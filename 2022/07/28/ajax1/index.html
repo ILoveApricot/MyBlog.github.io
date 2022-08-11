@@ -14,7 +14,7 @@
 <meta property="og:description" content="ajax优缺点：1.无需刷新页面请求数据2.用户事件更新页面内容 1.无浏览历史2.跨域3.SEO不行 请求报文：1.行   get post put delete &#x2F; url路径 &#x2F;  http协议版本2.头 	  HOST：          Cookie:          Content-type:        …… 3.空行4.体 响应报文1.行  http协议版本">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-28T07:56:13.000Z">
-<meta property="article:modified_time" content="2022-08-10T10:20:19.130Z">
+<meta property="article:modified_time" content="2022-08-11T06:08:42.807Z">
 <meta property="article:author" content="Ma">
 <meta name="twitter:card" content="summary">
   
@@ -118,8 +118,19 @@ app.listen(8000, () =&gt; &#123;
     console.log(&quot;服务已经启动，8000端口监听中&quot;);
 &#125;);
 </code></pre>
-<h1 id="ajax操作步骤"><a href="#ajax操作步骤" class="headerlink" title="ajax操作步骤"></a>ajax操作步骤</h1><p>1.创建对象<br>    <code>const xhr = new XMLHttpRequest();</code><br>2.初始化 设置请求方法和url<br>    <code>xhr.open(&#39;GET&#39;, &#39;/url&#39;);</code><br>3.发送<br>    <code>xhr.send();</code><br>4.事件绑定 处理服务端返回结果<br>    xhr.onreadystatechange &#x3D; function() {<br>    if (xhr.readyState &#x3D;&#x3D;&#x3D; 4) {<br>        &#x2F;&#x2F;判断响应状态码<br>        if (xhr.status &#x3D;&#x3D;&#x3D; 200 &amp;&amp; xhr.status &lt; 300) {<br>            &#x2F;&#x2F;处理结果 行 头 空行 体<br>            console.log(xhr.status); &#x2F;&#x2F;状态码<br>            console.log(xhr.statusTEXT); &#x2F;&#x2F;状态字符串<br>            console.log(xhr.getAllResponseHeaders); &#x2F;&#x2F;所有响应头	<br>            console.log(xhr.response); &#x2F;&#x2F;响应体<br>        } else {</p>
-<pre><code>    &#125;
+<h1 id="ajax操作步骤"><a href="#ajax操作步骤" class="headerlink" title="ajax操作步骤"></a>ajax操作步骤</h1><p>1.创建对象<br>    <code>const xhr = new XMLHttpRequest();</code><br>2.初始化 设置请求方法和url<br>    <code>xhr.open(&#39;GET&#39;, &#39;/url&#39;);</code><br>3.发送<br>    <code>xhr.send();</code><br>4.事件绑定 处理服务端返回结果   </p>
+<pre><code>xhr.onreadystatechange = function() &#123;
+if (xhr.readyState === 4) &#123;
+    //判断响应状态码  
+    if (xhr.status === 200 &amp;&amp; xhr.status &lt; 300) &#123;
+        //处理结果 行 头 空行 体  
+        console.log(xhr.status); //状态码  
+        console.log(xhr.statusTEXT); //状态字符串  
+        console.log(xhr.getAllResponseHeaders); //所有响应头	  
+        console.log(xhr.response); //响应体  
+    &#125; else &#123;
+
+    &#125;
 &#125;
 </code></pre>
 <p>}</p>
@@ -138,6 +149,15 @@ app.listen(8000, () =&gt; &#123;
   
     
 <nav id="article-nav">
+  
+    <a href="/2022/08/10/vue1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          vue1
+        
+      </div>
+    </a>
   
   
     <a href="/2022/07/25/newpapername/" id="article-nav-older" class="article-nav-link-wrap">
@@ -167,7 +187,7 @@ app.listen(8000, () =&gt; &#123;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
     </div>
   </div>
 
@@ -178,6 +198,14 @@ app.listen(8000, () =&gt; &#123;
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/08/10/redis1/">redis1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/10/vue1/">vue1</a>
+          </li>
         
           <li>
             <a href="/2022/07/28/ajax1/">ajax1</a>
