@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>redis2 | 智能财务</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="2.2.2 list类型lpush（左插入）、lrange（查询集合）、rpush（右插入）操作   #lpush 127.0.0.1:6379&gt; lpush list v1  #新增一个集合 (integer) 1 127.0.0.1:6379&gt; lpush list v2 (integer) 2 127.0.0.1:6379&gt; lpush list v3 (integer)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis2">
+<meta property="og:url" content="http://example.com/2022/08/12/redis2/index.html">
+<meta property="og:site_name" content="智能财务">
+<meta property="og:description" content="2.2.2 list类型lpush（左插入）、lrange（查询集合）、rpush（右插入）操作   #lpush 127.0.0.1:6379&gt; lpush list v1  #新增一个集合 (integer) 1 127.0.0.1:6379&gt; lpush list v2 (integer) 2 127.0.0.1:6379&gt; lpush list v3 (integer)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-12T15:13:41.000Z">
+<meta property="article:modified_time" content="2022-08-12T16:02:49.194Z">
+<meta property="article:author" content="Ma">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="智能财务" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">智能财务</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-redis2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/12/redis2/" class="article-date">
+  <time class="dt-published" datetime="2022-08-12T15:13:41.000Z" itemprop="datePublished">2022-08-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      redis2
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="2-2-2-list类型"><a href="#2-2-2-list类型" class="headerlink" title="2.2.2 list类型"></a>2.2.2 list类型</h2><p>lpush（左插入）、lrange（查询集合）、rpush（右插入）操作  </p>
+<pre><code>#lpush
+127.0.0.1:6379&gt; lpush list v1  #新增一个集合
+(integer) 1
+127.0.0.1:6379&gt; lpush list v2
+(integer) 2
+127.0.0.1:6379&gt; lpush list v3
+(integer) 3  
+
+#lrange
+127.0.0.1:6379&gt; LRANGE list 0 -1  #查询list的所有元素值
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+3) &quot;v1&quot;
+127.0.0.1:6379&gt; lpush list1 v1 v2 v3 v4 v5  #批量添加集合元素
+(integer) 5
+127.0.0.1:6379&gt; LRANGE list1 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+5) &quot;v1&quot;
+
+#rpush
+127.0.0.1:6379&gt; LRANGE list 0 1  #指定查询列表中的元素，从下标零开始，1结束，两个元素
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+127.0.0.1:6379&gt; LRANGE list 0 0  #指定查询列表中的唯一元素
+1) &quot;v3&quot;
+127.0.0.1:6379&gt; rpush list rv0  #右插入，跟lpush相反，这里添加进去元素是在尾部！
+(integer) 4
+127.0.0.1:6379&gt; lrange list 0 -1  #查看集合所有元素
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+3) &quot;v1&quot;
+4) &quot;rv0&quot;
+
+每次都使用lpush，老的数据永远在后面，我们每次获取 0 0 位置的元素，相当于更新了
+数据操作，但是数据记录还在。查询记录即可获取集合所有元素
+</code></pre>
+<p>lpop（左移除）、rpop（右移除）操作</p>
+<pre><code>#lpop
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+5) &quot;v1&quot;
+127.0.0.1:6379&gt; lpop list  #从头部开始移除第一个元素
+&quot;v5&quot;
+
+#rpop
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+4) &quot;v1&quot;
+127.0.0.1:6379&gt; rpop list
+&quot;v1&quot;
+127.0.0.1:6379&gt; LRANGE list 0 -1  #从尾部开始移除第一个元素
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+</code></pre>
+<p>lindex（查询指定下标元素）、llen（获取集合长度） 操作</p>
+<pre><code>#lindex
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+127.0.0.1:6379&gt; lindex list 1  #获取指定下标位置集合的元素，下标从0开始计数
+&quot;v3&quot;
+127.0.0.1:6379&gt; lindex list 0  #相当于java中的indexof
+&quot;v4&quot;
+
+#llen
+127.0.0.1:6379&gt; llen list  #获取指定集合的元素长度，相当于java中的length或者size
+(integer) 3
+</code></pre>
+<p>lrem（根据value移除指定的值）</p>
+<pre><code>127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+127.0.0.1:6379&gt; lrem list 1 v2  #移除集合list中的元素是v2的元素1个
+(integer) 1
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+127.0.0.1:6379&gt; lrem list 0 v3 #移除集合list中的元素是v2的元素1个,这里的0和1效果是一致的
+(integer) 1
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+127.0.0.1:6379&gt; lpush list  v3 v2 v2 v2
+(integer) 4
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v2&quot;
+2) &quot;v2&quot;
+3) &quot;v2&quot;
+4) &quot;v3&quot;
+5) &quot;v4&quot;
+127.0.0.1:6379&gt; lrem list 3 v2  #移除集合list中元素为v2 的‘3’个，这里的参数数量，如果实际中集合元素数量不达标，不会报错，全部移除后返回成功移除后的数量值
+(integer) 3
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v3&quot;
+2) &quot;v4&quot;
+</code></pre>
+<p>ltrim（截取元素）、rpoplpush（移除指定集合中最后一个元素到一个新的集合中）操作</p>
+<pre><code>#ltrim
+127.0.0.1:6379&gt; lpush list v1 v2 v3 v4
+(integer) 4
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+4) &quot;v1&quot;
+127.0.0.1:6379&gt; ltrim list 1 2  #通过下标截取指定的长度，这个list已经被改变了，只剩下我们所指定截取后的元素
+OK
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+
+#rpoplpush
+127.0.0.1:6379&gt; lpush list v1 v2 v3 v4 v5
+(integer) 5
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+5) &quot;v1&quot;
+127.0.0.1:6379&gt; rpoplpush list newlist  #移除list集合中的最后一个元素到新的集合newlist中，返回值是移除的最后一个元素值
+&quot;v1&quot;
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+127.0.0.1:6379&gt; LRANGE newlist 0 -1  #确实存在该newlist集合并且有刚刚移除的元素，证明成功
+1) &quot;v1&quot;
+</code></pre>
+<p>lset（更新）、linsert操作</p>
+<pre><code>#lset
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+127.0.0.1:6379&gt; 
+127.0.0.1:6379&gt; lset list 1 newV5  #更新list集合中下标为‘1’的元素为‘newV5’
+OK
+127.0.0.1:6379&gt; LRANGE list 0 -1  #查看证明更新成功
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+注意点：
+127.0.0.1:6379&gt; lset list1 0 vvvv  #如果指定的‘集合’不存在，报错
+(error) ERR no such key
+127.0.0.1:6379&gt; lset list 8 vvv  #如果集合存在，但是指定的‘下标’不存在，报错
+
+#linsert
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+127.0.0.1:6379&gt; LINSERT list after v3 insertv3  #在集合中的‘v3’元素 ‘(after)之后’ 加上一个元素
+(integer) 5
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;v3&quot;
+4) &quot;insertv3&quot;
+5) &quot;v2&quot;
+127.0.0.1:6379&gt; LINSERT list before v3 insertv3  #在集合中的‘v3’元素 ‘(before)之前’ 加上一个元素
+(integer) 6
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;insertv3&quot;
+4) &quot;v3&quot;
+5) &quot;insertv3&quot;
+6) &quot;v2&quot;
+</code></pre>
+<p>小结：</p>
+<p>实际上是一个链表，before Node after ， left，right 都可以插入值<br>如果key 不存在，创建新的链表<br>如果key存在，新增内容<br>如果移除了所有值，空链表，也代表不存在<br>在两边插入或者改动值，效率最高！ 中间元素，相对来说效率会低一点<br>消息排队消息队列 （Lpush Rpop）， 栈（ Lpush Lpop）</p>
+<h2 id="2-2-3-Set（集合）元素唯一不重复"><a href="#2-2-3-Set（集合）元素唯一不重复" class="headerlink" title="2.2.3 Set（集合）元素唯一不重复"></a>2.2.3 Set（集合）元素唯一不重复</h2><p>sadd（添加）、smembers（查看所有元素）、sismember（判断是否存在）、scard（查看长度）、srem（移除指定元素）操作</p>
+<pre><code>#set中所有的元素都是唯一的不重复的！
+127.0.0.1:6379&gt; sadd set1 test1 test2 test3 test4  #添加set集合（可批量可单个，写法一致）
+(integer) 4
+127.0.0.1:6379&gt; SMEMBERS set1  #查看set中所有元素
+1) &quot;test1&quot;
+2) &quot;test2&quot;
+3) &quot;test3&quot;
+4) &quot;test4&quot;
+127.0.0.1:6379&gt; SISMEMBER set1 test2  #判断某个值在不在set中，在返回1
+(integer) 1
+127.0.0.1:6379&gt; SISMEMBER set1 test5  #不在返回0
+(integer) 0
+127.0.0.1:6379&gt; SCARD set1  #查看集合的长度，相当于size、length
+(integer) 4
+127.0.0.1:6379&gt; srem set1 test2  #移除set中指定的元素
+(integer) 1
+127.0.0.1:6379&gt; SMEMBERS set1  #移除成功
+1) &quot;test1&quot;
+2) &quot;test3&quot;
+3) &quot;test4&quot;
+</code></pre>
+<p>srandmember（抽随机）操作</p>
+<pre><code>127.0.0.1:6379&gt; sadd myset 1 2 3 4 5 6 7  #在set中添加7个元素
+(integer) 7
+127.0.0.1:6379&gt; SMEMBERS myset
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+6) &quot;6&quot;
+7) &quot;7&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 1  #随机抽取myset中1个元素返回
+1) &quot;4&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 1  #随机抽取myset中1个元素返回
+1) &quot;1&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 1  #随机抽取myset中1个元素返回
+1) &quot;5&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset  #不填后参数，默认抽1个值，但是下面返回不会带序号值
+&quot;3&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 3  #随机抽取myset中3个元素返回
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 3  #随机抽取myset中3个元素返回
+1) &quot;6&quot;
+2) &quot;3&quot;
+3) &quot;5&quot;
+</code></pre>
+<p>spop（随机删除元素）、smove（移动指定元素到新的集合中）操作</p>
+<pre><code>127.0.0.1:6379&gt; SMEMBERS myset
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+6) &quot;6&quot;
+7) &quot;7&quot;
+127.0.0.1:6379&gt; spop myset  #随机删除1个元素，不指定参数值即删除1个
+&quot;2&quot;
+127.0.0.1:6379&gt; spop myset 1  #随机删除1个元素
+1) &quot;7&quot;
+127.0.0.1:6379&gt; spop myset 2  #随机删除2个元素
+1) &quot;3&quot;
+2) &quot;5&quot;
+127.0.0.1:6379&gt; SMEMBERS myset  #查询删除后的结果
+1) &quot;1&quot;
+2) &quot;4&quot;
+3) &quot;6&quot;
+127.0.0.1:6379&gt; smove myset myset2 1  #移动指定set中的指定元素到新的set中
+(integer) 1
+127.0.0.1:6379&gt; SMEMBERS myset  #查询原来的set集合
+1) &quot;4&quot;
+2) &quot;6&quot;
+127.0.0.1:6379&gt; SMEMBERS myset2  #查询新的set集合，如果新的set存在，即往后加，如果不存在，则自动创建set并且加入进去
+1) &quot;1&quot;
+</code></pre>
+<p>sdiff（差集）、sinter（交集）、sunion（并集）操作</p>
+<pre><code>127.0.0.1:6379&gt; sadd myset1 1 2 3 4 5
+(integer) 5
+127.0.0.1:6379&gt; sadd myset2 3 4 5 6 7
+(integer) 5
+127.0.0.1:6379&gt; SMEMBERS myset1
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+127.0.0.1:6379&gt; SMEMBERS myset2
+1) &quot;3&quot;
+2) &quot;4&quot;
+3) &quot;5&quot;
+4) &quot;6&quot;
+5) &quot;7&quot;
+127.0.0.1:6379&gt; SDIFF myset1 myset2  #查询指定的set之间的差集，可以是多个set
+1) &quot;1&quot;
+2) &quot;2&quot;
+127.0.0.1:6379&gt; SINTER myset1 myset2  #查询指定的set之间的交集，可以是多个set
+1) &quot;3&quot;
+2) &quot;4&quot;
+3) &quot;5&quot;
+127.0.0.1:6379&gt; sunion myset1 myset2  #查询指定的set之间的并集，可以是多个set
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+6) &quot;6&quot;
+7) &quot;7&quot;
+</code></pre>
+<p>总结：可实现共同好友、共同关注等需求。</p>
+<h2 id="2-2-4-Hash（哈希）"><a href="#2-2-4-Hash（哈希）" class="headerlink" title="2.2.4 Hash（哈希）"></a>2.2.4 Hash（哈希）</h2><p>hset（添加hash）、hget（查询）、hgetall（查询所有）、hdel（删除hash中指定的值）、hlen（获取hash的长度）、hexists（判断key是否存在）操作</p>
+<pre><code>127.0.0.1:6379&gt; hset myhash key1 set1 key2 set2  #添加hash，可多个
+(integer) 2
+127.0.0.1:6379&gt; hget myhash key1  #获取hash中key是key1的值
+&quot;set1&quot;
+127.0.0.1:6379&gt; hget myhash key2 
+&quot;set2&quot;
+127.0.0.1:6379&gt; hgetall myhash  #获取hash中所有的值，包含key
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;key2&quot;
+4) &quot;set2&quot;
+127.0.0.1:6379&gt; hset myhash del test  #添加
+(integer) 1
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;key2&quot;
+4) &quot;set2&quot;
+5) &quot;del&quot;
+6) &quot;test&quot;
+127.0.0.1:6379&gt; hdel myhash del key2  #删除指定hash中的key（可多个），key删除后对应的value也会被删除
+(integer) 2
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+127.0.0.1:6379&gt; hlen myhash  #获取指定hash的长度，相当于length、size
+(integer) 1
+127.0.0.1:6379&gt; HEXISTS myhash name  #判断key是否存在于指定的hash，存在返回1
+(integer) 1
+127.0.0.1:6379&gt; HEXISTS myhash age  #判断key是否存在于指定的hash，不存在返回0
+(integer) 0
+</code></pre>
+<p>hkeys（获取所有key）、hvals（获取所有value）、hincrby（给值加增量）、hsetnx（存在不添加）操作</p>
+<pre><code>127.0.0.1:6379&gt; hset myhash k 1 kk 2
+(integer) 2
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;k&quot;
+4) &quot;1&quot;
+5) &quot;kk&quot;
+6) &quot;2&quot;
+127.0.0.1:6379&gt; hkeys myhash  #获取指定hash中的所有key
+1) &quot;key1&quot;
+2) &quot;k&quot;
+3) &quot;kk&quot;
+127.0.0.1:6379&gt; hvals myhash   #获取指定hash中的所有value
+1) &quot;set1&quot;
+2) &quot;1&quot;
+3) &quot;2&quot;
+127.0.0.1:6379&gt; hincrby myhash age 2  #让hash中age的value指定+2(自增)
+(integer) 3
+127.0.0.1:6379&gt; hincrby myhash age -1  #让hash中age的value指定-1(自减)
+(integer) 2
+127.0.0.1:6379&gt; hsetnx myhash nokey novalue  #添加不存在就新增返回新增成功的数量（只能单个增加）
+(integer) 1 
+127.0.0.1:6379&gt; hsetnx myhash name miaotiao  #添加存在则失败返回0
+(integer) 0
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;k&quot;
+4) &quot;2&quot;
+5) &quot;kk&quot;
+6) &quot;2&quot;
+7) &quot;nokey&quot;
+8) &quot;novalue&quot;
+</code></pre>
+<p>总结：比String更加适合存对象</p>
+<h2 id="2-2-5-zSet（有序集合）"><a href="#2-2-5-zSet（有序集合）" class="headerlink" title="2.2.5 zSet（有序集合）"></a>2.2.5 zSet（有序集合）</h2><p>zadd（添加）、zrange（查询）、zrangebyscore（排序小-大）、zrevrange（排序大-小）、zrangebyscore withscores（查询所有值包含key）操作</p>
+<pre><code>127.0.0.1:6379&gt; zadd myzset 1 one 2 two 3 three  #添加zset值，可多个
+(integer) 3
+127.0.0.1:6379&gt; ZRANGE myzset 0 -1  #查询所有的值
+1) &quot;one&quot;
+2) &quot;two&quot;
+3) &quot;three&quot;
+#-inf 负无穷  +inf 正无穷
+127.0.0.1:6379&gt; ZRANGEBYSCORE myzset -inf +inf  #将zset的值根据key来从小到大排序并输出
+1) &quot;one&quot;
+2) &quot;two&quot;
+3) &quot;three&quot;
+127.0.0.1:6379&gt; ZRANGEBYSCORE myzset 0 1  #只查询key&lt;=1的值并且排序从小到大
+1) &quot;one&quot;
+127.0.0.1:6379&gt; ZREVRANGE myzset 1 -1  #从大到小排序输出
+1) &quot;two&quot;
+2) &quot;one&quot;
+127.0.0.1:6379&gt; ZRANGEBYSCORE myzset -inf +inf withscores  #查询指定zset的所有值，包含序号的值
+1) &quot;one&quot;
+2) &quot;1&quot;
+3) &quot;two&quot;
+4) &quot;2&quot;
+5) &quot;three&quot;
+6) &quot;3&quot;
+</code></pre>
+<p>zrem（移除元素）、zcard（查看元素个数）、zcount（查询指定区间内的元素个数）操作</p>
+<pre><code>127.0.0.1:6379&gt; zadd myset 1 v1 2 v2 3 v3 4 v4
+(integer) 4
+127.0.0.1:6379&gt; ZRANGE myset 0 -1
+1) &quot;v1&quot;
+2) &quot;v2&quot;
+3) &quot;v3&quot;
+4) &quot;v4&quot;
+127.0.0.1:6379&gt; zrem myset v3  #移除指定的元素，可多个
+(integer) 1
+127.0.0.1:6379&gt; ZRANGE myset 0 -1
+1) &quot;v1&quot;
+2) &quot;v2&quot;
+3) &quot;v4&quot;
+127.0.0.1:6379&gt; zcard myset  #查看zset的元素个数，相当于长度，size。
+(integer) 3
+127.0.0.1:6379&gt; zcount myset 0 100  #查询指定区间内的元素个数
+(integer) 3
+127.0.0.1:6379&gt; zcount myset 0 2  #查询指定区间内的元素个数
+(integer) 2
+</code></pre>
+<p>总结：成绩表排序，工资表排序，年龄排序等需求可以用zset来实现！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/12/redis2/" data-id="cl6qnrrw50000cgw9axgres0a" data-title="redis2" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/08/10/redis1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">redis1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/12/redis2/">redis2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/10/redis1/">redis1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/10/vue1/">vue1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/28/ajax1/">ajax1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/25/newpapername/">newpapername</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Ma<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
