@@ -71,6 +71,865 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-vue3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/15/vue3/" class="article-date">
+  <time class="dt-published" datetime="2022-08-15T15:43:09.000Z" itemprop="datePublished">2022-08-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/15/vue3/">vue3</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="组件化开发"><a href="#组件化开发" class="headerlink" title="组件化开发"></a>组件化开发</h1><blockquote>
+<p>##组件的基本介绍<br>注册组件的基本步骤  </p>
+</blockquote>
+<blockquote>
+<ul>
+<li>调用Vue.extend()方法 - 创建组件构造器  </li>
+<li>调用Vue.component()方法 - 注册组件  </li>
+<li>在Vue实例的作用范围内 - 使用组件</li>
+</ul>
+</blockquote>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    //使用组件
+    &lt;my-cpm&gt;&lt;/my-cpm&gt;
+&lt;/div&gt;
+
+//创建组件构造器
+const cpnC = Vue.extend(&#123;
+    template: &#39;
+    &lt;div&gt;
+        &lt;h2&gt;标题&lt;/h2&gt;
+        &lt;p&gt;模板&lt;/p&gt;
+    &lt;/div&gt;&#39;
+&#125;)
+
+//注册组件
+Vue.component(&#39;my-cpn&#39;, cpmC)
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        message: &#39;&#39;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<h3 id="全局组件-x2F-局部组件"><a href="#全局组件-x2F-局部组件" class="headerlink" title="全局组件 &#x2F; 局部组件"></a>全局组件 &#x2F; 局部组件</h3><p>全局:上面案例  </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>局部组件<br>    <div id="app"><br>        <my-cpm></my-cpm><br>    </div></p>
+</blockquote>
+<pre><code>const cpnC = Vue.extend(&#123;
+    template: &#39;
+    &lt;div&gt;
+        &lt;h2&gt;标题&lt;/h2&gt;
+        &lt;p&gt;模板&lt;/p&gt;
+    &lt;/div&gt;&#39;
+&#125;)
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        message: &#39;&#39;
+    &#125;,
+    components: &#123;
+        cpn: cpnC
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<h3 id="父组件-x2F-子组件"><a href="#父组件-x2F-子组件" class="headerlink" title="父组件 &#x2F; 子组件"></a>父组件 &#x2F; 子组件</h3><blockquote>
+<p>父子组件的错误用法: 以子标签的形式在Vue实例中使用  </p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>因为当子组件注册到父组件的components时, Vue会编译好父组件的模块</li>
+<li>该模块的内容已经决定了父组件将要渲染的HTML (相当于父组件中已经有子组件中的内容了)</li>
+</ul>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<h3 id="语法塘"><a href="#语法塘" class="headerlink" title="语法塘"></a>语法塘</h3><p>Vue为了简化注册组件的过程, 提供了注册的语法塘, 省去了调用Vue.extend()的步骤. 而是可以直接使用一个对象来代替</p>
+</blockquote>
+</blockquote>
+<pre><code>// 全局组件
+Vue.component(&#39;xxx&#39;, &#123;
+    template: &#39;
+    &lt;div&gt;
+        哈哈哈哈
+    &lt;/div&gt;
+    &#39;
+&#125;)
+
+// 内部会自动调用Vue.extend()
+
+
+// 局部组件
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;
+    &#125;,
+    components: &#123;
+        &#39;cpn&#39;: &#123;
+            template: &#39;
+                &lt;div&gt;
+                    哈哈哈哈
+                &lt;/div&gt;
+            &#39;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<h1 id="组件通讯"><a href="#组件通讯" class="headerlink" title="组件通讯"></a>组件通讯</h1><blockquote>
+<h3 id="父子组件的通讯"><a href="#父子组件的通讯" class="headerlink" title="父子组件的通讯"></a>父子组件的通讯</h3><p>父组件通过props向子组件传递数据</p>
+</blockquote>
+</blockquote>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;cpm v-bind:cmovies=&quot;movies&quot; v-bind:cmessage=&quot;message&quot;&gt;&lt;/cpn&gt;
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        &lt;li v-for=&quot;item in cmovies&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;
+        &lt;h2&gt;&#123;&#123;cmessage&#125;&#125;&lt;/h2&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+
+const cpn = &#123;
+    template: &#39;#cpn&#39;,
+    // 把数组里的当变量来看了
+    props: [&#39;cmovies&#39;, &#39;cmessage&#39;],
+    data () &#123;
+        return &#123;&#125;
+    &#125;
+&#125;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;,
+        movies: [&#39;哈喽&#39;, &#39;嗨&#39;, &#39;哟哟&#39;]
+    &#125;,
+    components: &#123;
+        cpn
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<p>子组件通过事件向父组件发送数据</p>
+</blockquote>
+</blockquote>
+<pre><code>// 父组件模板
+&lt;div id=&quot;app&quot;&gt;
+    // 2.父组件监听一个事件
+    // 不能写驼峰
+    &lt;cpm @itemclick=&quot;cpnClick&quot;&gt;&lt;/cpn&gt;
+&lt;/div&gt;
+
+// 子组件模板
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        &lt;button v-for=&quot;item in categories&quot; 
+                @click=&quot;btnClick(item)&quot;&gt;
+            &#123;&#123;item.name&#125;&#125;
+        &lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+
+// 子组件
+const cpn = &#123;
+    template: &#39;#cpn&#39;,
+    data() &#123;
+        return &#123;
+            categories: [
+                &#123;id: &#39;aaaa&#39;, name: &#39;热门推荐&#39;&#125;,
+                &#123;id: &#39;bbbb&#39;, name: &#39;手机数码&#39;&#125;,
+                &#123;id: &#39;cccc&#39;, name: &#39;家用家电&#39;&#125;,
+                &#123;id: &#39;dddd&#39;, name: &#39;电脑办公&#39;&#125;,
+            ]
+        &#125;
+    &#125;,
+    methods: &#123;
+        btnClick(item) &#123;
+            // 要把item传给父组件
+            // 1. 发送一个事件 (自定义事件)
+            // 会把item当成默认的传到父组件去
+            this.$emit(&#39;itemclick&#39;, item)
+        ]
+    &#125;
+&#125;
+
+// 父组件
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;
+    &#125;,
+    components: &#123;
+        cpn
+    &#125;,
+    methods: &#123;
+        // 3. 父组件监听的事件 
+        cpnClick(item) &#123;
+            console.log(&#39;成功了&#39;, item);
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<h3 id="父子组件的访问方式"><a href="#父子组件的访问方式" class="headerlink" title="父子组件的访问方式"></a>父子组件的访问方式</h3><h3 id="父组件访问子组件"><a href="#父组件访问子组件" class="headerlink" title="父组件访问子组件"></a>父组件访问子组件</h3><ul>
+<li>$children: 拿所有子组件</li>
+<li>$refs: 拿指定的子组件</li>
+</ul>
+</blockquote>
+</blockquote>
+<pre><code>// this.$children是一个数组类型, 它包含所有子组件对象  
+// 通过遍历, 取出所有子组件的message状态  
+
+&lt;div id=&quot;app&quot;&gt;
+    &lt;cpm&gt;&lt;/cpn&gt;
+    &lt;cpm&gt;&lt;/cpn&gt;
+    // 使用$refs的时候, 在想要访问的子组件上添加ref属性
+    &lt;cpm ref=&quot;aaa&quot;&gt;&lt;/cpn&gt;
+    &lt;buttun @click=&quot;btnClick&quot;&gt;按钮&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        我是子组件
+    &lt;/div&gt;
+&lt;/template&gt;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;
+    &#125;,
+    methods: &#123;
+        btnClick() &#123;
+            cosole.log(this.$children);
+            // $children 的使用方法, 一般用的少, 下标不固定
+            // this.$children[0].showMessage();
+            // this.$children[0].name;
+            
+            //for (let c of this.$children) &#123;
+            //    console.log(c.name); // 我是子组件的name
+            //    c.showMessage(); // showMessage
+            //&#125;
+            
+            // $refs 的使用方法 =&gt; 对象类型, 默认是一个空的对象
+            console.log(this.$refs.aaa.name); // 我是子组件的name
+        &#125;
+    &#125;
+    components: &#123;
+        cpn: &#123;
+            template: &quot;#cpn&quot;,
+            data() &#123;
+                return &#123;
+                    name: &#39;我是子组件的name&#39;
+                &#125;
+            &#125;,
+            methods: &#123;
+                showMessage() &#123;
+                    cosole.log(&#39;showMessage&#39;);
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<h3 id="子组件访问父组件"><a href="#子组件访问父组件" class="headerlink" title="子组件访问父组件"></a>子组件访问父组件</h3><ul>
+<li>$parent: 上一级父组件</li>
+<li>$root: 根组件</li>
+</ul>
+</blockquote>
+</blockquote>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;cpm&gt;&lt;/cpn&gt;
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        &lt;ccpn&gt;&lt;/ccpn&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;template id=&quot;ccpn&quot;&gt;
+    &lt;div&gt;
+        &lt;h2&gt;我是子组件&lt;/h2&gt;
+        &lt;button @click=&quot;btnClick&quot;&gt;按钮&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;
+    &#125;,
+
+    components: &#123;
+        cpn: &#123;
+            template: &quot;#cpn&quot;,
+            data() &#123;
+               return &#123;
+                   name: &#39;我是cpn的name&#39;
+               &#125; 
+            &#125;,
+            conmponents: &#123;
+                ccpn: &#123;
+                    template: &#39;#ccpn&#39;,
+                    btnClick() &#123;
+                        // 1. 访问父组件$parent
+                        // 不建议这么写, 一层套一层 复用性太差
+                        console.log(this.$parent);  
+                        console.log(this.$parent.name);  // 我是cpn的name
+                        
+                        // 2. 访问根组件 $root
+                        console.log(this.$root.meassage);   // 哈哈哈
+                    &#125; 
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<h1 id="跨级组件通信之provide-x2F-inject"><a href="#跨级组件通信之provide-x2F-inject" class="headerlink" title="跨级组件通信之provide&#x2F;inject"></a>跨级组件通信之provide&#x2F;inject</h1><p>provide选项允许我们指定我们想要提供给后代组件的数据&#x2F;方法。</p>
+<pre><code>provide: function () &#123;
+  return &#123;
+    fun: this.fun, //方法
+    name: &#39;Bob&#39;, // 数据
+  &#125;
+&#125;
+</code></pre>
+<p>然后在任何后代组件里，我们都可以使用inject选项来接收指定的我们想要添加在这个实例上的属性：</p>
+<pre><code>//接受方法
+inject: [&#39;fun&#39;]
+//接受数据
+inject:[&#39;name&#39;]
+</code></pre>
+<h1 id="插槽slot"><a href="#插槽slot" class="headerlink" title="插槽slot"></a>插槽slot</h1><p>作用:<br>组件的插槽是为了让我们封装的组件更加具有扩展性<br>让使用者可以决定组件内部的一些内容到底展示什么  </p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><ul>
+<li>插槽的基本使用</li>
+<li>插槽的默认值 button</li>
+<li>如果有多个值同时放入到组件进行替换时, 一起作为替换元素</li>
+</ul>
+<p>d</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    // 使用默认值替换
+    &lt;cpm&gt;&lt;/cpn&gt;
+    // 插槽替换的元素
+    &lt;cpm&gt;&lt;span&gt;这是替换的内容呀&lt;/span&gt;&lt;/cpn&gt;
+    // 多个元素
+    &lt;cpm&gt;
+        &lt;div&gt;第一个元素&lt;/div&gt;
+        &lt;p&gt;第二个元素&lt;/p&gt;
+    &lt;/cpn&gt;
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        &lt;div&gt;这个是标题&lt;/div&gt;
+        &lt;p&gt;这个是内容&lt;/p&gt;
+        // 放入插槽
+        &lt;slot&gt;默认值元素&lt;/slot&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;
+    &#125;,
+    components: &#123;
+        cpn: &#123;
+            template: &#39;#cpn&#39;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<h2 id="具名插槽"><a href="#具名插槽" class="headerlink" title="具名插槽"></a>具名插槽</h2><p>在多个插槽的情况下, 替换制定插槽的内容</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;cpm&gt;&lt;/cpn&gt;
+    &lt;cpm&gt;&lt;button slot=&quot;left&quot;&gt;返回&lt;/button&gt;&lt;/cpn&gt;
+    &lt;cpm&gt;&lt;span slot=&quot;center&quot;&gt;中间标题&lt;/span&gt;&lt;/cpn&gt;
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        &lt;slot name=&quot;left&quot;&gt;&lt;span&gt;左边&lt;/span&gt;&lt;/slot&gt;
+        &lt;slot name=&quot;center&quot;&gt;&lt;span&gt;中间&lt;/span&gt;&lt;/slot&gt;
+        &lt;slot name=&quot;right&quot;&gt;&lt;span&gt;右边&lt;/span&gt;&lt;/slot&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        meassage: &#39;哈哈哈&#39;
+    &#125;,
+    components: &#123;
+        cpn: &#123;
+            template: &#39;#cpn&#39;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<h2 id="作用域插槽"><a href="#作用域插槽" class="headerlink" title="作用域插槽"></a>作用域插槽</h2><h3 id="编译作用域"><a href="#编译作用域" class="headerlink" title="编译作用域"></a>编译作用域</h3><p>父组件模板所有的东西都在父级作用域内编译, 子组件模板的所有东西会在子级作用域内编译</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;cpm v-show=&quot;isShow&quot;&gt;我是一&lt;/cpn&gt; // true
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        &lt;p v-show=&quot;isShow&quot;&gt;我是二&lt;/p&gt; // false
+    &lt;/div&gt;
+&lt;/template&gt;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        isShow: true // Vue实例中的属性
+    &#125;,
+    components: &#123;
+        cpn: &#123;
+            template: &#39;#cpn&#39;,
+            data() &#123;
+                return &#123;
+                     isShow: false // 子组件中的属性
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<h2 id="作用域插槽使用"><a href="#作用域插槽使用" class="headerlink" title="作用域插槽使用"></a>作用域插槽使用</h2><p>父组件替换插槽的标签, 但是内容由子组件来提供</p>
+<pre><code>需求: 
+1. 子组件中包括一组数据, num: [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;]
+2. 需要在多个界面展示 
+   某些界面是以水平方向展示
+   某些界面是以列表形式展示
+   某些界面直接展示一个数组 
+3. 内容在子组件, 希望父组件告诉我们如何展示, 怎么办?
+   利用slot作用域插槽就行了
+   
+&lt;div id=&quot;app&quot;&gt;
+    &lt;cpm&gt;&lt;/cpn&gt; 
+    &lt;cpm&gt;
+        // 2. 获取子组件中的num
+        &lt;template slot-scope=&quot;slot&quot;&gt;
+            // 根据之前的起名来取  如 slot.aaa
+            &lt;span  v-for=&quot;item in slot.data&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/span&gt;
+        &lt;/template&gt;
+    &lt;/cpn&gt; 
+    &lt;cpm&gt;&lt;/cpn&gt; 
+&lt;/div&gt;
+
+&lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+        // 1. slot定义  &#39;data&#39;可以随便起名 如 :aaa=&quot;num&quot;
+        &lt;slot :data=&quot;num&quot;&gt;
+            &lt;ul&gt;
+                &lt;li v-for=&quot;item in num&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/slot&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        message: &#39;哈哈哈&#39;
+    &#125;,
+    components: &#123;
+        cpn: &#123;
+            template: &#39;#cpn&#39;,
+            data() &#123;
+                return &#123;
+                    num: [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;]
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/15/vue3/" data-id="cl6uz06xd0002xow94rbya8hc" data-title="vue3" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="vue-vue2" class="h-entry article article-type-vue" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/14/vue2/" class="article-date">
+  <time class="dt-published" datetime="2022-08-14T15:30:13.000Z" itemprop="datePublished">2022-08-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/14/vue2/">vue2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h1 id="值绑定"><a href="#值绑定" class="headerlink" title="值绑定"></a>值绑定</h1><p>含义: 动态的给value赋值<br>1 在前面的value中的值, 都是在定义input的时候直接给定的<br>2 但真实开发中, input的值可能是从网络获取或定义在data中的<br>3 可以通过v-bind:value动态的给value绑定值  </p>
+</blockquote>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label v-for=&quot;item in nums&quot; :for=&quot;item&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;item&quot; :id=&quot;item&quot; v-model=&quot;hobbies&quot;&gt;&#123;&#123;item&#125;&#125;
+    &lt;/label&gt;
+    &lt;h2&gt;您的爱好是: &#123;&#123;hobbies&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        hobbies: [],
+        nums: [&#39;篮球&#39;, &#39;足球&#39;, &#39;羽毛球&#39;]
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<h1 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h1></blockquote>
+<blockquote>
+<blockquote>
+<h3 id="lazy修饰符"><a href="#lazy修饰符" class="headerlink" title="lazy修饰符"></a>lazy修饰符</h3></blockquote>
+</blockquote>
+<ul>
+<li>前景: v-model默认是在input事件中实时同步输入框的数据的 (容易同步的过于频繁 )</li>
+<li>作用: 可以让数据只有在失去焦点或回车时才会更新</li>
+</ul>
+<p><code>&lt;input type=&quot;text&quot; v-model.lazy=&quot;输入&quot;&gt;</code></p>
+<blockquote>
+<blockquote>
+<h3 id="number修饰符"><a href="#number修饰符" class="headerlink" title="number修饰符"></a>number修饰符</h3></blockquote>
+</blockquote>
+<ul>
+<li>前景: 默认情况下, 在输入框中无论输入字母还是数字, 都会被当做字符串类型进行处理</li>
+<li>作用: 当做数字类型进行处理<blockquote>
+<blockquote>
+<h3 id="trim修饰符"><a href="#trim修饰符" class="headerlink" title="trim修饰符"></a>trim修饰符</h3></blockquote>
+</blockquote>
+</li>
+<li>前景: 输入的内容首位容易有空格</li>
+<li>作用: 可以过滤掉内容左右两边的空格</li>
+</ul>
+<blockquote>
+<h1 id="检测数组更新"><a href="#检测数组更新" class="headerlink" title="检测数组更新"></a>检测数组更新</h1><p>Vue是响应式, 所以当数据发生变化时, Vue会自动检测数据变化, 视图会发生对应的更新.<br>Vue中观察数据编译的方法 – 用它们改变数组会触发视觉更新</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>数组响应式方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>push()</td>
+<td>在数组中最后增加元素</td>
+</tr>
+<tr>
+<td>pop()</td>
+<td>删除数组中最后一个元素</td>
+</tr>
+<tr>
+<td>shift()</td>
+<td>删除数组中的第一个元素</td>
+</tr>
+<tr>
+<td>unshift()</td>
+<td>在数组最前面添加元素</td>
+</tr>
+<tr>
+<td>splice()</td>
+<td>删除 &#x2F; 插入 &#x2F; 替换元素</td>
+</tr>
+</tbody></table>
+<blockquote>
+<h1 id="计算属性-computed"><a href="#计算属性-computed" class="headerlink" title="计算属性 computed"></a>计算属性 computed</h1><p>使用: 需要将多个数据结合起来进行显示的时候</p>
+</blockquote>
+<pre><code>&lt;div id=&#39;app&#39;&gt;
+
+ // 使用拼接的方法 -- 语法太过繁琐
+ &lt;h2&gt;&#123;&#123;firstName + '' + lastName&#125;&#125;&lt;/h2&gt;
+ &lt;h2&gt;&#123;&#123;firstName&#125;&#125; &#123;&#123;lastName&#125;&#125;&lt;/h2&gt;
+ 
+ // 使用方法
+ &lt;h2&gt;&#123;&#123;getFullName()&#125;&#125;&lt;/h2&gt;
+ 
+ // 使用计算属性
+ &lt;h2&gt;&#123;&#123;fullName&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        firstName: &#39;li&#39;,
+        lastName: &#39;er&#39;
+    &#125;,
+    // 计算属性
+    computed: &#123;
+        fullName: function () &#123;
+            reture this.firstName + &#39;&#39; + this.lastName
+        &#125;
+    &#125;,
+    // 方法
+    methods: &#123;
+        getFullName () &#123;
+            reture this.firstName + &#39;&#39; + this.lastName
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<h3 id="计算属性setter和getter"><a href="#计算属性setter和getter" class="headerlink" title="计算属性setter和getter"></a>计算属性setter和getter</h3></blockquote>
+</blockquote>
+<pre><code>&lt;div id=&#39;app&#39;&gt;
+ &lt;h2&gt;&#123;&#123;fullName&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        firstName: &#39;li&#39;,
+        lastName: &#39;er&#39;
+    &#125;,
+    // 计算属性
+    computed: &#123;
+        fullName: &#123;
+            // 一般没有set方法 
+            set: function (value) &#123;
+                
+            &#125;,
+            // 只读属性
+            get: function () &#123;
+                reture this.firstName + &#39;&#39; + this.lastName
+            &#125;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<p>computed &#x2F; methods区别<br>多次使用的时候  </p>
+</blockquote>
+<blockquote>
+<ul>
+<li>methods: 每次都会调用</li>
+<li>computed: 计算机会缓存, 不变的情况下只调用一次</li>
+</ul>
+</blockquote>
+</blockquote>
+<h1 id="fulters过滤器"><a href="#fulters过滤器" class="headerlink" title="fulters过滤器"></a>fulters过滤器</h1><pre><code>&lt;div id=&#39;app&#39;&gt;
+ &lt;h2 &#123;&#123;aaa | showA&#125;&#125;&gt;&lt;/h2&gt;
+&lt;/div&gt;
+
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        aaa: &#39;li&#39;
+    &#125;,
+    // 过滤器
+    fulters: &#123;
+        showA (value) &#123;
+        return;
+    &#125;
+&#125;)
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/14/vue2/" data-id="cl6uz06xe0003xow96yq84imd" data-title="vue2" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-redis与springboot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/13/redis%E4%B8%8Espringboot/" class="article-date">
+  <time class="dt-published" datetime="2022-08-13T15:33:57.000Z" itemprop="datePublished">2022-08-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/13/redis%E4%B8%8Espringboot/">redis与springboot</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="pom依赖"><a href="#pom依赖" class="headerlink" title="pom依赖"></a>pom依赖</h1><pre><code>&lt;dependencies&gt;
+    &lt;!--集成redis--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+        &lt;version&gt;2.1.7.RELEASE&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--序列化--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+        &lt;version&gt;1.2.54&lt;/version&gt;
+        &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!--lombok,自动生成set、get等方法--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+        &lt;version&gt;1.18.10&lt;/version&gt;
+        &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<h1 id="yml配置文件"><a href="#yml配置文件" class="headerlink" title="yml配置文件"></a>yml配置文件</h1><pre><code>server:
+  port: 10001
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+</code></pre>
+<h1 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h1><pre><code>import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+
+@SpringBootTest
+public class testRedis &#123;
+
+    @Autowired(required = false)
+    private RedisTemplate redisTemplate;
+
+    @Test
+    void getName()&#123;
+        redisTemplate.opsForValue().set(&quot;name&quot;,&quot;dadadingdada!&quot;);
+        System.out.println(redisTemplate.opsForValue().get(&quot;name&quot;));
+    &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/13/redis%E4%B8%8Espringboot/" data-id="cl6uz06xd0001xow9d0k58ob0" data-title="redis与springboot" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-redis3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/13/redis3/" class="article-date">
+  <time class="dt-published" datetime="2022-08-12T16:06:25.000Z" itemprop="datePublished">2022-08-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/13/redis3/">redis3</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/13/redis3/" data-id="cl6uz06x70000xow9534m54o9" data-title="redis3" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-redis2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/08/12/redis2/" class="article-date">
@@ -829,7 +1688,179 @@ OK
     <div class="e-content article-entry" itemprop="articleBody">
       
         <h1 id="vue概念"><a href="#vue概念" class="headerlink" title="vue概念"></a>vue概念</h1><p>Vue是一个渐进式的框架<br>渐进式意味着你可以将Vue作为你应用的一部分嵌套其中<br>Vue的核心库以及其生态系统<br>Core + Vue-router + Vuex  </p>
-<h1 id="vue语法"><a href="#vue语法" class="headerlink" title="vue语法"></a>vue语法</h1><h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3>
+<h1 id="vue语法"><a href="#vue语法" class="headerlink" title="vue语法"></a>vue语法</h1><h3 id="1-综合"><a href="#1-综合" class="headerlink" title="1.综合"></a>1.综合</h3><p>插值操作 Mustache</p>
+<p>Mustache语法 (双大括号)<br>可以直接写变量<br>可以写简单的表达式<br>v-once<br>后面不需要跟任何表达式<br>表示元素和组件只渲染一次, 不会随着数据的改变而变化  </p>
+<p>v-html<br>后面往往跟一个string类型<br>会将string的html解析出来并渲染  </p>
+<p>v-text<br>与Mustache相似, 一般不用, 不灵活  </p>
+<p>v-pre<br>用于跳过这个元素和它子元素的编译过程, 用于显示原本的Mustache语法  </p>
+<p>v-cloak<br>在某些情况下, 我们浏览器可能会直接显示出未编译的Mustache标签  </p>
+<p>v-bind<br>作用: 动态绑定属性<br>简写: :</p>
+<p>条件判断</p>
+<p>v-if<br>v-else-if<br>v-else<br>v-show  </p>
+<p>当条件为false的时<br>v-if: 指令的元素, 不会渲染到dom中<br>v-show: dom增加一个行内样式display:   none<br>v-on<br>作用: 绑定事件监听<br>简写: @<br>写法:<br>    没有参数的情况下, 可以不写(); 如果方法本身有一个参数, 会默认将原生事件event参数传递进去<br>    如果传入某个参数, 同时需要event时, 可以通过$event传入时间</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+  &lt;h2&gt;点击次数: &#123;&#123;counter&#125;&#125;&lt;/h2&gt;
+  &lt;!--情况一: 方法没有参数--&gt;
+  &lt;button @click=&quot;btnClick1&quot;&gt;按钮1&lt;/button&gt;
+  &lt;button @click=&quot;btnClick1()&quot;&gt;按钮1&lt;/button&gt;
+
+  &lt;!--情况二: 如果方法有参数--&gt;
+  &lt;!--1.调用时不传入参数,会默认将event作为第一个参数传入--&gt;
+  &lt;button @click=&quot;btnClick2&quot;&gt;按钮2&lt;/button&gt;
+  &lt;!--2.调用时不传入参数,那么参数为undefined--&gt;
+  &lt;button @click=&quot;btnClick2()&quot;&gt;按钮2&lt;/button&gt;
+
+  &lt;!--情况三: 如果方法有参数,并且希望传入event--&gt;
+  &lt;button @click=&quot;btnClick3(10, $event)&quot;&gt;按钮3&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../../js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+      counter: 0
+    &#125;,
+    methods: &#123;
+      btnClick1() &#123;
+        console.log(&#39;按钮1被点击&#39;);
+      &#125;,
+      btnClick2(payload) &#123;
+        console.log(&#39;按钮2被点击&#39;, payload);
+      &#125;,
+      btnClick3(num, event) &#123;
+        console.log(&#39;按钮3被点击&#39;, num, event);
+      &#125;
+    &#125;
+  &#125;)
+&lt;/script&gt;
+</code></pre>
+<h1 id="v-for遍历数组"><a href="#v-for遍历数组" class="headerlink" title="v-for遍历数组"></a>v-for遍历数组</h1><pre><code>// 遍历过程中, 没有使用索引值
+&lt;li v-for=&quot;item in names&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;
+
+// 遍历过程中, 获取索引值
+&lt;li v-for=&quot;(item, index) in names&quot;&gt;&#123;&#123;index + 1&#125;&#125; - &#123;&#123;item&#125;&#125;&lt;/li&gt;
+
+// 遍历对象的时候, 只有一个值, 活得的是value
+
+// 获取对象的key和value 
+&lt;li v-for=&quot;(value, key) in names&quot;&gt;&#123;&#123;value&#125;&#125; - &#123;&#123;key&#125;&#125;&lt;/li&gt;
+
+// 获取对象的key和value和index 
+&lt;li v-for=&quot;(value, key, index) in names&quot;&gt;&#123;&#123;value&#125;&#125; - &#123;&#123;key&#125;&#125; - &#123;&#123;index&#125;&#125;&lt;/li&gt;
+</code></pre>
+<p>官方推荐, 使用v-for的时候, 加上一个 key属性<br>key的作用是为了高效的更新虚拟DOM<br>key要具有唯一性, 不然就没意义  </p>
+<pre><code>&lt;li v-for=&quot;(item, index) in names&quot; :key=&quot;item&quot;&gt;&#123;&#123;index + 1&#125;&#125; - &#123;&#123;item&#125;&#125;&lt;/li&gt;
+</code></pre>
+<h1 id="v-model表单绑定"><a href="#v-model表单绑定" class="headerlink" title="v-model表单绑定"></a>v-model表单绑定</h1><p>实现表单元素和数据的双向绑定</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;input type=&quot;text&quot; v-model=&quot;message&quot;&gt;
+    &#123;&#123;message&#125;&#125;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        message: &#39;你好&#39;
+    &#125;
+&#125;)
+
+// 界面的message数据改了, data里面的message就改变了, 是双向的
+</code></pre>
+<p>可以将v-model用于textarea元素</p>
+<pre><code>&lt;textare v-model=&quot;message&quot;&gt;&lt;/textare&gt;
+&lt;p&gt;输入内容: &#123;&#123;message&#125;&#125; &lt;/p&gt;
+</code></pre>
+<p>其他方法实现双向绑定</p>
+<pre><code>// v-bind绑定一个value属性
+// v-on指令给当前元素绑定input事件  
+// 下面代码 等同于 使用v-model
+
+&lt;div id=&quot;app&quot;&gt;
+    &lt;input type=&quot;text&quot; :value=&quot;message&quot; @input=&quot;message = $event.target.value&quot;&gt;
+    &#123;&#123;message&#125;&#125;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        message: &#39;你好&#39;
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="v-model结合radio类型使用"><a href="#v-model结合radio类型使用" class="headerlink" title="v-model结合radio类型使用"></a>v-model结合radio类型使用</h3><pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label for=&quot;male&quot;&gt;
+        &lt;inout type=&quot;radio&quot; id=&quot;male&quot; value=&quot;男&quot; v-model=&quot;sex&quot;&gt;男
+    &lt;/label&gt;
+    &lt;label for=&quot;male&quot;&gt;
+        &lt;inout type=&quot;radio&quot; id=&quot;female&quot; value=&quot;女&quot; v-model=&quot;sex&quot;&gt;nv
+    &lt;/label&gt;
+    &lt;h2&gt;您选择的性别是: &#123;&#123;sex&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        sex: &#39;男&#39;
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="v-model结合checkbox类型使用"><a href="#v-model结合checkbox类型使用" class="headerlink" title="v-model结合checkbox类型使用"></a>v-model结合checkbox类型使用</h3><p>单选框</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; id=&quot;agree&quot;  v-model=&quot;isAgree&quot;&gt;同意
+    &lt;/label&gt;
+    &lt;buttion :disabled=&quot;!isAgree&quot;&gt;下一步&lt;/button&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        isAgree: false
+    &#125;
+&#125;)
+</code></pre>
+<p>多选框</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;足球&quot; v-model=&quot;hobbies&quot;&gt;足球
+    &lt;/label&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;篮球&quot; v-model=&quot;hobbies&quot;&gt;篮球
+    &lt;/label&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;羽毛球&quot; v-model=&quot;hobbies&quot;&gt;羽毛球
+    &lt;/label&gt;
+    &lt;h2&gt;您的爱好是: &#123;&#123;hobbies&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        isAgree: false,
+        hobbies: []
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="v-model结合select类型使用"><a href="#v-model结合select类型使用" class="headerlink" title="v-model结合select类型使用"></a>v-model结合select类型使用</h3><p>下拉框单选</p>
+<p>v-model绑定的是一个值<br>当选中option中一个时, 会将它对应的value赋值到mySelect中</p>
+<pre><code>&lt;select v-model=&quot;mySelect&quot;&gt;
+    &lt;option value=&quot;apple&quot;&gt;苹果&lt;option&gt;
+    &lt;option value=&quot;orange&quot;&gt;橘子&lt;option&gt;
+    &lt;option value=&quot;banana&quot;&gt;香蕉&lt;option&gt;
+&lt;/select&gt;
+&lt;p&gt;您最喜欢的水果: &#123;&#123;mySelect&#125;&#125;&lt;/p&gt;
+</code></pre>
+<p>下拉框多选</p>
+<p>v-model绑定的是一个数组<br>当选择多个值时,会将选中的option对应的value添加到数组mySelect中</p>
+<pre><code>&lt;select v-model=&quot;mySelect&quot; multiple&gt;
+    &lt;option value=&quot;apple&quot;&gt;苹果&lt;option&gt;
+    &lt;option value=&quot;orange&quot;&gt;橘子&lt;option&gt;
+    &lt;option value=&quot;banana&quot;&gt;香蕉&lt;option&gt;
+&lt;/select&gt;
+&lt;p&gt;您最喜欢的水果: &#123;&#123;mySelect&#125;&#125;&lt;/p&gt;
+</code></pre>
+
       
     </div>
     <footer class="article-footer">
@@ -1045,23 +2076,23 @@ if (xhr.readyState === 4) &#123;
       <ul>
         
           <li>
+            <a href="/2022/08/15/vue3/">vue3</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/14/vue2/">vue2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/13/redis%E4%B8%8Espringboot/">redis与springboot</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/13/redis3/">redis3</a>
+          </li>
+        
+          <li>
             <a href="/2022/08/12/redis2/">redis2</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/10/redis1/">redis1</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/10/vue1/">vue1</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/28/ajax1/">ajax1</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/25/newpapername/">newpapername</a>
           </li>
         
       </ul>

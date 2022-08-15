@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>vue2 | 智能财务</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="值绑定含义: 动态的给value赋值1 在前面的value中的值, 都是在定义input的时候直接给定的2 但真实开发中, input的值可能是从网络获取或定义在data中的3 可以通过v-bind:value动态的给value绑定值    &lt;div id&#x3D;&quot;app&quot;&gt;     &lt;label v-for&#x3D;&quot;item in nums&quot; :f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue2">
+<meta property="og:url" content="http://example.com/2022/08/14/vue2/index.html">
+<meta property="og:site_name" content="智能财务">
+<meta property="og:description" content="值绑定含义: 动态的给value赋值1 在前面的value中的值, 都是在定义input的时候直接给定的2 但真实开发中, input的值可能是从网络获取或定义在data中的3 可以通过v-bind:value动态的给value绑定值    &lt;div id&#x3D;&quot;app&quot;&gt;     &lt;label v-for&#x3D;&quot;item in nums&quot; :f">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-14T15:30:13.000Z">
+<meta property="article:modified_time" content="2022-08-15T16:01:31.061Z">
+<meta property="article:author" content="Ma">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="智能财务" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">智能财务</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="vue-vue2" class="h-entry article article-type-vue" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/14/vue2/" class="article-date">
+  <time class="dt-published" datetime="2022-08-14T15:30:13.000Z" itemprop="datePublished">2022-08-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      vue2
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h1 id="值绑定"><a href="#值绑定" class="headerlink" title="值绑定"></a>值绑定</h1><p>含义: 动态的给value赋值<br>1 在前面的value中的值, 都是在定义input的时候直接给定的<br>2 但真实开发中, input的值可能是从网络获取或定义在data中的<br>3 可以通过v-bind:value动态的给value绑定值  </p>
+</blockquote>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label v-for=&quot;item in nums&quot; :for=&quot;item&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;item&quot; :id=&quot;item&quot; v-model=&quot;hobbies&quot;&gt;&#123;&#123;item&#125;&#125;
+    &lt;/label&gt;
+    &lt;h2&gt;您的爱好是: &#123;&#123;hobbies&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        hobbies: [],
+        nums: [&#39;篮球&#39;, &#39;足球&#39;, &#39;羽毛球&#39;]
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<h1 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h1></blockquote>
+<blockquote>
+<blockquote>
+<h3 id="lazy修饰符"><a href="#lazy修饰符" class="headerlink" title="lazy修饰符"></a>lazy修饰符</h3></blockquote>
+</blockquote>
+<ul>
+<li>前景: v-model默认是在input事件中实时同步输入框的数据的 (容易同步的过于频繁 )</li>
+<li>作用: 可以让数据只有在失去焦点或回车时才会更新</li>
+</ul>
+<p><code>&lt;input type=&quot;text&quot; v-model.lazy=&quot;输入&quot;&gt;</code></p>
+<blockquote>
+<blockquote>
+<h3 id="number修饰符"><a href="#number修饰符" class="headerlink" title="number修饰符"></a>number修饰符</h3></blockquote>
+</blockquote>
+<ul>
+<li>前景: 默认情况下, 在输入框中无论输入字母还是数字, 都会被当做字符串类型进行处理</li>
+<li>作用: 当做数字类型进行处理<blockquote>
+<blockquote>
+<h3 id="trim修饰符"><a href="#trim修饰符" class="headerlink" title="trim修饰符"></a>trim修饰符</h3></blockquote>
+</blockquote>
+</li>
+<li>前景: 输入的内容首位容易有空格</li>
+<li>作用: 可以过滤掉内容左右两边的空格</li>
+</ul>
+<blockquote>
+<h1 id="检测数组更新"><a href="#检测数组更新" class="headerlink" title="检测数组更新"></a>检测数组更新</h1><p>Vue是响应式, 所以当数据发生变化时, Vue会自动检测数据变化, 视图会发生对应的更新.<br>Vue中观察数据编译的方法 – 用它们改变数组会触发视觉更新</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>数组响应式方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>push()</td>
+<td>在数组中最后增加元素</td>
+</tr>
+<tr>
+<td>pop()</td>
+<td>删除数组中最后一个元素</td>
+</tr>
+<tr>
+<td>shift()</td>
+<td>删除数组中的第一个元素</td>
+</tr>
+<tr>
+<td>unshift()</td>
+<td>在数组最前面添加元素</td>
+</tr>
+<tr>
+<td>splice()</td>
+<td>删除 &#x2F; 插入 &#x2F; 替换元素</td>
+</tr>
+</tbody></table>
+<blockquote>
+<h1 id="计算属性-computed"><a href="#计算属性-computed" class="headerlink" title="计算属性 computed"></a>计算属性 computed</h1><p>使用: 需要将多个数据结合起来进行显示的时候</p>
+</blockquote>
+<pre><code>&lt;div id=&#39;app&#39;&gt;
+
+ // 使用拼接的方法 -- 语法太过繁琐
+ &lt;h2&gt;&#123;&#123;firstName + '' + lastName&#125;&#125;&lt;/h2&gt;
+ &lt;h2&gt;&#123;&#123;firstName&#125;&#125; &#123;&#123;lastName&#125;&#125;&lt;/h2&gt;
+ 
+ // 使用方法
+ &lt;h2&gt;&#123;&#123;getFullName()&#125;&#125;&lt;/h2&gt;
+ 
+ // 使用计算属性
+ &lt;h2&gt;&#123;&#123;fullName&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        firstName: &#39;li&#39;,
+        lastName: &#39;er&#39;
+    &#125;,
+    // 计算属性
+    computed: &#123;
+        fullName: function () &#123;
+            reture this.firstName + &#39;&#39; + this.lastName
+        &#125;
+    &#125;,
+    // 方法
+    methods: &#123;
+        getFullName () &#123;
+            reture this.firstName + &#39;&#39; + this.lastName
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<h3 id="计算属性setter和getter"><a href="#计算属性setter和getter" class="headerlink" title="计算属性setter和getter"></a>计算属性setter和getter</h3></blockquote>
+</blockquote>
+<pre><code>&lt;div id=&#39;app&#39;&gt;
+ &lt;h2&gt;&#123;&#123;fullName&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        firstName: &#39;li&#39;,
+        lastName: &#39;er&#39;
+    &#125;,
+    // 计算属性
+    computed: &#123;
+        fullName: &#123;
+            // 一般没有set方法 
+            set: function (value) &#123;
+                
+            &#125;,
+            // 只读属性
+            get: function () &#123;
+                reture this.firstName + &#39;&#39; + this.lastName
+            &#125;
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<blockquote>
+<blockquote>
+<p>computed &#x2F; methods区别<br>多次使用的时候  </p>
+</blockquote>
+<blockquote>
+<ul>
+<li>methods: 每次都会调用</li>
+<li>computed: 计算机会缓存, 不变的情况下只调用一次</li>
+</ul>
+</blockquote>
+</blockquote>
+<h1 id="fulters过滤器"><a href="#fulters过滤器" class="headerlink" title="fulters过滤器"></a>fulters过滤器</h1><pre><code>&lt;div id=&#39;app&#39;&gt;
+ &lt;h2 &#123;&#123;aaa | showA&#125;&#125;&gt;&lt;/h2&gt;
+&lt;/div&gt;
+
+
+const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data:&#123;
+        aaa: &#39;li&#39;
+    &#125;,
+    // 过滤器
+    fulters: &#123;
+        showA (value) &#123;
+        return;
+    &#125;
+&#125;)
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/14/vue2/" data-id="cl6uz06xe0003xow96yq84imd" data-title="vue2" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/08/15/vue3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          vue3
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/08/13/redis%E4%B8%8Espringboot/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">redis与springboot</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/15/vue3/">vue3</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/14/vue2/">vue2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/13/redis%E4%B8%8Espringboot/">redis与springboot</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/13/redis3/">redis3</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/12/redis2/">redis2</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Ma<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
