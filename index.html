@@ -71,6 +71,1030 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-vue6" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/19/vue6/" class="article-date">
+  <time class="dt-published" datetime="2022-08-19T11:07:29.000Z" itemprop="datePublished">2022-08-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/19/vue6/">vue6</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="vue-router"><a href="#vue-router" class="headerlink" title="vue-router"></a>vue-router</h1><p>路由器提供了两种机制: 路由和转送.</p>
+<ul>
+<li>路由是决定数据包从来源到目的地的路径.</li>
+<li>转送将输入端的数据转移到合适的输出端.</li>
+<li>路由中有一个非常重要的概念叫路由表.</li>
+<li>路由表本质上就是一个映射表, 决定了数据包的指向</li>
+</ul>
+<p>先使用vue-cli构建一个项目，构建的时候选择vueroter<br>后端路由： 对于普通的网站，所有的超链接都是URL地址，所有的URL地址都对应服务器上对应的资源；<br>前端路由： 对于单页面应用程序来说，主要通过URL中的hash(#号)来实现不同页面之间的切换，同时，hash有一个特点：HTTP请求中不会包含hash相关的内容；所以，单页面程序中的页面跳转主要用hash实现；不会涉及到页面刷新，只是切换组件</p>
+<h3 id="前端前进和后退："><a href="#前端前进和后退：" class="headerlink" title="前端前进和后退："></a>前端前进和后退：</h3><pre><code>// 向前进
+history.pushState(&#123;&#125;,&#39;name&#39;,&#39;login&#39;)
+// 向后退
+history.replaceState(&#123;&#125;,&#39;name&#39;,&#39;login&#39;)
+
+// 向前进
+history.go(1) === history.back()
+// 向后退
+history.go(-1) ===  history.forward()
+</code></pre>
+<p>vue-router了解</p>
+<ul>
+<li>vue-router是Vue.js官方的路由插件，它和vue.js是深度集成的，适合用于构建单页面应用。</li>
+<li>我们可以访问其官方网站对其进行学习: <a target="_blank" rel="noopener" href="https://router.vuejs.org/zh/">https://router.vuejs.org/zh/</a></li>
+</ul>
+<p>vue-router是基于路由和组件的</p>
+<ul>
+<li>路由用于设定访问路径, 将路径和组件映射起来.</li>
+<li>在vue-router的单页面应用中, 页面的路径的改变就是组件的切换.</li>
+</ul>
+<h1 id="6-1-vue-router配置"><a href="#6-1-vue-router配置" class="headerlink" title="6.1 vue-router配置"></a>6.1 vue-router配置</h1><p>在router目录下的 index.js 文件中添加如下配置：</p>
+<pre><code>// 导入vueRouter
+import VueRouter from &quot;vue-router&quot;;
+import Vue from &quot;Vue&quot;;
+
+// 1.通过Vue.use(plugin)，安装插件
+Vue.use(VueRouter)
+// 2.创建路由对象
+const  router = new VueRouter(&#123;
+  // 配置路由和组件相关的东西
+  routers:[
+    
+  ]
+&#125;)
+
+// 3. 将router传入到Vue实例中
+
+export default router
+</code></pre>
+<p>在 main.js 中使用即可</p>
+<pre><code>import Vue from &#39;vue&#39;
+import App from &#39;./App&#39;
+// 导入router
+import router from &#39;./router/index&#39;
+
+Vue.config.productionTip = false
+
+new Vue(&#123;
+  el: &#39;#app&#39;,
+  router,
+  render: h =&gt; h(App)
+&#125;)
+</code></pre>
+<h2 id="路由映射配置"><a href="#路由映射配置" class="headerlink" title="路由映射配置"></a>路由映射配置</h2><p>该标签是一个vue-router中已经内置的组件, 它会被渲染成一个标签<br>该标签会根据当前的路径, 动态渲染出不同的组件<br>网页的其他内容, 比如顶部的标题&#x2F;导航, 或者底部的一些版权信息等会和处于同一个等级<br>在路由切换时, 切换的是挂载的组件, 其他内容不会发生改变  </p>
+<h3 id="在components下新建如下两个文件"><a href="#在components下新建如下两个文件" class="headerlink" title="在components下新建如下两个文件"></a>在components下新建如下两个文件</h3><p>About.vue：</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;about&quot;&gt;
+    &lt;h2&gt;我是关于页标题&lt;/h2&gt;
+    &lt;p&gt;我是关于页内容&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  export default &#123;
+    name: &quot;About&quot;
+  &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+  #about &#123;
+    width: 300px;
+    height: 300px;
+    border: red solid 1px;
+
+  &#125;
+&lt;/style&gt;
+</code></pre>
+<p>Home.vue</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;home&quot;&gt;
+    &lt;h2&gt;我是首页标题&lt;/h2&gt;
+    &lt;p&gt;我是首页内容&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  export default &#123;
+    name: &quot;Home&quot;
+  &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+  #home &#123;
+    width: 300px;
+    height: 300px;
+  border: red solid 1px;
+  &#125;
+&lt;/style&gt;
+</code></pre>
+<p>router 下的index.js中添加如下内容</p>
+<pre><code>// 配置路由相关的信息
+import VueRouter from &#39;vue-router&#39;
+import Vue from &#39;vue&#39;
+
+import Home from &#39;../components/Home&#39;
+import About from &#39;../components/About&#39;
+
+// 1.通过Vue.use(插件), 安装插件
+Vue.use(VueRouter)
+
+// 2.创建VueRouter对象
+const routes = [
+  &#123;
+    path: &#39;&#39;,
+    // redirect重定向,默认跳转路径
+    redirect: &#39;/home&#39;
+  &#125;,
+  &#123;
+    path: &#39;/home&#39;,
+    component: Home
+  &#125;,
+  &#123;
+    path: &#39;/about&#39;,
+    component: About
+  &#125;
+]
+const router = new VueRouter(&#123;
+  // 配置路由和组件之间的应用关系
+  routes,
+  // 改变模式 默认是hash模式(有#号)
+  mode: &#39;history&#39;,
+  // 选择当前组件的时候需要添加的className
+  linkActiveClass: &#39;active&#39;
+&#125;)
+
+// 3.将router对象传入到Vue实例
+export default router
+</code></pre>
+<p>App.vue中添加如下内容：</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+&lt;!-- tag:以什么形式的标签进行渲染，
+   replace：不会留下history记录, 所以指定replace的情况下, 后退键返回不能返回到上一个页面中
+ --&gt;
+      &lt;router-link to=&quot;/home&quot; tag=&quot;button&quot; replace&gt;首页&lt;/router-link&gt;
+      &lt;router-link to=&quot;/about&quot; tag=&quot;button&quot; replace&gt;关于&lt;/router-link&gt;
+      &lt;!-- 此处是一个占位标签，当路由跳转到某个组件的时候，该组件中的内容就会被渲染到此标签中 --&gt;
+       &lt;router-view&gt; &lt;/router-view&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+
+export default &#123;
+  name: &#39;App&#39;
+&#125;
+&lt;/script&gt;
+
+&lt;style&gt;
+  .active&#123;
+      color: red;
+  &#125;
+&lt;/style&gt;
+</code></pre>
+<p>使用代码手动跳转</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+&lt;!--  自定义事件通过$router进行控制跳转  --&gt;
+    &lt;button @click=&quot;homeClick&quot;   tag=&quot;button&quot; &gt;首页&lt;/button&gt;
+    &lt;button @click=&quot;aboutClick&quot;   tag=&quot;button&quot; &gt;关于&lt;/button&gt;
+       &lt;router-view&gt; &lt;/router-view&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+
+export default &#123;
+  name: &#39;App&#39;,
+  methods:&#123;
+   // Vue-router在所有组件里都加入了$router
+    homeClick()&#123;
+
+      console.log(&quot;homeClick&quot;)
+
+      // this.$router.replace(&#39;/home&#39;) // 可以点浏览器回退
+      this.$router.push(&#39;/home&#39;)    // 不可以点浏览器回退
+
+    &#125;,
+    aboutClick()&#123;
+
+       this.$router.push(&#39;/about&#39;)
+      // this.$router.replace(&#39;/about&#39;)
+       console.log(&quot;aboutClick&quot;)
+    &#125;
+  &#125;
+&#125;
+&lt;/script&gt;
+
+&lt;style&gt;
+  .active&#123;
+      color: red;
+  &#125;
+&lt;/style&gt;
+</code></pre>
+<h1 id="动态路由-参数传递"><a href="#动态路由-参数传递" class="headerlink" title="动态路由(参数传递)"></a>动态路由(参数传递)</h1><p>某些情况下，一个页面的path路径可能是不确定的，比如我们进入用户界面时，希望是如下的路径：</p>
+<ul>
+<li>&#x2F;user&#x2F;userId,路径后面跟上用户的id  </li>
+<li>这种path和Component的匹配关系，我们称之为动态路由(也是路由传递数据的一种方式)</li>
+</ul>
+<p>添加一个 User.vue</p>
+<pre><code>&lt;template&gt;
+    &lt;div id=&quot;user&quot;&gt;
+      &lt;div id=&quot;home&quot;&gt;
+        &lt;h2&gt;我是用户页标题&lt;/h2&gt;
+        &lt;p&gt;我是用户页内容&lt;/p&gt;
+        &lt;h2&gt;用户id:&#123;&#123;userId&#125;&#125;&lt;/h2&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+    export default &#123;
+        name: &quot;User&quot;,
+      computed:&#123;
+          userId()&#123;
+            // $route：指向的是当前活跃的路由
+            return this.$route.params.userId;
+          &#125;
+      &#125;
+    &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+#user&#123;
+  width: 300px;
+  height: 300px;
+  border: red solid 1px;
+&#125;
+&lt;/style&gt;
+</code></pre>
+<p>在router目录下的index.js中添加如下配置：</p>
+<pre><code>// 2.创建VueRouter对象
+const routes = [
+  &#123;
+    path: &#39;&#39;,
+    // redirect重定向,默认跳转路径
+    redirect: &#39;/home&#39;
+  &#125;,
+  &#123;
+    path: &#39;/home&#39;,
+    component: Home
+  &#125;,
+  &#123;
+    path: &#39;/about&#39;,
+    component: About
+  &#125;,&#123;
+  path: &#39;/user/:userId&#39;,
+    component: User
+  &#125;
+]
+</code></pre>
+<p>在 App.vue 中添加如下代码：</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;router-link  to=&quot;/home&quot; tag=&quot;button&quot; replace&gt;首页&lt;/router-link&gt;
+    &lt;router-link  to=&quot;/about&quot; tag=&quot;button&quot; replace&gt;关于&lt;/router-link&gt;
+    &lt;router-link  :to=&quot;&#39;/user/&#39;+userId&quot; tag=&quot;button&quot; replace&gt;用户&lt;/router-link&gt;
+       &lt;router-view&gt; &lt;/router-view&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+
+export default &#123;
+  name: &#39;App&#39;,
+  data()&#123;
+    return &#123;userId:&quot;101&quot;&#125;
+  &#125;
+&#125;
+&lt;/script&gt;
+
+&lt;style&gt;
+  .active&#123;
+      color: red;
+  &#125;
+&lt;/style&gt;
+</code></pre>
+<h1 id="路由懒加载"><a href="#路由懒加载" class="headerlink" title="路由懒加载"></a>路由懒加载</h1><p>路由懒加载的意义</p>
+<ul>
+<li>当打包构建应用时，Javascript包会变得非常大，影响页面加载。</li>
+<li>如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了</li>
+</ul>
+<p>路由懒加载做了什么?</p>
+<ul>
+<li>路由懒加载的主要作用就是将路由对应的组件打包成一个个的js代码块.</li>
+<li>只有在这个路由被访问到的时候, 才加载对应的组件</li>
+</ul>
+<p>懒加载的三种方式<br>方式一: 结合Vue的异步组件和Webpack的代码分析</p>
+<pre><code>const Home = resolve =&gt; &#123; require.ensure([&#39;../components/Home.vue&#39;], () =&gt; &#123; resolve(require(&#39;../components/Home.vue&#39;)) &#125;)&#125;;
+</code></pre>
+<p>方式二: AMD写法</p>
+<pre><code>const About = resolve =&gt; require([&#39;../components/About.vue&#39;], resolve);
+</code></pre>
+<p>方式三: 在ES6中, 我们可以有更加简单的写法来组织Vue异步组件和Webpack的代码分割</p>
+<pre><code>const Home = () =&gt; import(&#39;../components/Home.vue&#39;)&lt;font color=&#39;red&#39;&gt;（最终使用）&lt;/font&gt;
+</code></pre>
+<h1 id="路由嵌套"><a href="#路由嵌套" class="headerlink" title="路由嵌套"></a>路由嵌套</h1><p>嵌套路由是一个很常见的功能</p>
+<ul>
+<li>比如在home页面中, 我们希望通过&#x2F;home&#x2F;news和&#x2F;home&#x2F;message访问一些内容.</li>
+<li>一个路径映射一个组件, 访问这两个路径也会分别渲染两个组件.</li>
+</ul>
+<h3 id="嵌套路由实现"><a href="#嵌套路由实现" class="headerlink" title="嵌套路由实现"></a>嵌套路由实现</h3><p>1.在components下准备两个组件作为Home的子组件  </p>
+<p>HomeMessage.vue：</p>
+<pre><code>&lt;template&gt;
+&lt;div&gt;
+  &lt;ul&gt;
+    &lt;li&gt;消息0&lt;/li&gt;
+    &lt;li&gt;消息1&lt;/li&gt;
+    &lt;li&gt;消息2&lt;/li&gt;
+    &lt;li&gt;消息3&lt;/li&gt;
+    &lt;li&gt;消息4&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+    export default &#123;
+        name: &quot;HomeMessage&quot;
+    &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+
+&lt;/style&gt;
+</code></pre>
+<p>HomeNews.vue</p>
+<pre><code>&lt;template&gt;
+&lt;div&gt;
+  &lt;ul&gt;
+    &lt;li&gt;新闻0&lt;/li&gt;
+    &lt;li&gt;新闻1&lt;/li&gt;
+    &lt;li&gt;新闻2&lt;/li&gt;
+    &lt;li&gt;新闻3&lt;/li&gt;
+    &lt;li&gt;新闻4&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+    export default &#123;
+        name: &quot;HomeNews&quot;
+    &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+
+&lt;/style&gt;
+</code></pre>
+<p>2.在 router 下的 index.js 下降这两个组件注册为Home的子组件</p>
+<pre><code>  &#123;
+    path: &#39;/home&#39;,
+    component: Home,
+    children:[
+      &#123;
+        path:&#39;message&#39;,
+        component:HomeMessage
+      &#125;,
+      &#123;
+        path: &#39;news&#39;,
+        component:HomeNews
+      &#125;
+
+    ]
+  &#125;,
+</code></pre>
+<p>3.在 Home 页进行引用这两个组件</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;home&quot;&gt;
+    &lt;h2&gt;我是首页标题&lt;/h2&gt;
+    &lt;router-link to=&quot;/home/news&quot; tag=&quot;button&quot;&gt;新闻&lt;/router-link&gt;
+    &lt;router-link to=&quot;/home/message&quot; tag=&quot;button&quot;&gt;消息&lt;/router-link&gt;
+   &lt;router-view&gt;&lt;/router-view&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>参数传递，也就是从一个路由跳转到另外一个路由的时候，我们希望传递一些消息到跳转的路由</p>
+<p>params的类型:</p>
+<ul>
+<li>配置路由格式: &#x2F;router&#x2F;:id</li>
+<li>传递的方式: 在path后面跟上对应的值</li>
+<li>传递后形成的路径: &#x2F;router&#x2F;123, &#x2F;router&#x2F;abc</li>
+</ul>
+<p>query的类型:</p>
+<ul>
+<li>配置路由格式: &#x2F;router, 也就是普通配置</li>
+<li>传递的方式: 对象中使用query的key作为传递方式</li>
+<li>传递后形成的路径: &#x2F;router?id&#x3D;123, &#x2F;router?id&#x3D;abc</li>
+</ul>
+<h3 id="实现方式1：通过query的方式"><a href="#实现方式1：通过query的方式" class="headerlink" title="实现方式1：通过query的方式"></a>实现方式1：通过query的方式</h3><p>1.准备 Profile.vue</p>
+<pre><code>&lt;template&gt;
+&lt;div&gt;
+  &lt;h1&gt;我的档案&lt;/h1&gt;
+  &lt;ul&gt;
+    &lt;li&gt;姓名：&#123;&#123;$route.query.name&#125;&#125;&lt;/li&gt;
+    &lt;li&gt;年龄：&#123;&#123;$route.query.age&#125;&#125;&lt;/li&gt;
+    &lt;li&gt;性别：&#123;&#123;$route.query.sex&#125;&#125;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+    export default &#123;
+        name: &quot;Profile&quot;,
+    &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+
+&lt;/style&gt;
+</code></pre>
+<p>2.在 router 下的 index.js 下配置路由</p>
+<pre><code>  &#123;
+    path: &#39;/profile&#39;,
+    component: Profile
+  &#125;
+</code></pre>
+<p>3.在 App.vue 下配置如下内容</p>
+<pre><code>&lt;router-link  :to=&quot;&#123;path: &#39;/profile&#39;, query: &#123;name: &#39;张三&#39;, age: 18,sex:&#39;男&#39;&#125;&#125;&quot;tag=&quot;button&quot; &gt;档案&lt;/router-link&gt;
+</code></pre>
+<h3 id="实现方式2：自定义点击事件"><a href="#实现方式2：自定义点击事件" class="headerlink" title="实现方式2：自定义点击事件"></a>实现方式2：自定义点击事件</h3><p>1.准备 Order.vue 页面</p>
+<pre><code>&lt;template&gt;
+    &lt;div&gt;
+      &lt;h2&gt;订单页面&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li&gt;订单号：&#123;&#123;$route.query.orderId&#125;&#125;&lt;/li&gt;
+        &lt;li&gt;物品名称：&#123;&#123;$route.query.productName&#125;&#125;&lt;/li&gt;
+        &lt;li&gt;价格：&#123;&#123;$route.query.price&#125;&#125;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+    export default &#123;
+        name: &quot;Order&quot;,
+
+    &#125;
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+
+&lt;/style&gt;
+</code></pre>
+<p>2.在 router 下的 index.js 下配置路由	</p>
+<pre><code> &#123;
+    path: &#39;/order&#39;,
+    component: Order
+  &#125;
+</code></pre>
+<p>3.在 App.vue 添加如下配置</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;button @click=&quot;orderClick&quot;tag=&quot;button&quot; replace&gt;订单&lt;/button&gt;
+    &lt;router-view&gt;&lt;/router-view&gt;
+
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  export default &#123;
+    name: &#39;App&#39;,
+    methods: &#123;
+      orderClick() &#123;
+        this.$router.push(&#123;
+          path: &#39;/order&#39;,
+          query: &#123;orderId: 101, productName: &#39;奥特曼真皮大衣&#39;, price: 8888&#125;
+        &#125;)
+      &#125;
+
+    &#125;,
+   
+  &#125;
+&lt;/script&gt;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/19/vue6/" data-id="cl70ok8ht000144w9802xeddu" data-title="vue6" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-vue5" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/17/vue5/" class="article-date">
+  <time class="dt-published" datetime="2022-08-17T13:22:23.000Z" itemprop="datePublished">2022-08-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/17/vue5/">vue5</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="vue-cli"><a href="#vue-cli" class="headerlink" title="vue-cli"></a>vue-cli</h1><p>CLI是什么意思?</p>
+<ul>
+<li>CLI是 Command-Line Interface, 翻译为命令行界面, 但是俗称脚手架.</li>
+<li>Vue CLI是一个官方发布 vue.js 项目脚手架</li>
+<li>使用 vue-cli 可以快速搭建Vue开发环境以及对应的webpack配置.</li>
+</ul>
+<h3 id="Vue-cli2初始化"><a href="#Vue-cli2初始化" class="headerlink" title="Vue-cli2初始化"></a>Vue-cli2初始化</h3><p>Vue CLI2初始化项目：vue init webpack projectName(执行该命令)<br>Vue CLI3初始化项目： vue create projectName</p>
+<h3 id="项目目录结构解析"><a href="#项目目录结构解析" class="headerlink" title="项目目录结构解析"></a>项目目录结构解析</h3><p>build目录: webpack.base.conf.js是webpack的公共配置；webpack.dev.conf.js是开发时配置；webpack.prod.conf.js是发布时配置</p>
+<p>config目录: 该文件夹中主要都是一些变量的配置，比如index.js，里面会有一些变量的配置，这些变量会被上面的builid文件夹里面的js文件所引用。当然了，index.js中的变量值也是可以自定义改变的。所以说config文件夹和build文件夹都是webpack的相关配置。</p>
+<p>node_modules目录: 该文件夹中存放的是项目依赖的包</p>
+<p>.babelrc文件：.babelrc主要就是对哪些浏览器可以进行es6转es5进行了限制。如果该浏览器占市场的份额大于1%且该浏览器的版本是它的最新的两个版本之一，那么可以进行es6到es5的转换。如果该浏览器是版本小于8的IE浏览器，那不要直接不考虑转换。总之，.babelrc就是在进行es转换的时候需要读取的配置文件。</p>
+<p>.editorconfig: 该文件主要就是对代码进行一些统一的设置</p>
+<p>.eslintignore: 表示我们在写代码的时候，有些文件夹里面的代码就算写的不太规范，但是我们也可以忽略它的不规范，在这个文件里面配置。</p>
+<p>slintrc.js文件: 用于设置如何进行代码检查。</p>
+<p>.gitignore文件: 表示当我们向服务器上传东西的时候，有些东西是可以不要上传的，可以在该文件中配置哪些东西不上传。</p>
+<p>.postcssrc.js文件: 项目在进行css转换的时候，所需要读取的配置文件。</p>
+<p>index.html文件: html文件的一个模板，打包的时候会以这个index.html为模板生成一个html文件放入dist文件夹中。</p>
+<p>package.json文件: 主要用于对项目所依赖包的配置和一些指令的设定(scripts属性)。</p>
+<h1 id="vue-cli3"><a href="#vue-cli3" class="headerlink" title="vue-cli3"></a>vue-cli3</h1><ul>
+<li>vue-cli 3 是基于 webpack 4 打造，vue-cli 2 还是 webapck 3</li>
+<li>vue-cli 3 的设计原则是“0配置”，移除的配置文件根目录下的，build和config等目录</li>
+<li>vue-cli 3 提供了 vue ui 命令，提供了可视化配置，更加人性化</li>
+<li>移除了static文件夹，新增了public文件夹，并且index.html移动到public中</li>
+</ul>
+<p>修改vue配置信息方式：</p>
+<p>vue-cli3图形化界面配置：在控制台输入： vue ui<br>在 node_modules&#x2F;@vue&#x2F;cli-service下进行修改<br>在当前项目目录下 创建 vue.config.js 自定义配置  </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/17/vue5/" data-id="cl70ok8hw000244w9gn0v3l9o" data-title="vue5" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-vue4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/16/vue4/" class="article-date">
+  <time class="dt-published" datetime="2022-08-16T14:42:56.000Z" itemprop="datePublished">2022-08-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/16/vue4/">vue4</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="webpack模块化开发"><a href="#webpack模块化开发" class="headerlink" title="webpack模块化开发"></a>webpack模块化开发</h1><p>目录结构：<br>WEBPACK-DEMO<br>│  package.json<br>│  webpack.config.js<br>│<br>├─dist<br>├─node_modules<br>└─src<br>      index.html<br>      main.js  </p>
+<h1 id="webpack安装"><a href="#webpack安装" class="headerlink" title="webpack安装"></a>webpack安装</h1><p>Vue.js官方脚手架工具就使用了webpack模板  </p>
+<ul>
+<li>对所有的资源会压缩等优化操作，核心两个功能 模块化和打包  </li>
+<li>它在开发过程中提供了一套完整的功能，能够使得我们开发过程中变得高效</li>
+<li>安装webpack之前先安装node，并且配置环境变量 node-v 查看是否安装node环境</li>
+<li>配置阿里云镜像：npm config set registry <a target="_blank" rel="noopener" href="https://registry.npm.taobao.org/">https://registry.npm.taobao.org/</a></li>
+<li>检测是否配置成功 npm config get registry</li>
+<li>安装命令（全局安装）：cnpm install <a href="mailto:&#119;&#101;&#x62;&#112;&#x61;&#x63;&#x6b;&#64;&#51;&#46;&#54;&#46;&#48;">&#119;&#101;&#x62;&#112;&#x61;&#x63;&#x6b;&#64;&#51;&#46;&#54;&#46;&#48;</a> -g</li>
+<li>测试是否安装成功：webpack -v</li>
+</ul>
+<h1 id="webpack入门使用"><a href="#webpack入门使用" class="headerlink" title="webpack入门使用"></a>webpack入门使用</h1><p>index.html 只需要引入bundle.js即可，webpack打包的时候会将依赖到的都引入进来</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;script src=&quot;../dist/bundle.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h1 id="main-js"><a href="#main-js" class="headerlink" title="main.js"></a>main.js</h1><pre><code>const &#123;add, mul&#125; = require(&#39;./mathUtil.js&#39;)
+console.log(add(20,30));
+console.log(mul(20,30));
+</code></pre>
+<p>#mathUtil.js</p>
+<pre><code>function add(number1,number2) &#123;
+        return number1+number2;
+&#125;
+
+function mul(number1,number2) &#123;
+        return number2*number1;
+&#125;
+
+module.exports = &#123;
+        add,
+        mul
+&#125;
+
+-------------------------------------------ES6模块化---------------------------------------------------------
+ // 导出  
+    export &#123;
+        add,mul
+&#125;
+// 导入
+    import &#123;name, age, height&#125; from &quot;./info&quot;;
+</code></pre>
+<h1 id="webpack配置"><a href="#webpack配置" class="headerlink" title="webpack配置"></a>webpack配置</h1><p>初始化项目：cnpm init</p>
+<pre><code>package name: (02webpack配置) meetwebpack(包名)
+version: (1.0.0)
+description: webpack-init(描述)
+entry point: (webpack.config.js) index.js(入口文件)
+test command:
+git repository:
+keywords:
+author:
+license: (ISC)
+About to write to C:\Users\11058\Desktop\web学习\webpack\package.json:
+</code></pre>
+<p>在项目下，新建一个文件 webpack.config.js</p>
+<pre><code>// 从node中导入
+const path=require(&#39;path&#39;)
+module.exports=&#123;
+    // 入口
+    entry:&#39;./src/main.js&#39;,
+    // 出口
+    output:&#123;
+        // 将当前路径和dist进行拼接
+        path: path.resolve(__dirname, &#39;dist&#39;),
+        filename:&#39;bundle.js&#39;
+    &#125;
+&#125;
+</code></pre>
+<p>在 package.json 的script中配置命令 直接使用 npm run build 代替 webpack 命令</p>
+<pre><code>  &quot;scripts&quot;: &#123;
+     // 优先从本地webpack中找，如果本地没有就去全局中找 [使用脚本使用的就是本地的，否则都是使用的是全局的]
+     // 如果想通过cm命令的方式使用本地webpack，那么就在node_modules/bin目录下执行：webpack命令 
+    &quot;build&quot;: &quot;webpack&quot;
+  &#125;
+</code></pre>
+<p>在项目本地安装 webpack 命令： npm install <a href="mailto:&#119;&#x65;&#98;&#112;&#x61;&#x63;&#x6b;&#x40;&#51;&#46;&#54;&#x2e;&#48;">&#119;&#x65;&#98;&#112;&#x61;&#x63;&#x6b;&#x40;&#51;&#46;&#54;&#x2e;&#48;</a> –save-dev</p>
+<p>webpack本身来说无法处理css, 图片, 高级ES6转化ES5的能力, 需要webpack扩展对应的loader</p>
+<h3 id="css-loader配置"><a href="#css-loader配置" class="headerlink" title="css-loader配置:"></a>css-loader配置:</h3><p>加载 CSS 文件并解析 import 的 CSS 文件，最终返回 CSS 代码</p>
+<p>1.安装css-loader: npm install <a href="mailto:&#115;&#x74;&#x79;&#108;&#101;&#45;&#108;&#x6f;&#x61;&#100;&#101;&#x72;&#64;&#50;&#x2e;&#x30;&#x2e;&#50;">&#115;&#x74;&#x79;&#108;&#101;&#45;&#108;&#x6f;&#x61;&#100;&#101;&#x72;&#64;&#50;&#x2e;&#x30;&#x2e;&#50;</a> –save-dev<br>2.在main.js中依赖normal.css[ require(’.&#x2F;css&#x2F;normal.css’) ]<br>3.在webpack.config.js中进行配置</p>
+<pre><code>   module: &#123;
+        // 配置规则
+        rules: [
+            &#123;
+                test: /\.css$/,
+                use: [ &quot;css-loader&quot;],
+            &#125;,
+        ],
+    &#125;,
+</code></pre>
+<h3 id="style-loader配置"><a href="#style-loader配置" class="headerlink" title="style-loader配置 :"></a>style-loader配置 :</h3><p>安装往css-loader后，并不能进行解析运行，css-loader只负责加载进来，需要额外的在安装style-loader</p>
+<p>1.安装style-loader: npm install <a href="mailto:&#x73;&#116;&#x79;&#108;&#x65;&#45;&#108;&#x6f;&#97;&#100;&#x65;&#114;&#64;&#48;&#46;&#x32;&#51;&#x2e;&#49;">&#x73;&#116;&#x79;&#108;&#x65;&#45;&#108;&#x6f;&#97;&#100;&#x65;&#114;&#64;&#48;&#46;&#x32;&#51;&#x2e;&#49;</a> –save-dev<br>2.在webpack.config.js中进行配置 ,在use中添加一个 style-loader 即可</p>
+<h3 id="less-loader配置"><a href="#less-loader配置" class="headerlink" title="less-loader配置:"></a>less-loader配置:</h3><p>1.安装 less-loader: npm install <a href="mailto:&#x6c;&#101;&#x73;&#x73;&#45;&#x6c;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x34;&#46;&#49;&#46;&#48;">&#x6c;&#101;&#x73;&#x73;&#45;&#x6c;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x34;&#46;&#49;&#46;&#48;</a> –save-dev<br>2.在webpack.config.js中进行配置<br>3.在rules中的第二个下标中配置该对象  </p>
+<pre><code>        &#123;
+            test: /\.less$/,
+           // 使用多个loader时，从右向左进行加载,使用对象还可以传递参数： &#123; loader:&quot;less-loader&quot;,arg:value&#125;,
+            use:[
+                &#123;loader:&quot;style-loader&quot;&#125;,
+                &#123;loader:&quot;css-loader&quot;&#125;,
+                &#123;loader:&quot;less-loader&quot;&#125;
+            ]
+        &#125;,
+</code></pre>
+<h3 id="url-loader配置：用于打包图片"><a href="#url-loader配置：用于打包图片" class="headerlink" title="url-loader配置：用于打包图片"></a>url-loader配置：用于打包图片</h3><p>1.安装url-loader: npm install –save-dev <a href="mailto:&#117;&#114;&#108;&#x2d;&#108;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x31;&#x2e;&#49;&#46;&#x32;">&#117;&#114;&#108;&#x2d;&#108;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x31;&#x2e;&#49;&#46;&#x32;</a><br>2.在webpack.config.js中进行配置 注意根据这些版本来，否则不指定版本，会出现问题</p>
+<pre><code>&#123;
+            test: /\.(png|jpg|gif)$/,
+            use: [
+                &#123;
+                    loader: &#39;url-loader&#39;,
+                    options: &#123;
+                        // 限制文件的大小,当加载的图片大于限制的时候使用file-loader进行加载，
+                        // 小于limit将图片编译为base64字符串进行显示
+                        limit:625664,
+                    &#125;,
+                &#125;,
+            ],
+        &#125;
+</code></pre>
+<h3 id="file-loader-安装命令：npm-install-102-105-108-x65-x2d-x6c-x6f-x61-x64-101-x72-x40-50-x2e-x30-x2e-x30-–save-dev-解决图片超过limit大小时无法进行打包或显示"><a href="#file-loader-安装命令：npm-install-102-105-108-x65-x2d-x6c-x6f-x61-x64-101-x72-x40-50-x2e-x30-x2e-x30-–save-dev-解决图片超过limit大小时无法进行打包或显示" class="headerlink" title="file-loader: 安装命令：npm install &#102;&#105;&#108;&#x65;&#x2d;&#x6c;&#x6f;&#x61;&#x64;&#101;&#x72;&#x40;&#50;&#x2e;&#x30;&#x2e;&#x30; –save -dev (解决图片超过limit大小时无法进行打包或显示)"></a>file-loader: 安装命令：npm install <a href="mailto:&#102;&#105;&#108;&#x65;&#x2d;&#x6c;&#x6f;&#x61;&#x64;&#101;&#x72;&#x40;&#50;&#x2e;&#x30;&#x2e;&#x30;">&#102;&#105;&#108;&#x65;&#x2d;&#x6c;&#x6f;&#x61;&#x64;&#101;&#x72;&#x40;&#50;&#x2e;&#x30;&#x2e;&#x30;</a> –save -dev (解决图片超过limit大小时无法进行打包或显示)</h3><pre><code>   output:&#123;
+        // 将当前路径和dist进行拼接
+        path: path.resolve(__dirname, &#39;dist&#39;),
+        filename:&#39;bundle.js&#39;,
+        // 从dist目录下开始寻找资源
+        publicPath:&#39;dist/&#39;
+    &#125;,
+  ----------------------------------------在rules添加如下配置-------------------------------------------------------
+           &#123;
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    &#123;
+                        loader: &#39;url-loader&#39;,
+                        options: &#123;
+                            // 限制文件的大小,当加载的图片大于限制的时候使用file-loader进行加载，
+                            // 小于limit将图片编译为base64字符串进行显示
+                            limit:13000, //625664
+                            // 设置打包路径和文件名
+                            name:&#39;img/[name].[hash:8].[ext]&#39;
+                        &#125;,
+                    &#125;,
+                ],
+            &#125;
+</code></pre>
+<h3 id="ES6语法转ES5语法"><a href="#ES6语法转ES5语法" class="headerlink" title="ES6语法转ES5语法"></a>ES6语法转ES5语法</h3><p>1.安装对应的依赖： npm install –save-dev babel-loader@7 babel-core babel-preset-es2015<br>2.配置 webpack.config.js</p>
+<pre><code>     &#123;
+            test: /\.m?js$/,
+            // 在进行ES6转ES5时只对src目录下js进行转化
+            exclude: /(node_modules|bower_components)/,
+            use: &#123;
+                loader: &#39;babel-loader&#39;,
+                options: &#123;
+                    presets: [&#39;es2015&#39;]
+                &#125;
+            &#125;
+        &#125;
+</code></pre>
+<h3 id="配置Vue环境"><a href="#配置Vue环境" class="headerlink" title="配置Vue环境"></a>配置Vue环境</h3><p>1.先进行安装 npm install vue –save<br>2.在mian.js中写入如下测试代码</p>
+<pre><code>const app = new Vue(&#123;
+    el:&#39;#app&#39;,
+    message:&#39;hello world&#39;,
+    methods:&#123;
+        showMessage()&#123;
+            console.log(&quot;welcome to Vue&quot;)
+        &#125;
+    &#125;
+&#125;)
+</code></pre>
+<p>3.在index.html中写一个app</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;button @click=&quot;showMessage&quot;&gt; 按钮 &lt;/button&gt;
+&lt;/div&gt;
+// 把引入bundle.js放在后面，避免元素未加载完，js代码开始执行找不到dom
+</code></pre>
+<p>4.解决错误：</p>
+<p>方式1：import Vue from ‘vue&#x2F;dist&#x2F;vue.esm.js’<br>方式2：在webpack.config.js中添加如下代码，和moudle同级</p>
+<pre><code>resolve: &#123;
+    alias: &#123;
+        &#39;vue$&#39;: &#39;vue/dist/vue.esm.js&#39; //内部为正则表达式  vue结尾的
+    &#125;
+&#125;
+</code></pre>
+<h3 id="安装vue-loader-npm-install-x76-x75-x65-45-108-111-97-x64-x65-114-64-x31-x35-x2e-52-x2e-50-x76-117-x65-x2d-x74-x65-x6d-112-108-97-x74-x65-45-x63-x6f-109-x70-x69-x6c-101-114-x40-x32-46-x36-x2e-49-x34-–save-dev"><a href="#安装vue-loader-npm-install-x76-x75-x65-45-108-111-97-x64-x65-114-64-x31-x35-x2e-52-x2e-50-x76-117-x65-x2d-x74-x65-x6d-112-108-97-x74-x65-45-x63-x6f-109-x70-x69-x6c-101-114-x40-x32-46-x36-x2e-49-x34-–save-dev" class="headerlink" title="安装vue-loader : npm install &#x76;&#x75;&#x65;&#45;&#108;&#111;&#97;&#x64;&#x65;&#114;&#64;&#x31;&#x35;&#x2e;&#52;&#x2e;&#50; &#x76;&#117;&#x65;&#x2d;&#x74;&#x65;&#x6d;&#112;&#108;&#97;&#x74;&#x65;&#45;&#x63;&#x6f;&#109;&#x70;&#x69;&#x6c;&#101;&#114;&#x40;&#x32;&#46;&#x36;&#x2e;&#49;&#x34;–save-dev"></a>安装vue-loader : npm install <a href="mailto:&#x76;&#x75;&#x65;&#45;&#108;&#111;&#97;&#x64;&#x65;&#114;&#64;&#x31;&#x35;&#x2e;&#52;&#x2e;&#50;">&#x76;&#x75;&#x65;&#45;&#108;&#111;&#97;&#x64;&#x65;&#114;&#64;&#x31;&#x35;&#x2e;&#52;&#x2e;&#50;</a> <a href="mailto:&#x76;&#117;&#x65;&#x2d;&#x74;&#x65;&#x6d;&#112;&#108;&#97;&#x74;&#x65;&#45;&#x63;&#x6f;&#109;&#x70;&#x69;&#x6c;&#101;&#114;&#x40;&#x32;&#46;&#x36;&#x2e;&#49;&#x34;">&#x76;&#117;&#x65;&#x2d;&#x74;&#x65;&#x6d;&#112;&#108;&#97;&#x74;&#x65;&#45;&#x63;&#x6f;&#109;&#x70;&#x69;&#x6c;&#101;&#114;&#x40;&#x32;&#46;&#x36;&#x2e;&#49;&#x34;</a>–save-dev</h3><p>在配置文件中做以下修改：</p>
+<pre><code>       &#123;
+            test: /\.vue$/,
+            use: &#123;
+                loader: &#39;vue-loader&#39;,
+            &#125;
+        &#125;
+</code></pre>
+<p>在vue目录下新建AApp.vue代替app.js ,内容如下：</p>
+<pre><code>&lt;!-- 组件模板代码 --&gt;
+&lt;template&gt;
+    &lt;div&gt;
+        &lt;p&gt;&#123;&#123;message&#125;&#125;&lt;/p&gt;
+        &lt;button @click=&quot;showMessage&quot;&gt; 按钮&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;!-- js代码 --&gt;
+&lt;script&gt;
+    export default &#123;
+        name: &#39;App&#39;,
+        data() &#123;
+            return &#123;
+                message: &quot;hello world&quot;
+            &#125;
+        &#125;,
+        methods: &#123;
+            showMessage() &#123;
+                alert(&quot;welcome to Vue&quot;);
+            &#125;
+        &#125;
+    &#125;
+&lt;/script&gt;
+
+&lt;!-- 写css代码 --&gt;
+&lt;style scoped&gt;
+    .title &#123;
+        color: #ff0000
+    &#125;
+&lt;/style&gt;
+</code></pre>
+<p>在 main.js 中使用即可</p>
+<pre><code>//引入App.vue
+import App from &quot;./vue/App.vue&quot;;
+
+new Vue(&#123;
+    el: &#39;#app&#39;,
+    template:&#39;&lt;App/&gt;&#39;,
+    components:&#123; App &#125;
+
+&#125;)
+</code></pre>
+<h1 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a>plugin</h1><h3 id="配置BannerPulgin"><a href="#配置BannerPulgin" class="headerlink" title="配置BannerPulgin:"></a>配置BannerPulgin:</h3><p>在webpack.config.js引入webpack</p>
+<pre><code>const webpack=require(&#39;webpack&#39;)
+</code></pre>
+<p>2.在moudle同级下配置插件</p>
+<pre><code>// 插件
+plugins:[
+    // 版权信息插件
+    new webpack.BannerPlugin(&#39;最终版权归test所有&#39;)
+]
+</code></pre>
+<h3 id="配置HtmlWebpackPlugin"><a href="#配置HtmlWebpackPlugin" class="headerlink" title="配置HtmlWebpackPlugin"></a>配置HtmlWebpackPlugin</h3><p>该插件将 index.html 打包到 buildle.js 中去</p>
+<p>1.安装该插件:npm install <a href="mailto:&#x68;&#116;&#109;&#108;&#x2d;&#x77;&#101;&#x62;&#112;&#x61;&#99;&#x6b;&#x2d;&#x70;&#x6c;&#117;&#103;&#x69;&#110;&#64;&#x32;&#x2e;&#x33;&#x30;&#x2e;&#x31;">&#x68;&#116;&#109;&#108;&#x2d;&#x77;&#101;&#x62;&#112;&#x61;&#99;&#x6b;&#x2d;&#x70;&#x6c;&#117;&#103;&#x69;&#110;&#64;&#x32;&#x2e;&#x33;&#x30;&#x2e;&#x31;</a> –save-dev<br>2.注释掉webpack.config.js中的publicPath:‘dist&#x2F;’<br>3.在webpack.config.js中引入const htmlWebpackPlugin &#x3D; require(‘html-webpack-plugin’)<br>4.在webpack.config.js中配置new htmlWebpackPlugin({template:‘index.html’ })  </p>
+<h3 id="配置uglifyjs"><a href="#配置uglifyjs" class="headerlink" title="配置uglifyjs:"></a>配置uglifyjs:</h3><p>对buildle.js进行压缩  </p>
+<p>1.安装 npm install <a href="mailto:&#117;&#103;&#x6c;&#x69;&#x66;&#x79;&#106;&#115;&#x2d;&#119;&#x65;&#98;&#112;&#97;&#99;&#107;&#x2d;&#x70;&#108;&#117;&#103;&#x69;&#x6e;&#x40;&#x31;&#46;&#x31;&#46;&#x31;">&#117;&#103;&#x6c;&#x69;&#x66;&#x79;&#106;&#115;&#x2d;&#119;&#x65;&#98;&#112;&#97;&#99;&#107;&#x2d;&#x70;&#108;&#117;&#103;&#x69;&#x6e;&#x40;&#x31;&#46;&#x31;&#46;&#x31;</a> –save-dev<br>2.在 webpack.config.js 中引入 const uglifyJsPlugin &#x3D; require(‘uglifyjs-webpack-plugin’)<br>3.在 webpack.config.js 中配置 new uglifyJsPlugin()  </p>
+<h3 id="使用-webpack-搭建本地服务器"><a href="#使用-webpack-搭建本地服务器" class="headerlink" title="使用 webpack 搭建本地服务器"></a>使用 webpack 搭建本地服务器</h3><p>1.安装npm install <a href="mailto:&#x77;&#101;&#98;&#112;&#97;&#x63;&#x6b;&#45;&#100;&#101;&#118;&#45;&#115;&#101;&#114;&#x76;&#x65;&#114;&#x40;&#50;&#46;&#x39;&#x2e;&#49;">&#x77;&#101;&#98;&#112;&#97;&#x63;&#x6b;&#45;&#100;&#101;&#118;&#45;&#115;&#101;&#114;&#x76;&#x65;&#114;&#x40;&#50;&#46;&#x39;&#x2e;&#49;</a> –save-dev<br>2.在package.json中的script中配置”dev”:”webpack-dev-server”<br>3.在webpack.config.js中添加如下配置</p>
+<pre><code>// 加载本地服务器
+devServer: &#123;
+    contentBase: &#39;./dist&#39;,
+    // 实时监听页面
+    inline: true,
+    // 80端口
+    port: 80,
+    // 如下 npm run dev 后自动打开浏览器
+    open: true,
+&#125;
+</code></pre>
+<h3 id="配置文件的分离抽取："><a href="#配置文件的分离抽取：" class="headerlink" title="配置文件的分离抽取："></a>配置文件的分离抽取：</h3><p>1.安装 npm install webpack-merge –save -dev</p>
+<p>base.config.js: 开发时和运行时都需要的配置</p>
+<pre><code>// 从node中导入
+const path=require(&#39;path&#39;)
+// 引入插件
+const webpack=require(&#39;webpack&#39;)
+const htmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;)
+module.exports=&#123;
+    // 入口
+    entry:&#39;./src/main.js&#39;,
+    // 出口
+    output:&#123;
+        // 将当前路径和dist进行拼接
+        path: path.resolve(__dirname, &#39;../dist&#39;),
+        filename:&#39;bundle.js&#39;,
+        // 从dist目录下开始寻找资源
+        // publicPath:&#39;dist/&#39;
+    &#125;,
+
+    module: &#123;
+        // 配置规则
+        rules: [
+            &#123;
+                test: /\.css$/,
+                // css-loader:只负责将css进行加载,不负责解析和加载到index.html中
+                // style-loader ：将模块导出的内容作为样式并添加到 DOM 中
+                use: [ &quot;style-loader&quot;,&quot;css-loader&quot;],
+            &#125;,
+            &#123;
+                test: /\.less$/,
+                // 使用多个loader时，从右向左进行加载,使用对象还可以传递参数： &#123; loader:&quot;less-loader&quot;,arg:value&#125;,
+                use:[
+                    &#123;loader:&quot;style-loader&quot;&#125;,
+                    &#123;loader:&quot;css-loader&quot;&#125;,
+                    &#123;loader:&quot;less-loader&quot;&#125;
+                ]
+            &#125;,
+            &#123;
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    &#123;
+                        loader: &#39;url-loader&#39;,
+                        options: &#123;
+                            // 限制文件的大小,当加载的图片大于限制的时候使用file-loader进行加载，
+                            // 小于limit将图片编译为base64字符串进行显示
+                            limit:13000, //625664
+                            // 设置打包路径和文件名
+                            name:&#39;img/[name].[hash:8].[ext]&#39;
+                        &#125;,
+                    &#125;,
+                ],
+            &#125;,
+            &#123;
+                test: /\.m?js$/,
+                // 在进行ES6转ES5时只对src目录下js进行转化
+                exclude: /(node_modules|bower_components)/,
+                use: &#123;
+                    loader: &#39;babel-loader&#39;,
+                    options: &#123;
+                        presets: [&#39;es2015&#39;]
+                    &#125;
+                &#125;
+            &#125;,
+            &#123;
+                test: /\.vue$/,
+                use: &#123;
+                    loader: &#39;vue-loader&#39;,
+                &#125;
+            &#125;
+        ],
+
+    &#125;,
+    // 解析
+    resolve: &#123;
+        extensions:[&#39;.css&#39;,&#39;.js&#39;,&#39;.vue&#39;],
+        alias: &#123;
+            &#39;vue$&#39;: &#39;vue/dist/vue.esm.js&#39; //内部为正则表达式  vue结尾的
+        &#125;
+    &#125;,
+    // 插件
+    plugins:[
+        // 版权信息插件
+        new webpack.BannerPlugin(&#39;最终版权归test所有&#39;),
+        new htmlWebpackPlugin(&#123;
+            template:&#39;index.html&#39;
+        &#125;),
+    ],
+
+&#125;
+</code></pre>
+<h3 id="dev-config-js-开发时配置"><a href="#dev-config-js-开发时配置" class="headerlink" title="dev.config.js: 开发时配置"></a>dev.config.js: 开发时配置</h3><pre><code>// proud.config.js:开发时需要的配置
+const  baseConfig = require(&#39;./base.config.js&#39;)
+const  webpackMerge=require(&#39;webpack-merge&#39;)
+// 将base.config和dev.config.js进行合并
+
+module.exports = webpackMerge.merge(baseConfig,&#123;
+    // 加载本地服务器
+    devServer: &#123;
+        contentBase: &#39;./dist&#39;,
+        // 实时监听页面
+        inline: true,
+        // 80端口
+        port: 80,
+        // 如下 npm run dev 后自动打开浏览器
+        open: true,
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="proud-config-js-运行时配置"><a href="#proud-config-js-运行时配置" class="headerlink" title="proud.config.js: 运行时配置"></a>proud.config.js: 运行时配置</h3><pre><code>// proud.config.js:运行时都需要的配置
+const uglifyJsPlugin = require(&#39;uglifyjs-webpack-plugin&#39;)
+const  baseConfig = require(&#39;./base.config.js&#39;)
+const  webpackMerge=require(&#39;webpack-merge&#39;)
+
+// 将base.config和proud.config.js进行合并
+module.exports=webpackMerge.merge(baseConfig,&#123;
+    // 插件
+    plugins:[
+        // 进行压缩
+        new uglifyJsPlugin()
+    ],
+&#125;)
+</code></pre>
+<h3 id="在-package-json-指定配置文件路径"><a href="#在-package-json-指定配置文件路径" class="headerlink" title="在 package.json 指定配置文件路径"></a>在 package.json 指定配置文件路径</h3><pre><code>  &quot;scripts&quot;: &#123;
+    &quot;build&quot;: &quot;webpack  --config  ./build/proud.config.js&quot;,
+    &quot;dev&quot;: &quot;webpack-dev-server  --config  ./build/dev.config.js&quot;
+  &#125;,
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/16/vue4/" data-id="cl70ok8hp000044w9ffe20o0a" data-title="vue4" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-vue3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/08/15/vue3/" class="article-date">
@@ -1876,176 +2900,12 @@ cosnt app = new Vue(&#123;
 
 
   
-    <article id="post-ajax1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/07/28/ajax1/" class="article-date">
-  <time class="dt-published" datetime="2022-07-28T07:56:13.000Z" itemprop="datePublished">2022-07-28</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/07/28/ajax1/">ajax1</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="ajax优缺点："><a href="#ajax优缺点：" class="headerlink" title="ajax优缺点："></a>ajax优缺点：</h1><p>1.无需刷新页面请求数据<br>2.用户事件更新页面内容</p>
-<p>1.无浏览历史<br>2.跨域<br>3.SEO不行</p>
-<h1 id="请求报文："><a href="#请求报文：" class="headerlink" title="请求报文："></a>请求报文：</h1><p>1.行   get post put delete &#x2F; url路径 &#x2F;  http协议版本<br>2.头 	  HOST：<br>          Cookie:<br>          Content-type:<br>        ……</p>
-<p>3.空行<br>4.体</p>
-<h1 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h1><p>1.行  http协议版本 &#x2F; 200 &#x2F; ok<br>2.头  Content-type: ……<br>3.空行<br>4.体</p>
-<h1 id="Express框架"><a href="#Express框架" class="headerlink" title="Express框架"></a>Express框架</h1><p>npm i express</p>
-<pre><code>const express = require(&#39;express&#39;);
-
-//创建应用对象
-const app = express();
-
-//创建路由规则
-//request对请求报文封装
-//response对响应报文封装
-app.get(&#39;/&#39;, (request, response) =&gt; &#123;
-    response.send(&#39;hello&#39;);
-&#125;);
-
-//监听端口启动服务
-app.listen(8000, () =&gt; &#123;
-    console.log(&quot;服务已经启动，8000端口监听中&quot;);
-&#125;);
-</code></pre>
-<h1 id="ajax操作步骤"><a href="#ajax操作步骤" class="headerlink" title="ajax操作步骤"></a>ajax操作步骤</h1><p>1.创建对象<br>    <code>const xhr = new XMLHttpRequest();</code><br>2.初始化 设置请求方法和url<br>    <code>xhr.open(&#39;GET&#39;, &#39;/url&#39;);</code><br>3.发送<br>    <code>xhr.send();</code><br>4.事件绑定 处理服务端返回结果   </p>
-<pre><code>xhr.onreadystatechange = function() &#123;
-if (xhr.readyState === 4) &#123;
-    //判断响应状态码  
-    if (xhr.status === 200 &amp;&amp; xhr.status &lt; 300) &#123;
-        //处理结果 行 头 空行 体  
-        console.log(xhr.status); //状态码  
-        console.log(xhr.statusTEXT); //状态字符串  
-        console.log(xhr.getAllResponseHeaders); //所有响应头	  
-        console.log(xhr.response); //响应体  
-    &#125; else &#123;
-
-    &#125;
-&#125;
-</code></pre>
-<p>}</p>
-<p>#设置请求头<br>前端:	<br>    <code>xhr.setRequestHeader(&#39;Content-Type&#39;,&#39;&#39;);</code><br>后端:<br>    <code>response.setHeader(&#39;Access-Control-Allow-Headers&#39;,&#39;*&#39;);</code></p>
-<p>#处理JSON<br>对json进行字符串转换<br>后端:<br>    <code>let str = JSON.stringify(json);</code><br>前端:设置响应体数据类型<br>    &#96;xhr.responseType &#x3D; ‘json’;</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/07/28/ajax1/" data-id="cl6ngpja50000low9b1cv1f2i" data-title="ajax1" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-newpapername" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/07/25/newpapername/" class="article-date">
-  <time class="dt-published" datetime="2022-07-25T05:57:43.000Z" itemprop="datePublished">2022-07-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/07/25/newpapername/">newpapername</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><p>测试发布</p>
-<h2 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h2><h3 id="标题测试"><a href="#标题测试" class="headerlink" title="标题测试"></a>标题测试</h3>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/07/25/newpapername/" data-id="cl60ciwey000060w94f87d0ug" data-title="newpapername" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/07/24/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2022-07-24T14:56:54.878Z" itemprop="datePublished">2022-07-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/07/24/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/07/24/hello-world/" data-id="cl60ciwf2000160w9ajn2gxzl" data-title="Hello World" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -2076,23 +2936,23 @@ if (xhr.readyState === 4) &#123;
       <ul>
         
           <li>
+            <a href="/2022/08/19/vue6/">vue6</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/17/vue5/">vue5</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/16/vue4/">vue4</a>
+          </li>
+        
+          <li>
             <a href="/2022/08/15/vue3/">vue3</a>
           </li>
         
           <li>
             <a href="/2022/08/14/vue2/">vue2</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/13/redis%E4%B8%8Espringboot/">redis与springboot</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/13/redis3/">redis3</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/12/redis2/">redis2</a>
           </li>
         
       </ul>
