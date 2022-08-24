@@ -4,19 +4,21 @@
   <meta charset="utf-8">
   
   
-  <title>redis与springboot | 智能财务</title>
+  <title>element1 | 智能财务</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="pom依赖&lt;dependencies&gt;     &lt;!--集成redis--&gt;     &lt;dependency&gt;         &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;         &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;a">
+  <meta name="description" content="安装elementuinpm i element-ui -S  在mian.js中引入Element UIimport ElementUI from &#39;element-ui&#39;; import &#39;element-ui&#x2F;lib&#x2F;theme-chalk&#x2F;index.css&#39;;   Vue.use(ElementUI);  测试在ui文件夹新建elementui.vue 路">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis与springboot">
-<meta property="og:url" content="http://example.com/2022/08/13/redis%E4%B8%8Espringboot/index.html">
+<meta property="og:title" content="element1">
+<meta property="og:url" content="http://example.com/2022/08/20/element1/index.html">
 <meta property="og:site_name" content="智能财务">
-<meta property="og:description" content="pom依赖&lt;dependencies&gt;     &lt;!--集成redis--&gt;     &lt;dependency&gt;         &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;         &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;a">
+<meta property="og:description" content="安装elementuinpm i element-ui -S  在mian.js中引入Element UIimport ElementUI from &#39;element-ui&#39;; import &#39;element-ui&#x2F;lib&#x2F;theme-chalk&#x2F;index.css&#39;;   Vue.use(ElementUI);  测试在ui文件夹新建elementui.vue 路">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-08-13T15:33:57.000Z">
-<meta property="article:modified_time" content="2022-08-13T15:38:42.085Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210110121343645.png">
+<meta property="article:published_time" content="2022-08-20T15:25:12.000Z">
+<meta property="article:modified_time" content="2022-08-24T03:11:47.220Z">
 <meta property="article:author" content="Ma">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210110121343645.png">
   
     <link rel="alternate" href="/atom.xml" title="智能财务" type="application/atom+xml">
   
@@ -73,10 +75,10 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-redis与springboot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-element1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2022/08/13/redis%E4%B8%8Espringboot/" class="article-date">
-  <time class="dt-published" datetime="2022-08-13T15:33:57.000Z" itemprop="datePublished">2022-08-13</time>
+    <a href="/2022/08/20/element1/" class="article-date">
+  <time class="dt-published" datetime="2022-08-20T15:25:12.000Z" itemprop="datePublished">2022-08-20</time>
 </a>
     
   </div>
@@ -87,7 +89,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      redis与springboot
+      element1
     </h1>
   
 
@@ -95,59 +97,62 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="pom依赖"><a href="#pom依赖" class="headerlink" title="pom依赖"></a>pom依赖</h1><pre><code>&lt;dependencies&gt;
-    &lt;!--集成redis--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-        &lt;version&gt;2.1.7.RELEASE&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!--序列化--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-        &lt;version&gt;1.2.54&lt;/version&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!--lombok,自动生成set、get等方法--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-        &lt;version&gt;1.18.10&lt;/version&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
+        <h1 id="安装elementui"><a href="#安装elementui" class="headerlink" title="安装elementui"></a>安装elementui</h1><pre><code>npm i element-ui -S
 </code></pre>
-<h1 id="yml配置文件"><a href="#yml配置文件" class="headerlink" title="yml配置文件"></a>yml配置文件</h1><pre><code>server:
-  port: 10001
-
-spring:
-  redis:
-    host: 127.0.0.1
-    port: 6379
+<h3 id="在mian-js中引入Element-UI"><a href="#在mian-js中引入Element-UI" class="headerlink" title="在mian.js中引入Element UI"></a>在mian.js中引入Element UI</h3><pre><code>import ElementUI from &#39;element-ui&#39;;
+import &#39;element-ui/lib/theme-chalk/index.css&#39;;
+ 
+Vue.use(ElementUI);
 </code></pre>
-<h1 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h1><pre><code>import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-
-@SpringBootTest
-public class testRedis &#123;
-
-    @Autowired(required = false)
-    private RedisTemplate redisTemplate;
-
-    @Test
-    void getName()&#123;
-        redisTemplate.opsForValue().set(&quot;name&quot;,&quot;dadadingdada!&quot;);
-        System.out.println(redisTemplate.opsForValue().get(&quot;name&quot;));
-    &#125;
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在ui文件夹新建elementui.vue</p>
+<p>路由中加入</p>
+<pre><code>import MintUI from &#39;@/components/UI/MintUI&#39;
+import ElementUI from &#39;@/components/UI/ElementUI&#39;
+ 
+//2、定义路由
+const routes = [
+  //前面的配置省略...
+  &#123;path:&#39;/mint_ui&#39;,component: MintUI&#125;,
+  &#123;path:&#39;/element_ui&#39;,component: ElementUI&#125;
+]
+</code></pre>
+<p>接着写几个按钮</p>
+<pre><code>&lt;template&gt;
+  &lt;div id=&quot;ElementUI&quot;&gt;
+    &lt;h1&gt;&#123;&#123;msg&#125;&#125;&lt;/h1&gt;
+    &lt;el-row&gt;
+        &lt;el-button&gt;默认按钮&lt;/el-button&gt;
+        &lt;el-button type=&quot;primary&quot;&gt;主要按钮&lt;/el-button&gt;
+        &lt;el-button type=&quot;success&quot;&gt;成功按钮&lt;/el-button&gt;
+        &lt;el-button type=&quot;info&quot;&gt;信息按钮&lt;/el-button&gt;
+        &lt;el-button type=&quot;warning&quot;&gt;警告按钮&lt;/el-button&gt;
+        &lt;el-button type=&quot;danger&quot;&gt;危险按钮&lt;/el-button&gt;
+    &lt;/el-row&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+ 
+&lt;script&gt;
+export default &#123;
+  name: &#39;ElementUI&#39;,
+  data () &#123;
+      return &#123;
+        msg: &#39;Element-UI&#39;
+      &#125;
+  &#125;
 &#125;
+&lt;/script&gt;
+ 
+&lt;style scoped&gt;
+&lt;/style&gt;
 </code></pre>
+<p>效果</p>
+<p><img src="https://img-blog.csdnimg.cn/20210110121343645.png" alt="效果图"></p>
+<h1 id="使用elementui组件"><a href="#使用elementui组件" class="headerlink" title="使用elementui组件"></a>使用elementui组件</h1><p>基础组件（Basic）、表单组件（From）、数据处理组件（Data）、提示组件（Notice）、导航组件（Navigation）、其他组件（Others）</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/08/13/redis%E4%B8%8Espringboot/" data-id="cl6uz06xd0001xow9d0k58ob0" data-title="redis与springboot" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/08/20/element1/" data-id="cl772kudi0000m4w96734eqc9" data-title="element1" class="article-share-link">Share</a>
       
       
       
@@ -157,19 +162,19 @@ public class testRedis &#123;
     
 <nav id="article-nav">
   
-    <a href="/2022/08/14/vue2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2022/08/21/element2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          vue2
+          element2
         
       </div>
     </a>
   
   
-    <a href="/2022/08/13/redis3/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/08/19/vue6/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">redis3</div>
+      <div class="article-nav-title">vue6</div>
     </a>
   
 </nav>

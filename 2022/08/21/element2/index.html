@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>element2 | 智能财务</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="NavMenu 导航菜单&lt;template&gt;   &lt;div id&#x3D;&quot;ElementUI&quot;&gt;     &lt;h1&gt;&amp;#123;&amp;#123; msg &amp;#125;&amp;#125;&lt;&#x2F;h1&gt;     &lt;el-menu       :default-active&#x3D;&quot;activeIndex&quot;       class&#x3D;&amp;qu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="element2">
+<meta property="og:url" content="http://example.com/2022/08/21/element2/index.html">
+<meta property="og:site_name" content="智能财务">
+<meta property="og:description" content="NavMenu 导航菜单&lt;template&gt;   &lt;div id&#x3D;&quot;ElementUI&quot;&gt;     &lt;h1&gt;&amp;#123;&amp;#123; msg &amp;#125;&amp;#125;&lt;&#x2F;h1&gt;     &lt;el-menu       :default-active&#x3D;&quot;activeIndex&quot;       class&#x3D;&amp;qu">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-21T15:41:39.000Z">
+<meta property="article:modified_time" content="2022-08-24T03:16:06.011Z">
+<meta property="article:author" content="Ma">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="智能财务" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">智能财务</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-element2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/21/element2/" class="article-date">
+  <time class="dt-published" datetime="2022-08-21T15:41:39.000Z" itemprop="datePublished">2022-08-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      element2
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="NavMenu-导航菜单"><a href="#NavMenu-导航菜单" class="headerlink" title="NavMenu 导航菜单"></a>NavMenu 导航菜单</h2><pre><code>&lt;template&gt;
+  &lt;div id=&quot;ElementUI&quot;&gt;
+    &lt;h1&gt;&#123;&#123; msg &#125;&#125;&lt;/h1&gt;
+    &lt;el-menu
+      :default-active=&quot;activeIndex&quot;
+      class=&quot;el-menu-demo&quot;
+      mode=&quot;horizontal&quot;
+      @select=&quot;handleSelect&quot;
+    &gt;
+      &lt;el-menu-item index=&quot;1&quot;&gt;处理中心&lt;/el-menu-item&gt;
+      &lt;el-submenu index=&quot;2&quot;&gt;
+        &lt;template slot=&quot;title&quot;&gt;我的工作台&lt;/template&gt;
+        &lt;el-menu-item index=&quot;2-1&quot;&gt;选项1&lt;/el-menu-item&gt;
+        &lt;el-menu-item index=&quot;2-2&quot;&gt;选项2&lt;/el-menu-item&gt;
+        &lt;el-menu-item index=&quot;2-3&quot;&gt;选项3&lt;/el-menu-item&gt;
+        &lt;el-submenu index=&quot;2-4&quot;&gt;
+          &lt;template slot=&quot;title&quot;&gt;选项4&lt;/template&gt;
+          &lt;el-menu-item index=&quot;2-4-1&quot;&gt;选项1&lt;/el-menu-item&gt;
+          &lt;el-menu-item index=&quot;2-4-2&quot;&gt;选项2&lt;/el-menu-item&gt;
+          &lt;el-menu-item index=&quot;2-4-3&quot;&gt;选项3&lt;/el-menu-item&gt;
+        &lt;/el-submenu&gt;
+      &lt;/el-submenu&gt;
+      &lt;el-menu-item index=&quot;3&quot; disabled&gt;消息中心&lt;/el-menu-item&gt;
+      &lt;el-menu-item index=&quot;4&quot;
+        &gt;&lt;a href=&quot;https://www.ele.me&quot; target=&quot;_blank&quot;&gt;订单管理&lt;/a&gt;&lt;/el-menu-item
+      &gt;
+    &lt;/el-menu&gt;
+    &lt;div class=&quot;line&quot;&gt;&lt;/div&gt;
+    &lt;el-menu
+      :default-active=&quot;activeIndex2&quot;
+      class=&quot;el-menu-demo&quot;
+      mode=&quot;horizontal&quot;
+      @select=&quot;handleSelect&quot;
+      background-color=&quot;#545c64&quot;
+      text-color=&quot;#fff&quot;
+      active-text-color=&quot;#ffd04b&quot;
+    &gt;
+      &lt;el-menu-item index=&quot;1&quot;&gt;处理中心&lt;/el-menu-item&gt;
+      &lt;el-submenu index=&quot;2&quot;&gt;
+        &lt;template slot=&quot;title&quot;&gt;我的工作台&lt;/template&gt;
+        &lt;el-menu-item index=&quot;2-1&quot;&gt;选项1&lt;/el-menu-item&gt;
+        &lt;el-menu-item index=&quot;2-2&quot;&gt;选项2&lt;/el-menu-item&gt;
+        &lt;el-menu-item index=&quot;2-3&quot;&gt;选项3&lt;/el-menu-item&gt;
+        &lt;el-submenu index=&quot;2-4&quot;&gt;
+          &lt;template slot=&quot;title&quot;&gt;选项4&lt;/template&gt;
+          &lt;el-menu-item index=&quot;2-4-1&quot;&gt;选项1&lt;/el-menu-item&gt;
+          &lt;el-menu-item index=&quot;2-4-2&quot;&gt;选项2&lt;/el-menu-item&gt;
+          &lt;el-menu-item index=&quot;2-4-3&quot;&gt;选项3&lt;/el-menu-item&gt;
+        &lt;/el-submenu&gt;
+      &lt;/el-submenu&gt;
+      &lt;el-menu-item index=&quot;3&quot; disabled&gt;消息中心&lt;/el-menu-item&gt;
+      &lt;el-menu-item index=&quot;4&quot;
+        &gt;&lt;a href=&quot;https://www.ele.me&quot; target=&quot;_blank&quot;&gt;订单管理&lt;/a&gt;&lt;/el-menu-item
+      &gt;
+    &lt;/el-menu&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+ 
+&lt;script&gt;
+export default &#123;
+  name: &quot;ElementUI&quot;,
+  data() &#123;
+    return &#123;
+      msg: &quot;Element-UI&quot;,
+      activeIndex: &quot;1&quot;,
+      activeIndex2: &quot;1&quot;,
+    &#125;;
+  &#125;,
+  methods: &#123;
+    handleSelect(key, keyPath) &#123;
+      console.log(key, keyPath);
+    &#125;,
+  &#125;,
+&#125;;
+&lt;/script&gt;
+ 
+&lt;style scoped&gt;
+body &#123;
+  margin: 0;
+&#125;
+&lt;/style&gt;
+</code></pre>
+<h2 id="Layout-布局实现混合布局"><a href="#Layout-布局实现混合布局" class="headerlink" title="Layout 布局实现混合布局"></a>Layout 布局实现混合布局</h2><pre><code>&lt;template&gt;
+  &lt;div id=&quot;ElementUI&quot;&gt;
+    &lt;h1&gt;&#123;&#123;msg&#125;&#125;&lt;/h1&gt;
+    &lt;el-row :gutter=&quot;20&quot;&gt;
+        &lt;el-col :span=&quot;16&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+        &lt;el-col :span=&quot;8&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+    &lt;/el-row&gt;
+    &lt;el-row :gutter=&quot;20&quot;&gt;
+        &lt;el-col :span=&quot;8&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+        &lt;el-col :span=&quot;8&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+        &lt;el-col :span=&quot;4&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+        &lt;el-col :span=&quot;4&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+    &lt;/el-row&gt;
+        &lt;el-row :gutter=&quot;20&quot;&gt;
+        &lt;el-col :span=&quot;4&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+        &lt;el-col :span=&quot;16&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+        &lt;el-col :span=&quot;4&quot;&gt;&lt;div class=&quot;grid-content bg-purple&quot;&gt;&lt;/div&gt;&lt;/el-col&gt;
+    &lt;/el-row&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+ 
+&lt;script&gt;
+export default &#123;
+  name: &#39;ElementUI&#39;,
+  data () &#123;
+      return &#123;  msg: &#39;Element-UI&#39; &#125;
+  &#125;
+&#125;
+&lt;/script&gt;
+ 
+&lt;style scoped&gt;
+.el-row &#123;
+    margin-bottom: 20px;
+    &amp;:last-child &#123;
+      margin-bottom: 0;
+    &#125;
+  &#125;
+  .el-col &#123;
+    border-radius: 4px;
+  &#125;
+  .bg-purple-dark &#123;
+    background: #99a9bf;
+  &#125;
+  .bg-purple &#123;
+    background: #d3dce6;
+  &#125;
+  .bg-purple-light &#123;
+    background: #e5e9f2;
+  &#125;
+  .grid-content &#123;
+    border-radius: 4px;
+    min-height: 36px;
+  &#125;
+  .row-bg &#123;
+    padding: 10px 0;
+    background-color: #f9fafc;
+  &#125;
+&lt;/style&gt;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/21/element2/" data-id="cl772kudm0001m4w99w2a16sy" data-title="element2" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/08/22/spring1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          spring1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/08/20/element1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">element1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/22/spring1/">spring1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/21/element2/">element2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/20/element1/">element1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/19/vue6/">vue6</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/17/vue5/">vue5</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Ma<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -71,6 +71,952 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-redis2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/12/redis2/" class="article-date">
+  <time class="dt-published" datetime="2022-08-12T15:13:41.000Z" itemprop="datePublished">2022-08-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/12/redis2/">redis2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="2-2-2-list类型"><a href="#2-2-2-list类型" class="headerlink" title="2.2.2 list类型"></a>2.2.2 list类型</h2><p>lpush（左插入）、lrange（查询集合）、rpush（右插入）操作  </p>
+<pre><code>#lpush
+127.0.0.1:6379&gt; lpush list v1  #新增一个集合
+(integer) 1
+127.0.0.1:6379&gt; lpush list v2
+(integer) 2
+127.0.0.1:6379&gt; lpush list v3
+(integer) 3  
+
+#lrange
+127.0.0.1:6379&gt; LRANGE list 0 -1  #查询list的所有元素值
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+3) &quot;v1&quot;
+127.0.0.1:6379&gt; lpush list1 v1 v2 v3 v4 v5  #批量添加集合元素
+(integer) 5
+127.0.0.1:6379&gt; LRANGE list1 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+5) &quot;v1&quot;
+
+#rpush
+127.0.0.1:6379&gt; LRANGE list 0 1  #指定查询列表中的元素，从下标零开始，1结束，两个元素
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+127.0.0.1:6379&gt; LRANGE list 0 0  #指定查询列表中的唯一元素
+1) &quot;v3&quot;
+127.0.0.1:6379&gt; rpush list rv0  #右插入，跟lpush相反，这里添加进去元素是在尾部！
+(integer) 4
+127.0.0.1:6379&gt; lrange list 0 -1  #查看集合所有元素
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+3) &quot;v1&quot;
+4) &quot;rv0&quot;
+
+每次都使用lpush，老的数据永远在后面，我们每次获取 0 0 位置的元素，相当于更新了
+数据操作，但是数据记录还在。查询记录即可获取集合所有元素
+</code></pre>
+<p>lpop（左移除）、rpop（右移除）操作</p>
+<pre><code>#lpop
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+5) &quot;v1&quot;
+127.0.0.1:6379&gt; lpop list  #从头部开始移除第一个元素
+&quot;v5&quot;
+
+#rpop
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+4) &quot;v1&quot;
+127.0.0.1:6379&gt; rpop list
+&quot;v1&quot;
+127.0.0.1:6379&gt; LRANGE list 0 -1  #从尾部开始移除第一个元素
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+</code></pre>
+<p>lindex（查询指定下标元素）、llen（获取集合长度） 操作</p>
+<pre><code>#lindex
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+127.0.0.1:6379&gt; lindex list 1  #获取指定下标位置集合的元素，下标从0开始计数
+&quot;v3&quot;
+127.0.0.1:6379&gt; lindex list 0  #相当于java中的indexof
+&quot;v4&quot;
+
+#llen
+127.0.0.1:6379&gt; llen list  #获取指定集合的元素长度，相当于java中的length或者size
+(integer) 3
+</code></pre>
+<p>lrem（根据value移除指定的值）</p>
+<pre><code>127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+127.0.0.1:6379&gt; lrem list 1 v2  #移除集合list中的元素是v2的元素1个
+(integer) 1
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+127.0.0.1:6379&gt; lrem list 0 v3 #移除集合list中的元素是v2的元素1个,这里的0和1效果是一致的
+(integer) 1
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+127.0.0.1:6379&gt; lpush list  v3 v2 v2 v2
+(integer) 4
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v2&quot;
+2) &quot;v2&quot;
+3) &quot;v2&quot;
+4) &quot;v3&quot;
+5) &quot;v4&quot;
+127.0.0.1:6379&gt; lrem list 3 v2  #移除集合list中元素为v2 的‘3’个，这里的参数数量，如果实际中集合元素数量不达标，不会报错，全部移除后返回成功移除后的数量值
+(integer) 3
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v3&quot;
+2) &quot;v4&quot;
+</code></pre>
+<p>ltrim（截取元素）、rpoplpush（移除指定集合中最后一个元素到一个新的集合中）操作</p>
+<pre><code>#ltrim
+127.0.0.1:6379&gt; lpush list v1 v2 v3 v4
+(integer) 4
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v4&quot;
+2) &quot;v3&quot;
+3) &quot;v2&quot;
+4) &quot;v1&quot;
+127.0.0.1:6379&gt; ltrim list 1 2  #通过下标截取指定的长度，这个list已经被改变了，只剩下我们所指定截取后的元素
+OK
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v3&quot;
+2) &quot;v2&quot;
+
+#rpoplpush
+127.0.0.1:6379&gt; lpush list v1 v2 v3 v4 v5
+(integer) 5
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+5) &quot;v1&quot;
+127.0.0.1:6379&gt; rpoplpush list newlist  #移除list集合中的最后一个元素到新的集合newlist中，返回值是移除的最后一个元素值
+&quot;v1&quot;
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+127.0.0.1:6379&gt; LRANGE newlist 0 -1  #确实存在该newlist集合并且有刚刚移除的元素，证明成功
+1) &quot;v1&quot;
+</code></pre>
+<p>lset（更新）、linsert操作</p>
+<pre><code>#lset
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;v4&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+127.0.0.1:6379&gt; 
+127.0.0.1:6379&gt; lset list 1 newV5  #更新list集合中下标为‘1’的元素为‘newV5’
+OK
+127.0.0.1:6379&gt; LRANGE list 0 -1  #查看证明更新成功
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+注意点：
+127.0.0.1:6379&gt; lset list1 0 vvvv  #如果指定的‘集合’不存在，报错
+(error) ERR no such key
+127.0.0.1:6379&gt; lset list 8 vvv  #如果集合存在，但是指定的‘下标’不存在，报错
+
+#linsert
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;v3&quot;
+4) &quot;v2&quot;
+127.0.0.1:6379&gt; LINSERT list after v3 insertv3  #在集合中的‘v3’元素 ‘(after)之后’ 加上一个元素
+(integer) 5
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;v3&quot;
+4) &quot;insertv3&quot;
+5) &quot;v2&quot;
+127.0.0.1:6379&gt; LINSERT list before v3 insertv3  #在集合中的‘v3’元素 ‘(before)之前’ 加上一个元素
+(integer) 6
+127.0.0.1:6379&gt; LRANGE list 0 -1
+1) &quot;v5&quot;
+2) &quot;newV5&quot;
+3) &quot;insertv3&quot;
+4) &quot;v3&quot;
+5) &quot;insertv3&quot;
+6) &quot;v2&quot;
+</code></pre>
+<p>小结：</p>
+<p>实际上是一个链表，before Node after ， left，right 都可以插入值<br>如果key 不存在，创建新的链表<br>如果key存在，新增内容<br>如果移除了所有值，空链表，也代表不存在<br>在两边插入或者改动值，效率最高！ 中间元素，相对来说效率会低一点<br>消息排队消息队列 （Lpush Rpop）， 栈（ Lpush Lpop）</p>
+<h2 id="2-2-3-Set（集合）元素唯一不重复"><a href="#2-2-3-Set（集合）元素唯一不重复" class="headerlink" title="2.2.3 Set（集合）元素唯一不重复"></a>2.2.3 Set（集合）元素唯一不重复</h2><p>sadd（添加）、smembers（查看所有元素）、sismember（判断是否存在）、scard（查看长度）、srem（移除指定元素）操作</p>
+<pre><code>#set中所有的元素都是唯一的不重复的！
+127.0.0.1:6379&gt; sadd set1 test1 test2 test3 test4  #添加set集合（可批量可单个，写法一致）
+(integer) 4
+127.0.0.1:6379&gt; SMEMBERS set1  #查看set中所有元素
+1) &quot;test1&quot;
+2) &quot;test2&quot;
+3) &quot;test3&quot;
+4) &quot;test4&quot;
+127.0.0.1:6379&gt; SISMEMBER set1 test2  #判断某个值在不在set中，在返回1
+(integer) 1
+127.0.0.1:6379&gt; SISMEMBER set1 test5  #不在返回0
+(integer) 0
+127.0.0.1:6379&gt; SCARD set1  #查看集合的长度，相当于size、length
+(integer) 4
+127.0.0.1:6379&gt; srem set1 test2  #移除set中指定的元素
+(integer) 1
+127.0.0.1:6379&gt; SMEMBERS set1  #移除成功
+1) &quot;test1&quot;
+2) &quot;test3&quot;
+3) &quot;test4&quot;
+</code></pre>
+<p>srandmember（抽随机）操作</p>
+<pre><code>127.0.0.1:6379&gt; sadd myset 1 2 3 4 5 6 7  #在set中添加7个元素
+(integer) 7
+127.0.0.1:6379&gt; SMEMBERS myset
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+6) &quot;6&quot;
+7) &quot;7&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 1  #随机抽取myset中1个元素返回
+1) &quot;4&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 1  #随机抽取myset中1个元素返回
+1) &quot;1&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 1  #随机抽取myset中1个元素返回
+1) &quot;5&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset  #不填后参数，默认抽1个值，但是下面返回不会带序号值
+&quot;3&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 3  #随机抽取myset中3个元素返回
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+127.0.0.1:6379&gt; SRANDMEMBER myset 3  #随机抽取myset中3个元素返回
+1) &quot;6&quot;
+2) &quot;3&quot;
+3) &quot;5&quot;
+</code></pre>
+<p>spop（随机删除元素）、smove（移动指定元素到新的集合中）操作</p>
+<pre><code>127.0.0.1:6379&gt; SMEMBERS myset
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+6) &quot;6&quot;
+7) &quot;7&quot;
+127.0.0.1:6379&gt; spop myset  #随机删除1个元素，不指定参数值即删除1个
+&quot;2&quot;
+127.0.0.1:6379&gt; spop myset 1  #随机删除1个元素
+1) &quot;7&quot;
+127.0.0.1:6379&gt; spop myset 2  #随机删除2个元素
+1) &quot;3&quot;
+2) &quot;5&quot;
+127.0.0.1:6379&gt; SMEMBERS myset  #查询删除后的结果
+1) &quot;1&quot;
+2) &quot;4&quot;
+3) &quot;6&quot;
+127.0.0.1:6379&gt; smove myset myset2 1  #移动指定set中的指定元素到新的set中
+(integer) 1
+127.0.0.1:6379&gt; SMEMBERS myset  #查询原来的set集合
+1) &quot;4&quot;
+2) &quot;6&quot;
+127.0.0.1:6379&gt; SMEMBERS myset2  #查询新的set集合，如果新的set存在，即往后加，如果不存在，则自动创建set并且加入进去
+1) &quot;1&quot;
+</code></pre>
+<p>sdiff（差集）、sinter（交集）、sunion（并集）操作</p>
+<pre><code>127.0.0.1:6379&gt; sadd myset1 1 2 3 4 5
+(integer) 5
+127.0.0.1:6379&gt; sadd myset2 3 4 5 6 7
+(integer) 5
+127.0.0.1:6379&gt; SMEMBERS myset1
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+127.0.0.1:6379&gt; SMEMBERS myset2
+1) &quot;3&quot;
+2) &quot;4&quot;
+3) &quot;5&quot;
+4) &quot;6&quot;
+5) &quot;7&quot;
+127.0.0.1:6379&gt; SDIFF myset1 myset2  #查询指定的set之间的差集，可以是多个set
+1) &quot;1&quot;
+2) &quot;2&quot;
+127.0.0.1:6379&gt; SINTER myset1 myset2  #查询指定的set之间的交集，可以是多个set
+1) &quot;3&quot;
+2) &quot;4&quot;
+3) &quot;5&quot;
+127.0.0.1:6379&gt; sunion myset1 myset2  #查询指定的set之间的并集，可以是多个set
+1) &quot;1&quot;
+2) &quot;2&quot;
+3) &quot;3&quot;
+4) &quot;4&quot;
+5) &quot;5&quot;
+6) &quot;6&quot;
+7) &quot;7&quot;
+</code></pre>
+<p>总结：可实现共同好友、共同关注等需求。</p>
+<h2 id="2-2-4-Hash（哈希）"><a href="#2-2-4-Hash（哈希）" class="headerlink" title="2.2.4 Hash（哈希）"></a>2.2.4 Hash（哈希）</h2><p>hset（添加hash）、hget（查询）、hgetall（查询所有）、hdel（删除hash中指定的值）、hlen（获取hash的长度）、hexists（判断key是否存在）操作</p>
+<pre><code>127.0.0.1:6379&gt; hset myhash key1 set1 key2 set2  #添加hash，可多个
+(integer) 2
+127.0.0.1:6379&gt; hget myhash key1  #获取hash中key是key1的值
+&quot;set1&quot;
+127.0.0.1:6379&gt; hget myhash key2 
+&quot;set2&quot;
+127.0.0.1:6379&gt; hgetall myhash  #获取hash中所有的值，包含key
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;key2&quot;
+4) &quot;set2&quot;
+127.0.0.1:6379&gt; hset myhash del test  #添加
+(integer) 1
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;key2&quot;
+4) &quot;set2&quot;
+5) &quot;del&quot;
+6) &quot;test&quot;
+127.0.0.1:6379&gt; hdel myhash del key2  #删除指定hash中的key（可多个），key删除后对应的value也会被删除
+(integer) 2
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+127.0.0.1:6379&gt; hlen myhash  #获取指定hash的长度，相当于length、size
+(integer) 1
+127.0.0.1:6379&gt; HEXISTS myhash name  #判断key是否存在于指定的hash，存在返回1
+(integer) 1
+127.0.0.1:6379&gt; HEXISTS myhash age  #判断key是否存在于指定的hash，不存在返回0
+(integer) 0
+</code></pre>
+<p>hkeys（获取所有key）、hvals（获取所有value）、hincrby（给值加增量）、hsetnx（存在不添加）操作</p>
+<pre><code>127.0.0.1:6379&gt; hset myhash k 1 kk 2
+(integer) 2
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;k&quot;
+4) &quot;1&quot;
+5) &quot;kk&quot;
+6) &quot;2&quot;
+127.0.0.1:6379&gt; hkeys myhash  #获取指定hash中的所有key
+1) &quot;key1&quot;
+2) &quot;k&quot;
+3) &quot;kk&quot;
+127.0.0.1:6379&gt; hvals myhash   #获取指定hash中的所有value
+1) &quot;set1&quot;
+2) &quot;1&quot;
+3) &quot;2&quot;
+127.0.0.1:6379&gt; hincrby myhash age 2  #让hash中age的value指定+2(自增)
+(integer) 3
+127.0.0.1:6379&gt; hincrby myhash age -1  #让hash中age的value指定-1(自减)
+(integer) 2
+127.0.0.1:6379&gt; hsetnx myhash nokey novalue  #添加不存在就新增返回新增成功的数量（只能单个增加）
+(integer) 1 
+127.0.0.1:6379&gt; hsetnx myhash name miaotiao  #添加存在则失败返回0
+(integer) 0
+127.0.0.1:6379&gt; hgetall myhash
+1) &quot;key1&quot;
+2) &quot;set1&quot;
+3) &quot;k&quot;
+4) &quot;2&quot;
+5) &quot;kk&quot;
+6) &quot;2&quot;
+7) &quot;nokey&quot;
+8) &quot;novalue&quot;
+</code></pre>
+<p>总结：比String更加适合存对象</p>
+<h2 id="2-2-5-zSet（有序集合）"><a href="#2-2-5-zSet（有序集合）" class="headerlink" title="2.2.5 zSet（有序集合）"></a>2.2.5 zSet（有序集合）</h2><p>zadd（添加）、zrange（查询）、zrangebyscore（排序小-大）、zrevrange（排序大-小）、zrangebyscore withscores（查询所有值包含key）操作</p>
+<pre><code>127.0.0.1:6379&gt; zadd myzset 1 one 2 two 3 three  #添加zset值，可多个
+(integer) 3
+127.0.0.1:6379&gt; ZRANGE myzset 0 -1  #查询所有的值
+1) &quot;one&quot;
+2) &quot;two&quot;
+3) &quot;three&quot;
+#-inf 负无穷  +inf 正无穷
+127.0.0.1:6379&gt; ZRANGEBYSCORE myzset -inf +inf  #将zset的值根据key来从小到大排序并输出
+1) &quot;one&quot;
+2) &quot;two&quot;
+3) &quot;three&quot;
+127.0.0.1:6379&gt; ZRANGEBYSCORE myzset 0 1  #只查询key&lt;=1的值并且排序从小到大
+1) &quot;one&quot;
+127.0.0.1:6379&gt; ZREVRANGE myzset 1 -1  #从大到小排序输出
+1) &quot;two&quot;
+2) &quot;one&quot;
+127.0.0.1:6379&gt; ZRANGEBYSCORE myzset -inf +inf withscores  #查询指定zset的所有值，包含序号的值
+1) &quot;one&quot;
+2) &quot;1&quot;
+3) &quot;two&quot;
+4) &quot;2&quot;
+5) &quot;three&quot;
+6) &quot;3&quot;
+</code></pre>
+<p>zrem（移除元素）、zcard（查看元素个数）、zcount（查询指定区间内的元素个数）操作</p>
+<pre><code>127.0.0.1:6379&gt; zadd myset 1 v1 2 v2 3 v3 4 v4
+(integer) 4
+127.0.0.1:6379&gt; ZRANGE myset 0 -1
+1) &quot;v1&quot;
+2) &quot;v2&quot;
+3) &quot;v3&quot;
+4) &quot;v4&quot;
+127.0.0.1:6379&gt; zrem myset v3  #移除指定的元素，可多个
+(integer) 1
+127.0.0.1:6379&gt; ZRANGE myset 0 -1
+1) &quot;v1&quot;
+2) &quot;v2&quot;
+3) &quot;v4&quot;
+127.0.0.1:6379&gt; zcard myset  #查看zset的元素个数，相当于长度，size。
+(integer) 3
+127.0.0.1:6379&gt; zcount myset 0 100  #查询指定区间内的元素个数
+(integer) 3
+127.0.0.1:6379&gt; zcount myset 0 2  #查询指定区间内的元素个数
+(integer) 2
+</code></pre>
+<p>总结：成绩表排序，工资表排序，年龄排序等需求可以用zset来实现！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/12/redis2/" data-id="cl6qnrrw50000cgw9axgres0a" data-title="redis2" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-redis1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/10/redis1/" class="article-date">
+  <time class="dt-published" datetime="2022-08-10T11:14:54.000Z" itemprop="datePublished">2022-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/10/redis1/">redis1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="1-redis服务安装"><a href="#1-redis服务安装" class="headerlink" title="1.redis服务安装"></a>1.redis服务安装</h1><p>自己上github找<br>解压后cmd进入安装根目录<br><code>redis-server redis.windows.conf</code>启动服务<br>之后双击redis-cli.exe  </p>
+<p>设置开启启动redis服务<br>进入根目录输入<br><code>redis-server --service-install redis.windows-service.conf --loglevel verbose</code>  </p>
+<p>redis可视化工具RedisDesktopManager</p>
+<h1 id="2-redis入门"><a href="#2-redis入门" class="headerlink" title="2.redis入门"></a>2.redis入门</h1><p>Redis（Remote Dictionary Server )，即远程字典服务<br>是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。<br>redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
+<h2 id="2-1"><a href="#2-1" class="headerlink" title="2.1"></a>2.1</h2><p>基本操作</p>
+<pre><code>127.0.0.1:6379&gt; ping  #查看当前连接是否正常，正常返回PONG
+PONG
+127.0.0.1:6379&gt; clear  #清空当前控制台（为了更好的看到下面输入的命令）
+127.0.0.1:6379&gt; keys *  #查看当前库里所有的key
+1) &quot;db&quot;
+127.0.0.1:6379&gt; FLUSHALL  #清空所有库的内容
+OK
+127.0.0.1:6379&gt; keys * 
+(empty array)
+127.0.0.1:6379&gt; set name test  #添加一个key为‘name’ value为‘test’的数据
+OK
+127.0.0.1:6379&gt; get name  #查询key为‘name’的value值
+&quot;test&quot;
+127.0.0.1:6379&gt; keys *
+1) &quot;name&quot;
+127.0.0.1:6379&gt; set name1 test2
+OK
+127.0.0.1:6379&gt; get name1
+&quot;test2&quot;
+127.0.0.1:6379&gt; keys *  #查看当前库里所有的key
+1) &quot;name1&quot;
+2) &quot;name&quot;
+127.0.0.1:6379&gt; EXISTS name  #判断当前key是否存在
+(integer) 1
+127.0.0.1:6379&gt; move name 1  #移除当前库1的key为‘name’的数据
+(integer) 1
+127.0.0.1:6379&gt; keys *
+1) &quot;name1&quot;
+127.0.0.1:6379&gt; FLUSHALL  #再次清空所有库的内容
+OK
+
+多加几条数据 下面测试设置key的过期时间
+127.0.0.1:6379&gt; set name test
+OK
+127.0.0.1:6379&gt; set name1 test1
+OK
+127.0.0.1:6379&gt; set name2 test2
+OK
+127.0.0.1:6379&gt; EXPIRE name 15  #设置key为’name‘的数据过期时间为15秒 单位seconds
+(integer) 1
+127.0.0.1:6379&gt; ttl name  #查看当前key为’name‘的剩余生命周期时间
+(integer) 13
+127.0.0.1:6379&gt; ttl name
+(integer) 12
+127.0.0.1:6379&gt; ttl name
+(integer) 11
+127.0.0.1:6379&gt; ttl name
+(integer) 8
+127.0.0.1:6379&gt; ttl name
+(integer) 6
+127.0.0.1:6379&gt; ttl name
+(integer) 3
+127.0.0.1:6379&gt; ttl name
+(integer) 2
+127.0.0.1:6379&gt; ttl name
+(integer) 1
+127.0.0.1:6379&gt; ttl name
+(integer) 0
+127.0.0.1:6379&gt; ttl name  #如若返回-2，证明key已过期
+(integer) -2
+127.0.0.1:6379&gt; get name    #再次查询即为空
+(nil)
+127.0.0.1:6379&gt; type name1
+string
+127.0.0.1:6379&gt; 
+</code></pre>
+<h2 id="2-2数据类型"><a href="#2-2数据类型" class="headerlink" title="2.2数据类型"></a>2.2数据类型</h2><h3 id="2-2-1-string"><a href="#2-2-1-string" class="headerlink" title="2.2.1 string"></a>2.2.1 string</h3><p>添加、查询、追加、获取长度、判断存在的操作</p>
+<pre><code>127.0.0.1:6379&gt; set name test  #插入一个key为‘name’值为‘test’的数据
+OK
+127.0.0.1:6379&gt; get name  #获取key为‘name’的数据
+&quot;test&quot;
+127.0.0.1:6379&gt; get key1
+&quot;hello world!&quot;
+127.0.0.1:6379&gt; keys *  #查看当前库的所有数据
+1) &quot;name&quot;
+127.0.0.1:6379&gt; EXISTS name  #判断key为‘name’的数据存在不存在，存在返回1
+(integer) 1
+127.0.0.1:6379&gt; EXISTS name1  #不存在返回0
+(integer) 0
+127.0.0.1:6379&gt; APPEND name1 test1  #追加到key为‘name’的数据后拼接值为‘test1’，如果key存在类似于java中字符串‘+’，不存在则新增一个，类似于Redis中的set name1 test1 ，并且返回该数据的总长度
+(integer) 9
+127.0.0.1:6379&gt; get name1
+&quot;test1&quot;
+127.0.0.1:6379&gt; STRLEN name1  #查看key为‘name1’的字符串长度
+(integer) 9
+127.0.0.1:6379&gt; APPEND name1 ,test2  #追加，key存在的话，拼接‘+’，返回总长度
+(integer) 19
+127.0.0.1:6379&gt; STRLEN name1
+(integer) 19
+127.0.0.1:6379&gt; get name1
+&quot;test1,test2&quot;
+127.0.0.1:6379&gt; set key1 &quot;hello world!&quot;  #注意点：插入的数据中如果有空格的数据，请用“”双引号，否则会报错！
+OK
+127.0.0.1:6379&gt; set key1 hello world!  #报错，因为在Redis中空格就是分隔符，相当于该参数已结束
+(error) ERR syntax error
+127.0.0.1:6379&gt; set key1 hello,world!  #逗号是可以的
+OK
+</code></pre>
+<p>自增、自减</p>
+<pre><code>127.0.0.1:6379&gt; set num 0  #插入一个初始值为0的数据
+OK
+127.0.0.1:6379&gt; get num
+&quot;0&quot;
+127.0.0.1:6379&gt; incr num  #指定key为‘num’的数据自增1，返回结果  相当于java中 i++
+(integer) 1
+127.0.0.1:6379&gt; get num  #一般用来做文章浏览量、点赞数、收藏数等功能
+&quot;1&quot;
+127.0.0.1:6379&gt; incr num
+(integer) 2
+127.0.0.1:6379&gt; incr num
+(integer) 3
+127.0.0.1:6379&gt; get num
+&quot;3&quot;
+127.0.0.1:6379&gt; decr num  #指定key为‘num’的数据自减1，返回结果  相当于java中 i--
+(integer) 2
+127.0.0.1:6379&gt; decr num
+(integer) 1
+127.0.0.1:6379&gt; decr num
+(integer) 0
+127.0.0.1:6379&gt; decr num  #可以一直减为负数~
+(integer) -1
+127.0.0.1:6379&gt; decr num  #一般用来做文章取消点赞、取消收藏等功能
+(integer) -2
+127.0.0.1:6379&gt; decr num
+(integer) -3
+127.0.0.1:6379&gt; INCRBY num 10  #后面跟上by  指定key为‘num’的数据自增‘参数（10）’，返回结果
+(integer) 7
+127.0.0.1:6379&gt; INCRBY num 10
+(integer) 17
+127.0.0.1:6379&gt; DECRBY num 3  #后面跟上by  指定key为‘num’的数据自减‘参数（3）’，返回结果
+(integer) 14
+127.0.0.1:6379&gt; DECRBY num 3
+(integer) 11
+</code></pre>
+<p>截取、替换字符串</p>
+<pre><code>#截取
+127.0.0.1:6379&gt; set key1 &quot;hello world!&quot;
+OK
+127.0.0.1:6379&gt; get key1
+&quot;hello world!&quot;
+127.0.0.1:6379&gt; GETRANGE key1 0 4  #截取字符串，相当于java中的subString，下标从0开始，不会改变原有数据
+&quot;hello&quot;
+127.0.0.1:6379&gt; get key1
+&quot;hello world!&quot;
+127.0.0.1:6379&gt; GETRANGE key1 0 -1  #0至-1相当于 get key1，效果一致，获取整条数据
+&quot;hello world!&quot;
+#替换
+127.0.0.1:6379&gt; set key2 &quot;hello,,,world!&quot;
+OK
+127.0.0.1:6379&gt; get key2
+&quot;hello,,,world!&quot;
+127.0.0.1:6379&gt; SETRANGE key2 5 888  #此语句跟java中replace有点类似，下标也是从0开始，但是有区别：java中是指定替换字符，Redis中是从指定位置开始替换，替换的数据根据你所需替换的长度一致，返回值是替换后的长度
+(integer) 14
+127.0.0.1:6379&gt; get key2
+&quot;hello888world!&quot;
+127.0.0.1:6379&gt; SETRANGE key2 5 67  #该处只替换了两位
+(integer) 14
+127.0.0.1:6379&gt; get key2
+&quot;hello678world!&quot;
+</code></pre>
+<p>设置过期时间、不存在设置</p>
+<pre><code>#设置过期时间，跟Expire的区别是前者设置已存在的key的过期时间，而setex是在创建的时候设置过期时间
+127.0.0.1:6379&gt; setex name1 15  tset  #新建一个key为‘name1’，值为‘test’，过期时间为15秒的字符串数据
+OK
+127.0.0.1:6379&gt; ttl name1  #查看key为‘name1’的key的过期时间
+(integer) 6
+127.0.0.1:6379&gt; ttl name1
+(integer) 5
+127.0.0.1:6379&gt; ttl name1
+(integer) 3
+127.0.0.1:6379&gt; ttl name1
+(integer) 1
+127.0.0.1:6379&gt; ttl name1
+(integer) 0
+127.0.0.1:6379&gt; ttl name1  #返回为-2时证明该key已过期，即不存在
+(integer) -2
+#不存在设置
+127.0.0.1:6379&gt; setnx name2 dingdada2  #如果key为‘name2’不存在，新增数据，返回值1证明成功
+(integer) 1
+127.0.0.1:6379&gt; get name2
+&quot;test2&quot;
+127.0.0.1:6379&gt; keys *
+1) &quot;name2&quot;
+127.0.0.1:6379&gt; setnx name2 &quot;dingdada3&quot;  #如果key为‘name2’的已存在，设置失败，返回值0，也就是说这个跟set的区别是：set会替换原有的值，而setnx不会，存在即不设置，确保了数据误操作~
+(integer) 0
+127.0.0.1:6379&gt; get name2
+&quot;test2&quot;
+</code></pre>
+<p>mset、mget</p>
+<pre><code>127.0.0.1:6379&gt; mset k1 v1 k2 v2 k3 v3  #插入多条数据
+OK
+127.0.0.1:6379&gt; keys *  #查询所有数据
+1) &quot;k2&quot;
+2) &quot;k3&quot;
+3) &quot;k1&quot;
+127.0.0.1:6379&gt; mget k1 k2 k3  #查询key为‘k1’，‘k2’，‘k3’的数据
+1) &quot;v1&quot;
+2) &quot;v2&quot;
+3) &quot;v3&quot;
+127.0.0.1:6379&gt; MSETNX k1 v1 k4 v4  #msetnx是一个原子性的操作，在一定程度上保证了事务！要么都成功，要么都失败！相当于if中的条件&amp;&amp;（与）
+(integer) 0
+127.0.0.1:6379&gt; keys *
+1) &quot;k2&quot;
+2) &quot;k3&quot;
+3) &quot;k1&quot;
+127.0.0.1:6379&gt; MSETNX k5 v5 k4 v4  #全部成功
+(integer) 1
+127.0.0.1:6379&gt; keys *
+1) &quot;k2&quot;
+2) &quot;k4&quot;	
+3) &quot;k3&quot;
+4) &quot;k5&quot;
+5) &quot;k1&quot;
+</code></pre>
+<p>添加获取对象、getset操作</p>
+<pre><code>#这里其实本质上还是字符串，但是我们讲其key巧妙的设计了一下。
+##mset student:1:name  student 相当于类名，1 相当于id，name 相当于属性
+#如果所需数据全部这样设计，那么我们在java的业务代码中，就不需要关注太多的key
+#只需要找到student类，下面哪个id，需要哪个属性即可，减少了代码的繁琐，在一定程度上可以理解为这个一个类的对象！
+127.0.0.1:6379&gt; mset student:1:name dingdada student:1:age 22  #新增一个key为‘student:1:name’，value为‘dingdada ’。。等数据
+OK
+127.0.0.1:6379&gt; keys *  #查看所有的key
+1) &quot;student:1:age&quot;
+2) &quot;student:1:name&quot;
+127.0.0.1:6379&gt; mget student:1:age student:1:name  #获取数据
+1) &quot;22&quot;
+2) &quot;dingdada&quot;
+
+##getset操作
+127.0.0.1:6379&gt; getset name1 dingdada1  #先get再set，先获取key，如果没有，set值进去，返回的是get的值
+(nil)
+127.0.0.1:6379&gt; get name1
+&quot;dingdada1&quot;
+127.0.0.1:6379&gt; getset name1 dingdada2  ##先获取key，如果有，set（替换）最新的值进去，返回的是get的值
+&quot;dingdada1&quot;
+127.0.0.1:6379&gt; get name1  #替换成功
+&quot;dingdada2&quot;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/10/redis1/" data-id="cl6on3sz70001ukw9c9j6fdfa" data-title="redis1" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-vue1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/10/vue1/" class="article-date">
+  <time class="dt-published" datetime="2022-08-10T10:23:17.000Z" itemprop="datePublished">2022-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/10/vue1/">vue1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="vue概念"><a href="#vue概念" class="headerlink" title="vue概念"></a>vue概念</h1><p>Vue是一个渐进式的框架<br>渐进式意味着你可以将Vue作为你应用的一部分嵌套其中<br>Vue的核心库以及其生态系统<br>Core + Vue-router + Vuex  </p>
+<h1 id="vue语法"><a href="#vue语法" class="headerlink" title="vue语法"></a>vue语法</h1><h3 id="1-综合"><a href="#1-综合" class="headerlink" title="1.综合"></a>1.综合</h3><p>插值操作 Mustache</p>
+<p>Mustache语法 (双大括号)<br>可以直接写变量<br>可以写简单的表达式<br>v-once<br>后面不需要跟任何表达式<br>表示元素和组件只渲染一次, 不会随着数据的改变而变化  </p>
+<p>v-html<br>后面往往跟一个string类型<br>会将string的html解析出来并渲染  </p>
+<p>v-text<br>与Mustache相似, 一般不用, 不灵活  </p>
+<p>v-pre<br>用于跳过这个元素和它子元素的编译过程, 用于显示原本的Mustache语法  </p>
+<p>v-cloak<br>在某些情况下, 我们浏览器可能会直接显示出未编译的Mustache标签  </p>
+<p>v-bind<br>作用: 动态绑定属性<br>简写: :</p>
+<p>条件判断</p>
+<p>v-if<br>v-else-if<br>v-else<br>v-show  </p>
+<p>当条件为false的时<br>v-if: 指令的元素, 不会渲染到dom中<br>v-show: dom增加一个行内样式display:   none<br>v-on<br>作用: 绑定事件监听<br>简写: @<br>写法:<br>    没有参数的情况下, 可以不写(); 如果方法本身有一个参数, 会默认将原生事件event参数传递进去<br>    如果传入某个参数, 同时需要event时, 可以通过$event传入时间</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+  &lt;h2&gt;点击次数: &#123;&#123;counter&#125;&#125;&lt;/h2&gt;
+  &lt;!--情况一: 方法没有参数--&gt;
+  &lt;button @click=&quot;btnClick1&quot;&gt;按钮1&lt;/button&gt;
+  &lt;button @click=&quot;btnClick1()&quot;&gt;按钮1&lt;/button&gt;
+
+  &lt;!--情况二: 如果方法有参数--&gt;
+  &lt;!--1.调用时不传入参数,会默认将event作为第一个参数传入--&gt;
+  &lt;button @click=&quot;btnClick2&quot;&gt;按钮2&lt;/button&gt;
+  &lt;!--2.调用时不传入参数,那么参数为undefined--&gt;
+  &lt;button @click=&quot;btnClick2()&quot;&gt;按钮2&lt;/button&gt;
+
+  &lt;!--情况三: 如果方法有参数,并且希望传入event--&gt;
+  &lt;button @click=&quot;btnClick3(10, $event)&quot;&gt;按钮3&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../../js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  const app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+      counter: 0
+    &#125;,
+    methods: &#123;
+      btnClick1() &#123;
+        console.log(&#39;按钮1被点击&#39;);
+      &#125;,
+      btnClick2(payload) &#123;
+        console.log(&#39;按钮2被点击&#39;, payload);
+      &#125;,
+      btnClick3(num, event) &#123;
+        console.log(&#39;按钮3被点击&#39;, num, event);
+      &#125;
+    &#125;
+  &#125;)
+&lt;/script&gt;
+</code></pre>
+<h1 id="v-for遍历数组"><a href="#v-for遍历数组" class="headerlink" title="v-for遍历数组"></a>v-for遍历数组</h1><pre><code>// 遍历过程中, 没有使用索引值
+&lt;li v-for=&quot;item in names&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;
+
+// 遍历过程中, 获取索引值
+&lt;li v-for=&quot;(item, index) in names&quot;&gt;&#123;&#123;index + 1&#125;&#125; - &#123;&#123;item&#125;&#125;&lt;/li&gt;
+
+// 遍历对象的时候, 只有一个值, 活得的是value
+
+// 获取对象的key和value 
+&lt;li v-for=&quot;(value, key) in names&quot;&gt;&#123;&#123;value&#125;&#125; - &#123;&#123;key&#125;&#125;&lt;/li&gt;
+
+// 获取对象的key和value和index 
+&lt;li v-for=&quot;(value, key, index) in names&quot;&gt;&#123;&#123;value&#125;&#125; - &#123;&#123;key&#125;&#125; - &#123;&#123;index&#125;&#125;&lt;/li&gt;
+</code></pre>
+<p>官方推荐, 使用v-for的时候, 加上一个 key属性<br>key的作用是为了高效的更新虚拟DOM<br>key要具有唯一性, 不然就没意义  </p>
+<pre><code>&lt;li v-for=&quot;(item, index) in names&quot; :key=&quot;item&quot;&gt;&#123;&#123;index + 1&#125;&#125; - &#123;&#123;item&#125;&#125;&lt;/li&gt;
+</code></pre>
+<h1 id="v-model表单绑定"><a href="#v-model表单绑定" class="headerlink" title="v-model表单绑定"></a>v-model表单绑定</h1><p>实现表单元素和数据的双向绑定</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;input type=&quot;text&quot; v-model=&quot;message&quot;&gt;
+    &#123;&#123;message&#125;&#125;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        message: &#39;你好&#39;
+    &#125;
+&#125;)
+
+// 界面的message数据改了, data里面的message就改变了, 是双向的
+</code></pre>
+<p>可以将v-model用于textarea元素</p>
+<pre><code>&lt;textare v-model=&quot;message&quot;&gt;&lt;/textare&gt;
+&lt;p&gt;输入内容: &#123;&#123;message&#125;&#125; &lt;/p&gt;
+</code></pre>
+<p>其他方法实现双向绑定</p>
+<pre><code>// v-bind绑定一个value属性
+// v-on指令给当前元素绑定input事件  
+// 下面代码 等同于 使用v-model
+
+&lt;div id=&quot;app&quot;&gt;
+    &lt;input type=&quot;text&quot; :value=&quot;message&quot; @input=&quot;message = $event.target.value&quot;&gt;
+    &#123;&#123;message&#125;&#125;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        message: &#39;你好&#39;
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="v-model结合radio类型使用"><a href="#v-model结合radio类型使用" class="headerlink" title="v-model结合radio类型使用"></a>v-model结合radio类型使用</h3><pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label for=&quot;male&quot;&gt;
+        &lt;inout type=&quot;radio&quot; id=&quot;male&quot; value=&quot;男&quot; v-model=&quot;sex&quot;&gt;男
+    &lt;/label&gt;
+    &lt;label for=&quot;male&quot;&gt;
+        &lt;inout type=&quot;radio&quot; id=&quot;female&quot; value=&quot;女&quot; v-model=&quot;sex&quot;&gt;nv
+    &lt;/label&gt;
+    &lt;h2&gt;您选择的性别是: &#123;&#123;sex&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        sex: &#39;男&#39;
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="v-model结合checkbox类型使用"><a href="#v-model结合checkbox类型使用" class="headerlink" title="v-model结合checkbox类型使用"></a>v-model结合checkbox类型使用</h3><p>单选框</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; id=&quot;agree&quot;  v-model=&quot;isAgree&quot;&gt;同意
+    &lt;/label&gt;
+    &lt;buttion :disabled=&quot;!isAgree&quot;&gt;下一步&lt;/button&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        isAgree: false
+    &#125;
+&#125;)
+</code></pre>
+<p>多选框</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;足球&quot; v-model=&quot;hobbies&quot;&gt;足球
+    &lt;/label&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;篮球&quot; v-model=&quot;hobbies&quot;&gt;篮球
+    &lt;/label&gt;
+    &lt;label for=&quot;agree&quot;&gt;
+        &lt;inout type=&quot;checkbox&quot; value=&quot;羽毛球&quot; v-model=&quot;hobbies&quot;&gt;羽毛球
+    &lt;/label&gt;
+    &lt;h2&gt;您的爱好是: &#123;&#123;hobbies&#125;&#125;&lt;/h2&gt;
+&lt;/div&gt;
+
+cosnt app = new Vue(&#123;
+    el: &#39;#app&#39;,
+    data: &#123;
+        isAgree: false,
+        hobbies: []
+    &#125;
+&#125;)
+</code></pre>
+<h3 id="v-model结合select类型使用"><a href="#v-model结合select类型使用" class="headerlink" title="v-model结合select类型使用"></a>v-model结合select类型使用</h3><p>下拉框单选</p>
+<p>v-model绑定的是一个值<br>当选中option中一个时, 会将它对应的value赋值到mySelect中</p>
+<pre><code>&lt;select v-model=&quot;mySelect&quot;&gt;
+    &lt;option value=&quot;apple&quot;&gt;苹果&lt;option&gt;
+    &lt;option value=&quot;orange&quot;&gt;橘子&lt;option&gt;
+    &lt;option value=&quot;banana&quot;&gt;香蕉&lt;option&gt;
+&lt;/select&gt;
+&lt;p&gt;您最喜欢的水果: &#123;&#123;mySelect&#125;&#125;&lt;/p&gt;
+</code></pre>
+<p>下拉框多选</p>
+<p>v-model绑定的是一个数组<br>当选择多个值时,会将选中的option对应的value添加到数组mySelect中</p>
+<pre><code>&lt;select v-model=&quot;mySelect&quot; multiple&gt;
+    &lt;option value=&quot;apple&quot;&gt;苹果&lt;option&gt;
+    &lt;option value=&quot;orange&quot;&gt;橘子&lt;option&gt;
+    &lt;option value=&quot;banana&quot;&gt;香蕉&lt;option&gt;
+&lt;/select&gt;
+&lt;p&gt;您最喜欢的水果: &#123;&#123;mySelect&#125;&#125;&lt;/p&gt;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/10/vue1/" data-id="cl6on3sz40000ukw992e212i9" data-title="vue1" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-ajax1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/07/28/ajax1/" class="article-date">
@@ -276,23 +1222,23 @@ if (xhr.readyState === 4) &#123;
       <ul>
         
           <li>
+            <a href="/2022/08/22/spring1/">spring1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/21/element2/">element2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/20/element1/">element1</a>
+          </li>
+        
+          <li>
             <a href="/2022/08/19/vue6/">vue6</a>
           </li>
         
           <li>
             <a href="/2022/08/17/vue5/">vue5</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/16/vue4/">vue4</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/15/vue3/">vue3</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/14/vue2/">vue2</a>
           </li>
         
       </ul>

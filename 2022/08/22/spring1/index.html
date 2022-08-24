@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>spring1 | 智能财务</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="springboot源码springboot源代码由以下部分组成 :(1)springboot启动类  (2)springboot自动装配  springboot启动类（1）@SpringBootApplication ：用来标注哪个类是启动类 （2）SpringApplication.run(xxxx.class, args) : 启动@SpringBootApplication 注解下的类 s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring1">
+<meta property="og:url" content="http://example.com/2022/08/22/spring1/index.html">
+<meta property="og:site_name" content="智能财务">
+<meta property="og:description" content="springboot源码springboot源代码由以下部分组成 :(1)springboot启动类  (2)springboot自动装配  springboot启动类（1）@SpringBootApplication ：用来标注哪个类是启动类 （2）SpringApplication.run(xxxx.class, args) : 启动@SpringBootApplication 注解下的类 s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201018125506183.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201018171129931.png">
+<meta property="article:published_time" content="2022-08-22T15:41:17.000Z">
+<meta property="article:modified_time" content="2022-08-24T03:41:09.061Z">
+<meta property="article:author" content="Ma">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201018125506183.png">
+  
+    <link rel="alternate" href="/atom.xml" title="智能财务" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">智能财务</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-spring1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/22/spring1/" class="article-date">
+  <time class="dt-published" datetime="2022-08-22T15:41:17.000Z" itemprop="datePublished">2022-08-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      spring1
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="springboot源码"><a href="#springboot源码" class="headerlink" title="springboot源码"></a>springboot源码</h1><h3 id="springboot源代码由以下部分组成"><a href="#springboot源代码由以下部分组成" class="headerlink" title="springboot源代码由以下部分组成 :"></a>springboot源代码由以下部分组成 :</h3><p>(1)springboot启动类</p>
+<p><img src="https://img-blog.csdnimg.cn/20201018125506183.png" alt="入口类"></p>
+<p>(2)springboot自动装配</p>
+<p><img src="https://img-blog.csdnimg.cn/20201018171129931.png" alt="自动装配"></p>
+<h3 id="springboot启动类"><a href="#springboot启动类" class="headerlink" title="springboot启动类"></a>springboot启动类</h3><p>（1）@SpringBootApplication ：用来标注哪个类是启动类</p>
+<p>（2）SpringApplication.run(xxxx.class, args) : 启动@SpringBootApplication 注解下的类</p>
+<h3 id="springboot自动装配"><a href="#springboot自动装配" class="headerlink" title="springboot自动装配"></a>springboot自动装配</h3><p>@SpringBootApplication中的代码</p>
+<pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@ComponentScan(excludeFilters = &#123; @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
+      @Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) &#125;)
+public @interface SpringBootApplication &#123;
+</code></pre>
+<h4 id="SpringBootApplication是由-SpringBootConfiguration、-EnableAutoConfiguration、-ComponentScan合成的"><a href="#SpringBootApplication是由-SpringBootConfiguration、-EnableAutoConfiguration、-ComponentScan合成的" class="headerlink" title="@SpringBootApplication是由@SpringBootConfiguration、@EnableAutoConfiguration、@ComponentScan合成的"></a>@SpringBootApplication是由@SpringBootConfiguration、@EnableAutoConfiguration、@ComponentScan合成的</h4><h4 id="SpringBootConfiguration"><a href="#SpringBootConfiguration" class="headerlink" title="@SpringBootConfiguration"></a>@SpringBootConfiguration</h4><pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Configuration
+public @interface SpringBootConfiguration &#123;
+</code></pre>
+<p>@SpringBootConfiguration表示就是一个配置类</p>
+<h4 id="ComponentScan"><a href="#ComponentScan" class="headerlink" title="@ComponentScan"></a>@ComponentScan</h4><pre><code>@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+@Repeatable(ComponentScans.class)
+public @interface ComponentScan &#123;
+</code></pre>
+<p>@ComponentScan就是spring中的包扫描注解</p>
+<h4 id="EnableAutoConfiguration"><a href="#EnableAutoConfiguration" class="headerlink" title="@EnableAutoConfiguration"></a>@EnableAutoConfiguration</h4><pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@AutoConfigurationPackage
+@Import(AutoConfigurationImportSelector.class)
+public @interface EnableAutoConfiguration &#123;
+</code></pre>
+<blockquote>
+<p>####1.@AutoConfigurationPackage</p>
+</blockquote>
+<pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@Import(AutoConfigurationPackages.Registrar.class) //给容器导入一个组件
+public @interface AutoConfigurationPackage &#123;
+</code></pre>
+<hr>
+<pre><code>static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports &#123;
+
+   @Override
+   public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) &#123;
+       //将当前主程序指定的包名注册进来
+      register(registry, new PackageImports(metadata).getPackageNames().toArray(new String[0]));
+   &#125;
+</code></pre>
+<blockquote>
+<h4 id="2-Import-AutoConfigurationImportSelector-class"><a href="#2-Import-AutoConfigurationImportSelector-class" class="headerlink" title="2.@Import(AutoConfigurationImportSelector.class)"></a>2.@Import(AutoConfigurationImportSelector.class)</h4></blockquote>
+<pre><code>    @Override
+public String[] selectImports(AnnotationMetadata annotationMetadata) &#123;
+   if (!isEnabled(annotationMetadata)) &#123;
+      return NO_IMPORTS;
+   &#125;
+    //给容器导入组件
+   AutoConfigurationEntry autoConfigurationEntry = getAutoConfigurationEntry(annotationMetadata);
+   return StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());
+&#125;
+</code></pre>
+<hr>
+<pre><code>//获取到所有需要导入的组件
+List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata, attributes);
+-&gt;
+  List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),
+                getBeanClassLoader());
+-&gt;
+    return loadSpringFactories(classLoaderToUse).getOrDefault(factoryTypeName, Collections.emptyList());
+-&gt;
+    //得到所有的组件
+    private static Map&lt;String, List&lt;String&gt;&gt; loadSpringFactories(ClassLoader classLoader) &#123;
+</code></pre>
+<hr>
+<pre><code>public static final String FACTORIES_RESOURCE_LOCATION = &quot;META-INF/spring.factories&quot;;
+
+//从META-INF/spring.factories中加载
+//默认扫描我们当前系统里面所有META-INF/spring.factories位置的文件
+Enumeration&lt;URL&gt; urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);
+</code></pre>
+<p>spring-boot-autoconfigure-2.4.2.jar下META-INF&#x2F;spring.factories中写死了springboot一启动就要给容器中加载的所有配置类</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/22/spring1/" data-id="cl772kuds0002m4w94feset0k" data-title="spring1" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/08/21/element2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">element2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/22/spring1/">spring1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/21/element2/">element2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/20/element1/">element1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/19/vue6/">vue6</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/17/vue5/">vue5</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Ma<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
