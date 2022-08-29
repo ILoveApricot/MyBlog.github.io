@@ -6,13 +6,15 @@
   
   <title>redis3 | 智能财务</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="article">
+  <meta name="description" content="三大特殊数据类型Geospatial： 地理位置注意点1：两极无法直接添加，我们一般会下载城市数据，直接通过java程序一次性导入！注意点2：有效的经度从-180度到180度。注意点3：有效的纬度从-85.05112878度到85.05112878度。注意点4：m 为米。km 为千米。mi 为英里。ft 为英尺。     geoadd（添加）、geopos（查看）、geodist（计算距离）操作1">
+<meta property="og:type" content="article">
 <meta property="og:title" content="redis3">
 <meta property="og:url" content="http://example.com/2022/08/13/redis3/index.html">
 <meta property="og:site_name" content="智能财务">
+<meta property="og:description" content="三大特殊数据类型Geospatial： 地理位置注意点1：两极无法直接添加，我们一般会下载城市数据，直接通过java程序一次性导入！注意点2：有效的经度从-180度到180度。注意点3：有效的纬度从-85.05112878度到85.05112878度。注意点4：m 为米。km 为千米。mi 为英里。ft 为英尺。     geoadd（添加）、geopos（查看）、geodist（计算距离）操作1">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-12T16:06:25.000Z">
-<meta property="article:modified_time" content="2022-08-12T16:06:25.290Z">
+<meta property="article:modified_time" content="2022-08-29T14:20:00.253Z">
 <meta property="article:author" content="Ma">
 <meta name="twitter:card" content="summary">
   
@@ -93,7 +95,187 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h1 id="三大特殊数据类型"><a href="#三大特殊数据类型" class="headerlink" title="三大特殊数据类型"></a>三大特殊数据类型</h1><h2 id="Geospatial：-地理位置"><a href="#Geospatial：-地理位置" class="headerlink" title="Geospatial： 地理位置"></a>Geospatial： 地理位置</h2><p>注意点1：两极无法直接添加，我们一般会下载城市数据，直接通过java程序一次性导入！<br>注意点2：有效的经度从-180度到180度。<br>注意点3：有效的纬度从-85.05112878度到85.05112878度。<br>注意点4：m 为米。km 为千米。mi 为英里。ft 为英尺。    </p>
+<h4 id="geoadd（添加）、geopos（查看）、geodist（计算距离）操作"><a href="#geoadd（添加）、geopos（查看）、geodist（计算距离）操作" class="headerlink" title="geoadd（添加）、geopos（查看）、geodist（计算距离）操作"></a>geoadd（添加）、geopos（查看）、geodist（计算距离）操作</h4><pre><code>127.0.0.1:6379&gt; geoadd city 118.8921 31.32751 nanjing 197.30794 31.79322  
+#当经纬度其中一个或者两个超过界限值，报错，信息如下：
+(error) ERR syntax error. Try GEOADD key [x1] [y1] [name1] [x2] [y2] [name2] ...
+#添加城市经纬度 语法格式： geoadd key 经度 纬度 name +++可多个添加
+#添加成功后返回添加成功的数量值
+127.0.0.1:6379&gt; geoadd city 118.8921 31.32751 nanjing 117.30794 31.79322 hefei 102.82147 24.88554 kunming 91.13775 29.65262 lasa 116.23128 40.22077 beijing 106.54041 29.40268 chongqing  
+(integer) 6
+127.0.0.1:6379&gt; ZRANGE city 0 -1  #注意：geo的查看方式和zset的命令是一致的，
+#由此可知，geo本质上还是个集合，不过Redis官方对其进行了二次封装
+1) &quot;lasa&quot;
+2) &quot;kunming&quot;
+3) &quot;chongqing&quot;
+4) &quot;hefei&quot;
+5) &quot;nanjing&quot;
+6) &quot;beijing&quot;
+127.0.0.1:6379&gt; geopos city nanjing  #查看看指定城市的经纬度信息
+1) 1) &quot;118.89209836721420288&quot;
+   2) &quot;31.32750976275760735&quot;
+127.0.0.1:6379&gt; geopos city nanjing beijing  #查看看多个城市的经纬度信息
+1) 1) &quot;118.89209836721420288&quot;
+   2) &quot;31.32750976275760735&quot;
+2) 1) &quot;116.23128265142440796&quot;
+   2) &quot;40.22076905438526495&quot;
+127.0.0.1:6379&gt; geodist city nanjing beijing   #计算南京到北京之间的距离，默认返回单位是m
+&quot;1017743.1413&quot;
+127.0.0.1:6379&gt; geodist city nanjing beijing km  #km  千米
+&quot;1017.7431&quot;
+127.0.0.1:6379&gt; geodist city nanjing beijing mi  #mi  英里
+&quot;632.3978&quot;
+127.0.0.1:6379&gt; geodist city nanjing beijing ft  #ft  英尺
+&quot;3339052.3010&quot;
+</code></pre>
+<h4 id="georadius（查询附近位置）操作"><a href="#georadius（查询附近位置）操作" class="headerlink" title="georadius（查询附近位置）操作"></a>georadius（查询附近位置）操作</h4><pre><code>127.0.0.1:6379&gt; ZRANGE city 0 -1  #查看城市
+1) &quot;lasa&quot;
+2) &quot;kunming&quot;
+3) &quot;chongqing&quot;
+4) &quot;hefei&quot;
+5) &quot;nanjing&quot;
+6) &quot;beijing&quot;
+#查看指定位置的1000公里范围内有哪些城市
+127.0.0.1:6379&gt; georadius city 120 38 1000 km  
+1) &quot;beijing&quot;
+2) &quot;hefei&quot;
+3) &quot;nanjing&quot;
+127.0.0.1:6379&gt; georadius city 120 38 400 km  #查看指定位置的400公里范围内有哪些城市
+(empty array)
+127.0.0.1:6379&gt; georadius city 120 38 550 km  #查看指定位置的550公里范围内有哪些城市
+1) &quot;beijing&quot;
+#查看指定位置的550公里范围内有哪些城市,withcoord指定返回城市的name
+127.0.0.1:6379&gt; georadius city 120 38 1000 km withcoord
+1) 1) &quot;beijing&quot;
+   2) 1) &quot;116.23128265142440796&quot;
+      2) &quot;40.22076905438526495&quot;
+2) 1) &quot;hefei&quot;
+   2) 1) &quot;117.30793744325637817&quot;
+      2) &quot;31.79321915080526395&quot;
+3) 1) &quot;nanjing&quot;
+   2) 1) &quot;118.89209836721420288&quot;
+      2) &quot;31.32750976275760735&quot;
+#查看指定位置的550公里范围内有哪些城市,withdist指定返回城市的’经纬度‘值
+127.0.0.1:6379&gt; georadius city 120 38 1000 km withcoord withdist
+1) 1) &quot;beijing&quot;
+   2) &quot;408.3496&quot;
+   3) 1) &quot;116.23128265142440796&quot;
+      2) &quot;40.22076905438526495&quot;
+2) 1) &quot;hefei&quot;
+   2) &quot;732.6371&quot;
+   3) 1) &quot;117.30793744325637817&quot;
+      2) &quot;31.79321915080526395&quot;
+3) 1) &quot;nanjing&quot;
+   2) &quot;749.0265&quot;
+   3) 1) &quot;118.89209836721420288&quot;
+      2) &quot;31.32750976275760735&quot;
+#查看指定位置的550公里范围内有哪些城市,withhash指定返回城市的’经纬度‘的hash值
+#如果两个城市的hash值越’像‘，证明城市距离越近！
+127.0.0.1:6379&gt; georadius city 120 38 1000 km withcoord withdist withhash
+1) 1) &quot;beijing&quot;
+   2) &quot;408.3496&quot;
+   3) (integer) 4069896088584598
+   4) 1) &quot;116.23128265142440796&quot;
+      2) &quot;40.22076905438526495&quot;
+2) 1) &quot;hefei&quot;
+   2) &quot;732.6371&quot;
+   3) (integer) 4052763834193093
+   4) 1) &quot;117.30793744325637817&quot;
+      2) &quot;31.79321915080526395&quot;
+3) 1) &quot;nanjing&quot;
+   2) &quot;749.0265&quot;
+   3) (integer) 4054278565840695
+   4) 1) &quot;118.89209836721420288&quot;
+      2) &quot;31.32750976275760735&quot;
+#查看指定位置的550公里范围内有哪些城市,count num 指定返回’num‘个城市数据量
+127.0.0.1:6379&gt; georadius city 120 38 1000 km withcoord withdist withhash count 2
+1) 1) &quot;beijing&quot;
+   2) &quot;408.3496&quot;
+   3) (integer) 4069896088584598
+   4) 1) &quot;116.23128265142440796&quot;
+      2) &quot;40.22076905438526495&quot;
+2) 1) &quot;hefei&quot;
+   2) &quot;732.6371&quot;
+   3) (integer) 4052763834193093
+   4) 1) &quot;117.30793744325637817&quot;
+      2) &quot;31.79321915080526395&quot;
+</code></pre>
+<h4 id="georadiusbymember-（查找指定元素指定范围内的元素）、geohash-（返回经纬度的hash值）、zrange、zrem（使用zset命令操作geo）"><a href="#georadiusbymember-（查找指定元素指定范围内的元素）、geohash-（返回经纬度的hash值）、zrange、zrem（使用zset命令操作geo）" class="headerlink" title="georadiusbymember （查找指定元素指定范围内的元素）、geohash （返回经纬度的hash值）、zrange、zrem（使用zset命令操作geo）"></a>georadiusbymember （查找指定元素指定范围内的元素）、geohash （返回经纬度的hash值）、zrange、zrem（使用zset命令操作geo）</h4><pre><code>#查询南京 500公里范围有哪些城市
+127.0.0.1:6379&gt; georadiusbymember city nanjing 500 km
+1) &quot;hefei&quot;
+2) &quot;nanjing&quot;
+#查询重庆 1500公里范围有哪些城市
+127.0.0.1:6379&gt; georadiusbymember city chongqing 1500 km
+1) &quot;lasa&quot;
+2) &quot;kunming&quot;
+3) &quot;chongqing&quot;
+4) &quot;hefei&quot;
+5) &quot;nanjing&quot;
+6) &quot;beijing&quot;
+#返回北京和南京的经纬度的 hash值
+127.0.0.1:6379&gt; geohash city beijing nanjing
+1) &quot;wx4sucvncn0&quot;
+2) &quot;wtsd1qyxfx0&quot;
+#查看所有城市name
+127.0.0.1:6379&gt; ZRANGE city 0 -1
+1) &quot;lasa&quot;
+2) &quot;kunming&quot;
+3) &quot;chongqing&quot;
+4) &quot;hefei&quot;
+5) &quot;nanjing&quot;
+6) &quot;beijing&quot;
+#根据geo中的name删除g元素
+127.0.0.1:6379&gt; ZREM city lasa
+(integer) 1
+#删除成功
+127.0.0.1:6379&gt; ZRANGE city 0 -1
+1) &quot;kunming&quot;
+2) &quot;chongqing&quot;
+3) &quot;hefei&quot;
+4) &quot;nanjing&quot;
+5) &quot;beijing&quot;
+</code></pre>
+<p>总结：实际需求中，我们可以用来查询附近的人、计算两人之间的距离等。当然，那些所需的经纬度我们肯定要结合java代码来一次导入，手动查询和录入太过于浪费时间</p>
+<h2 id="Hyperloglog：-基数"><a href="#Hyperloglog：-基数" class="headerlink" title="Hyperloglog： 基数"></a>Hyperloglog： 基数</h2><p>数学层面上可以说是：两个数据集中不重复的元素<br>但是再Redis中，可能会有一定的误差性。 官方给出的误差率是0.81%。<br>Hyperloglog的优点： 占用的内存是固定的，2^64个元素，相当于只需要12kb的内存即可。效率极高  </p>
+<h4 id="pfadd（添加数据集）、pfcount（统计数据集）、pfmegre（合并数据集-自动去重）"><a href="#pfadd（添加数据集）、pfcount（统计数据集）、pfmegre（合并数据集-自动去重）" class="headerlink" title="pfadd（添加数据集）、pfcount（统计数据集）、pfmegre（合并数据集-自动去重）"></a>pfadd（添加数据集）、pfcount（统计数据集）、pfmegre（合并数据集-自动去重）</h4><pre><code>127.0.0.1:6379&gt; pfadd dataList 1 2 3 4 5 6 7  #添加数据集
+(integer) 1
+127.0.0.1:6379&gt; pfcount dataList  #统计数据集中的元素
+(integer) 7
+127.0.0.1:6379&gt; pfadd dataList1 4 5 6 7 8 9 10  #添加数据集
+(integer) 1
+127.0.0.1:6379&gt; pfcount dataList1  #统计数据集中的元素
+(integer) 7
+#将dataList 和dataList1  两个数据集合并成一个新的 newdata数据集，并且自动去重
+127.0.0.1:6379&gt; pfmerge newdata dataList dataList1  
+OK
+127.0.0.1:6379&gt; pfcount newdata
+(integer) 10
+</code></pre>
+<p>总结：如果在实际业务中，允许一定的误差值，我们可以使用基数统计来计算~效率非常高！比如：网站的访问量，就可以利用Hyperloglog来进行计算统计！</p>
+<h2 id="Bitmap：-位存储"><a href="#Bitmap：-位存储" class="headerlink" title="Bitmap： 位存储"></a>Bitmap： 位存储</h2><p>Bitmap 位图，数据结构，都是操作二进制位来进行记录，就只有0和1两个状态</p>
+<h4 id="setbit（添加）、getset（获取）、bitcount（统计）操作"><a href="#setbit（添加）、getset（获取）、bitcount（统计）操作" class="headerlink" title="setbit（添加）、getset（获取）、bitcount（统计）操作"></a>setbit（添加）、getset（获取）、bitcount（统计）操作</h4><pre><code>127.0.0.1:6379&gt; setbit login 1 1   #添加周一已登陆 为1
+(integer) 0
+127.0.0.1:6379&gt; setbit login 2 1
+(integer) 0
+127.0.0.1:6379&gt; setbit login 3 1
+(integer) 0
+127.0.0.1:6379&gt; setbit login 4 0  #添加周四已登陆 为0
+(integer) 0
+127.0.0.1:6379&gt; setbit login 5 0
+(integer) 0
+127.0.0.1:6379&gt; setbit login 6 1
+(integer) 0
+127.0.0.1:6379&gt; setbit login 7 0
+(integer) 0
+127.0.0.1:6379&gt; getbit login 1  #获取周一是否登录
+(integer) 1
+127.0.0.1:6379&gt; getbit login 4  #获取周四是否登陆
+(integer) 0
+127.0.0.1:6379&gt; bitcount login  #统计这周登陆的天数
+(integer) 4
+</code></pre>
+<p>总结：实际需求中，可能需要我们统计用户的登陆信息，员工的打卡信息等等。只要是事务的只有两个状态的，我们都可以用Bitmap来进行操作！！！</p>
+
       
     </div>
     <footer class="article-footer">
