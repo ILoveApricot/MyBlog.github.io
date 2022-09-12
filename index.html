@@ -71,6 +71,159 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-swagger1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/09/12/swagger1/" class="article-date">
+  <time class="dt-published" datetime="2022-09-12T14:58:40.000Z" itemprop="datePublished">2022-09-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/09/12/swagger1/">swagger1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="1-导入依赖"><a href="#1-导入依赖" class="headerlink" title="1.导入依赖"></a>1.导入依赖</h1><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;$&#123;swagger.version&#125;&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+    &lt;version&gt;$&#123;swagger.version&#125;&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="创建Swagger2配置类"><a href="#创建Swagger2配置类" class="headerlink" title="创建Swagger2配置类"></a>创建Swagger2配置类</h3><pre><code>import io.wangpai.common.constant.Constant;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+/**
+ * Swagger配置
+ *
+ * @author Mark sunlightcs@gmail.com
+ */
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig&#123;
+
+    @Bean
+    public Docket createRestApi() &#123;
+        return new Docket(DocumentationType.SWAGGER_2)
+            .apiInfo(apiInfo())
+            .select()
+            //加了ApiOperation注解的类，生成接口文档
+            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+            //包下的类，生成接口文档
+            //.apis(RequestHandlerSelectors.basePackage(&quot;io.wangpai.modules.job.controller&quot;))
+            .paths(PathSelectors.any())
+            .build()
+            .directModelSubstitute(java.util.Date.class, String.class)
+            .securitySchemes(security());
+    &#125;
+
+    private ApiInfo apiInfo() &#123;
+        return new ApiInfoBuilder()
+            .title(&quot;Api&quot;)
+            .description(&quot;wangpai-admin文档&quot;)
+            .termsOfServiceUrl(&quot;https://www.wgame.io&quot;)
+            .version(&quot;2.0.0&quot;)
+            .build();
+    &#125;
+
+    private List&lt;ApiKey&gt; security() &#123;
+        return newArrayList(
+            new ApiKey(Constant.TOKEN_HEADER, Constant.TOKEN_HEADER, &quot;header&quot;)
+        );
+    &#125;
+&#125;
+</code></pre>
+<p>docket() 方法创建Docket的Bean对象，apiInfo()则是创建ApiInfo的基本信息。</p>
+<h3 id="注解说明"><a href="#注解说明" class="headerlink" title="注解说明"></a>注解说明</h3><p>@Api : 用在类上，说明该类的主要作用。</p>
+<p>@ApiOperation：用在方法上，给API增加方法说明。</p>
+<p>@ApiImplicitParams : 用在方法上，包含一组参数说明。</p>
+<p>@ApiImplicitParam：用来注解来给方法入参增加说明。</p>
+<p>@ApiResponses：用于表示一组响应。</p>
+<p>@ApiResponse：用在@ApiResponses中，一般用于表达一个错误的响应信息</p>
+<p>@ApiModel：用在返回对象类上，描述一个Model的信息（一般用在请求参数无法使用@ApiImplicitParam注解进行描述的时候）</p>
+<p>@ApiModelProperty：描述一个model的属性</p>
+<h3 id="测试登录-localhost-8080-x2F-swagger-ui-html"><a href="#测试登录-localhost-8080-x2F-swagger-ui-html" class="headerlink" title="测试登录 localhost:8080&#x2F;swagger-ui.html"></a>测试登录 localhost:8080&#x2F;swagger-ui.html</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/09/12/swagger1/" data-id="cl7ywarxk0001pcw97e3q0c4f" data-title="swagger1" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-redis4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/08/31/redis4/" class="article-date">
+  <time class="dt-published" datetime="2022-08-31T13:59:26.000Z" itemprop="datePublished">2022-08-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/08/31/redis4/">redis4</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/08/31/redis4/" data-id="cl7ywarxc0000pcw9hea628o7" data-title="redis4" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-spring2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/08/24/spring2/" class="article-date">
@@ -2070,299 +2223,6 @@ const app = new Vue(&#123;
 
 
   
-    <article id="vue-vue2" class="h-entry article article-type-vue" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/08/14/vue2/" class="article-date">
-  <time class="dt-published" datetime="2022-08-14T15:30:13.000Z" itemprop="datePublished">2022-08-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/08/14/vue2/">vue2</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<h1 id="值绑定"><a href="#值绑定" class="headerlink" title="值绑定"></a>值绑定</h1><p>含义: 动态的给value赋值<br>1 在前面的value中的值, 都是在定义input的时候直接给定的<br>2 但真实开发中, input的值可能是从网络获取或定义在data中的<br>3 可以通过v-bind:value动态的给value绑定值  </p>
-</blockquote>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    &lt;label v-for=&quot;item in nums&quot; :for=&quot;item&quot;&gt;
-        &lt;inout type=&quot;checkbox&quot; value=&quot;item&quot; :id=&quot;item&quot; v-model=&quot;hobbies&quot;&gt;&#123;&#123;item&#125;&#125;
-    &lt;/label&gt;
-    &lt;h2&gt;您的爱好是: &#123;&#123;hobbies&#125;&#125;&lt;/h2&gt;
-&lt;/div&gt;
-
-cosnt app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        hobbies: [],
-        nums: [&#39;篮球&#39;, &#39;足球&#39;, &#39;羽毛球&#39;]
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<h1 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h1></blockquote>
-<blockquote>
-<blockquote>
-<h3 id="lazy修饰符"><a href="#lazy修饰符" class="headerlink" title="lazy修饰符"></a>lazy修饰符</h3></blockquote>
-</blockquote>
-<ul>
-<li>前景: v-model默认是在input事件中实时同步输入框的数据的 (容易同步的过于频繁 )</li>
-<li>作用: 可以让数据只有在失去焦点或回车时才会更新</li>
-</ul>
-<p><code>&lt;input type=&quot;text&quot; v-model.lazy=&quot;输入&quot;&gt;</code></p>
-<blockquote>
-<blockquote>
-<h3 id="number修饰符"><a href="#number修饰符" class="headerlink" title="number修饰符"></a>number修饰符</h3></blockquote>
-</blockquote>
-<ul>
-<li>前景: 默认情况下, 在输入框中无论输入字母还是数字, 都会被当做字符串类型进行处理</li>
-<li>作用: 当做数字类型进行处理<blockquote>
-<blockquote>
-<h3 id="trim修饰符"><a href="#trim修饰符" class="headerlink" title="trim修饰符"></a>trim修饰符</h3></blockquote>
-</blockquote>
-</li>
-<li>前景: 输入的内容首位容易有空格</li>
-<li>作用: 可以过滤掉内容左右两边的空格</li>
-</ul>
-<blockquote>
-<h1 id="检测数组更新"><a href="#检测数组更新" class="headerlink" title="检测数组更新"></a>检测数组更新</h1><p>Vue是响应式, 所以当数据发生变化时, Vue会自动检测数据变化, 视图会发生对应的更新.<br>Vue中观察数据编译的方法 – 用它们改变数组会触发视觉更新</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>数组响应式方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>push()</td>
-<td>在数组中最后增加元素</td>
-</tr>
-<tr>
-<td>pop()</td>
-<td>删除数组中最后一个元素</td>
-</tr>
-<tr>
-<td>shift()</td>
-<td>删除数组中的第一个元素</td>
-</tr>
-<tr>
-<td>unshift()</td>
-<td>在数组最前面添加元素</td>
-</tr>
-<tr>
-<td>splice()</td>
-<td>删除 &#x2F; 插入 &#x2F; 替换元素</td>
-</tr>
-</tbody></table>
-<blockquote>
-<h1 id="计算属性-computed"><a href="#计算属性-computed" class="headerlink" title="计算属性 computed"></a>计算属性 computed</h1><p>使用: 需要将多个数据结合起来进行显示的时候</p>
-</blockquote>
-<pre><code>&lt;div id=&#39;app&#39;&gt;
-
- // 使用拼接的方法 -- 语法太过繁琐
- &lt;h2&gt;&#123;&#123;firstName + '' + lastName&#125;&#125;&lt;/h2&gt;
- &lt;h2&gt;&#123;&#123;firstName&#125;&#125; &#123;&#123;lastName&#125;&#125;&lt;/h2&gt;
- 
- // 使用方法
- &lt;h2&gt;&#123;&#123;getFullName()&#125;&#125;&lt;/h2&gt;
- 
- // 使用计算属性
- &lt;h2&gt;&#123;&#123;fullName&#125;&#125;&lt;/h2&gt;
-&lt;/div&gt;
-
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data:&#123;
-        firstName: &#39;li&#39;,
-        lastName: &#39;er&#39;
-    &#125;,
-    // 计算属性
-    computed: &#123;
-        fullName: function () &#123;
-            reture this.firstName + &#39;&#39; + this.lastName
-        &#125;
-    &#125;,
-    // 方法
-    methods: &#123;
-        getFullName () &#123;
-            reture this.firstName + &#39;&#39; + this.lastName
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<h3 id="计算属性setter和getter"><a href="#计算属性setter和getter" class="headerlink" title="计算属性setter和getter"></a>计算属性setter和getter</h3></blockquote>
-</blockquote>
-<pre><code>&lt;div id=&#39;app&#39;&gt;
- &lt;h2&gt;&#123;&#123;fullName&#125;&#125;&lt;/h2&gt;
-&lt;/div&gt;
-
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data:&#123;
-        firstName: &#39;li&#39;,
-        lastName: &#39;er&#39;
-    &#125;,
-    // 计算属性
-    computed: &#123;
-        fullName: &#123;
-            // 一般没有set方法 
-            set: function (value) &#123;
-                
-            &#125;,
-            // 只读属性
-            get: function () &#123;
-                reture this.firstName + &#39;&#39; + this.lastName
-            &#125;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<p>computed &#x2F; methods区别<br>多次使用的时候  </p>
-</blockquote>
-<blockquote>
-<ul>
-<li>methods: 每次都会调用</li>
-<li>computed: 计算机会缓存, 不变的情况下只调用一次</li>
-</ul>
-</blockquote>
-</blockquote>
-<h1 id="fulters过滤器"><a href="#fulters过滤器" class="headerlink" title="fulters过滤器"></a>fulters过滤器</h1><pre><code>&lt;div id=&#39;app&#39;&gt;
- &lt;h2 &#123;&#123;aaa | showA&#125;&#125;&gt;&lt;/h2&gt;
-&lt;/div&gt;
-
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data:&#123;
-        aaa: &#39;li&#39;
-    &#125;,
-    // 过滤器
-    fulters: &#123;
-        showA (value) &#123;
-        return;
-    &#125;
-&#125;)
-</code></pre>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/08/14/vue2/" data-id="cl6uz06xe0003xow96yq84imd" data-title="vue2" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-redis与springboot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/08/13/redis%E4%B8%8Espringboot/" class="article-date">
-  <time class="dt-published" datetime="2022-08-13T15:33:57.000Z" itemprop="datePublished">2022-08-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/08/13/redis%E4%B8%8Espringboot/">redis与springboot</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="pom依赖"><a href="#pom依赖" class="headerlink" title="pom依赖"></a>pom依赖</h1><pre><code>&lt;dependencies&gt;
-    &lt;!--集成redis--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-        &lt;version&gt;2.1.7.RELEASE&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!--序列化--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-        &lt;version&gt;1.2.54&lt;/version&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!--lombok,自动生成set、get等方法--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-        &lt;version&gt;1.18.10&lt;/version&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
-</code></pre>
-<h1 id="yml配置文件"><a href="#yml配置文件" class="headerlink" title="yml配置文件"></a>yml配置文件</h1><pre><code>server:
-  port: 10001
-
-spring:
-  redis:
-    host: 127.0.0.1
-    port: 6379
-</code></pre>
-<h1 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h1><pre><code>import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-
-@SpringBootTest
-public class testRedis &#123;
-
-    @Autowired(required = false)
-    private RedisTemplate redisTemplate;
-
-    @Test
-    void getName()&#123;
-        redisTemplate.opsForValue().set(&quot;name&quot;,&quot;dadadingdada!&quot;);
-        System.out.println(redisTemplate.opsForValue().get(&quot;name&quot;));
-    &#125;
-&#125;
-</code></pre>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/08/13/redis%E4%B8%8Espringboot/" data-id="cl6uz06xd0001xow9d0k58ob0" data-title="redis与springboot" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2386,7 +2246,7 @@ public class testRedis &#123;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
     </div>
   </div>
 
@@ -2399,6 +2259,14 @@ public class testRedis &#123;
       <ul>
         
           <li>
+            <a href="/2022/09/12/swagger1/">swagger1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/31/redis4/">redis4</a>
+          </li>
+        
+          <li>
             <a href="/2022/08/24/spring2/">spring2</a>
           </li>
         
@@ -2408,14 +2276,6 @@ public class testRedis &#123;
         
           <li>
             <a href="/2022/08/21/element2/">element2</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/20/element1/">element1</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/19/vue6/">vue6</a>
           </li>
         
       </ul>

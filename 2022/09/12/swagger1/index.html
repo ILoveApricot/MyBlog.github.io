@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>swagger1 | 智能财务</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="1.导入依赖&lt;dependency&gt;     &lt;groupId&gt;io.springfox&lt;&#x2F;groupId&gt;     &lt;artifactId&gt;springfox-swagger2&lt;&#x2F;artifactId&gt;     &lt;version&gt;$&amp;#123;swagger.version&amp;#125;&lt;&#x2F;version&gt; &amp;lt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swagger1">
+<meta property="og:url" content="http://example.com/2022/09/12/swagger1/index.html">
+<meta property="og:site_name" content="智能财务">
+<meta property="og:description" content="1.导入依赖&lt;dependency&gt;     &lt;groupId&gt;io.springfox&lt;&#x2F;groupId&gt;     &lt;artifactId&gt;springfox-swagger2&lt;&#x2F;artifactId&gt;     &lt;version&gt;$&amp;#123;swagger.version&amp;#125;&lt;&#x2F;version&gt; &amp;lt">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-12T14:58:40.000Z">
+<meta property="article:modified_time" content="2022-09-12T15:03:32.752Z">
+<meta property="article:author" content="Ma">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="智能财务" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">智能财务</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-swagger1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/09/12/swagger1/" class="article-date">
+  <time class="dt-published" datetime="2022-09-12T14:58:40.000Z" itemprop="datePublished">2022-09-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      swagger1
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="1-导入依赖"><a href="#1-导入依赖" class="headerlink" title="1.导入依赖"></a>1.导入依赖</h1><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;$&#123;swagger.version&#125;&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+    &lt;version&gt;$&#123;swagger.version&#125;&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="创建Swagger2配置类"><a href="#创建Swagger2配置类" class="headerlink" title="创建Swagger2配置类"></a>创建Swagger2配置类</h3><pre><code>import io.wangpai.common.constant.Constant;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+/**
+ * Swagger配置
+ *
+ * @author Mark sunlightcs@gmail.com
+ */
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig&#123;
+
+    @Bean
+    public Docket createRestApi() &#123;
+        return new Docket(DocumentationType.SWAGGER_2)
+            .apiInfo(apiInfo())
+            .select()
+            //加了ApiOperation注解的类，生成接口文档
+            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+            //包下的类，生成接口文档
+            //.apis(RequestHandlerSelectors.basePackage(&quot;io.wangpai.modules.job.controller&quot;))
+            .paths(PathSelectors.any())
+            .build()
+            .directModelSubstitute(java.util.Date.class, String.class)
+            .securitySchemes(security());
+    &#125;
+
+    private ApiInfo apiInfo() &#123;
+        return new ApiInfoBuilder()
+            .title(&quot;Api&quot;)
+            .description(&quot;wangpai-admin文档&quot;)
+            .termsOfServiceUrl(&quot;https://www.wgame.io&quot;)
+            .version(&quot;2.0.0&quot;)
+            .build();
+    &#125;
+
+    private List&lt;ApiKey&gt; security() &#123;
+        return newArrayList(
+            new ApiKey(Constant.TOKEN_HEADER, Constant.TOKEN_HEADER, &quot;header&quot;)
+        );
+    &#125;
+&#125;
+</code></pre>
+<p>docket() 方法创建Docket的Bean对象，apiInfo()则是创建ApiInfo的基本信息。</p>
+<h3 id="注解说明"><a href="#注解说明" class="headerlink" title="注解说明"></a>注解说明</h3><p>@Api : 用在类上，说明该类的主要作用。</p>
+<p>@ApiOperation：用在方法上，给API增加方法说明。</p>
+<p>@ApiImplicitParams : 用在方法上，包含一组参数说明。</p>
+<p>@ApiImplicitParam：用来注解来给方法入参增加说明。</p>
+<p>@ApiResponses：用于表示一组响应。</p>
+<p>@ApiResponse：用在@ApiResponses中，一般用于表达一个错误的响应信息</p>
+<p>@ApiModel：用在返回对象类上，描述一个Model的信息（一般用在请求参数无法使用@ApiImplicitParam注解进行描述的时候）</p>
+<p>@ApiModelProperty：描述一个model的属性</p>
+<h3 id="测试登录-localhost-8080-x2F-swagger-ui-html"><a href="#测试登录-localhost-8080-x2F-swagger-ui-html" class="headerlink" title="测试登录 localhost:8080&#x2F;swagger-ui.html"></a>测试登录 localhost:8080&#x2F;swagger-ui.html</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/09/12/swagger1/" data-id="cl7ywarxk0001pcw97e3q0c4f" data-title="swagger1" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/08/31/redis4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">redis4</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/swagger1/">swagger1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/31/redis4/">redis4</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/24/spring2/">spring2</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/22/spring1/">spring1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/21/element2/">element2</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Ma<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
