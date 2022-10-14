@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   
   
-  <title>redis与springboot | 智能财务</title>
+  <title>postman1 | 智能财务</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="pom依赖&lt;dependencies&gt;     &lt;!--集成redis--&gt;     &lt;dependency&gt;         &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;         &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;a">
-<meta property="og:type" content="article">
-<meta property="og:title" content="redis与springboot">
-<meta property="og:url" content="http://example.com/2022/08/13/redis%E4%B8%8Espringboot/index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="postman1">
+<meta property="og:url" content="http://example.com/2022/09/14/postman1/index.html">
 <meta property="og:site_name" content="智能财务">
-<meta property="og:description" content="pom依赖&lt;dependencies&gt;     &lt;!--集成redis--&gt;     &lt;dependency&gt;         &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;         &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;a">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-08-13T15:33:57.000Z">
-<meta property="article:modified_time" content="2022-08-13T15:38:42.085Z">
+<meta property="article:published_time" content="2022-09-14T12:15:57.000Z">
+<meta property="article:modified_time" content="2022-09-14T12:15:57.346Z">
 <meta property="article:author" content="Ma">
 <meta name="twitter:card" content="summary">
   
@@ -73,10 +71,10 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-redis与springboot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-postman1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2022/08/13/redis%E4%B8%8Espringboot/" class="article-date">
-  <time class="dt-published" datetime="2022-08-13T15:33:57.000Z" itemprop="datePublished">2022-08-13</time>
+    <a href="/2022/09/14/postman1/" class="article-date">
+  <time class="dt-published" datetime="2022-09-14T12:15:57.000Z" itemprop="datePublished">2022-09-14</time>
 </a>
     
   </div>
@@ -87,7 +85,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      redis与springboot
+      postman1
     </h1>
   
 
@@ -95,59 +93,11 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="pom依赖"><a href="#pom依赖" class="headerlink" title="pom依赖"></a>pom依赖</h1><pre><code>&lt;dependencies&gt;
-    &lt;!--集成redis--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-        &lt;version&gt;2.1.7.RELEASE&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;!--序列化--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-        &lt;version&gt;1.2.54&lt;/version&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;!--lombok,自动生成set、get等方法--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-        &lt;version&gt;1.18.10&lt;/version&gt;
-        &lt;scope&gt;compile&lt;/scope&gt;
-    &lt;/dependency&gt;
-</code></pre>
-<h1 id="yml配置文件"><a href="#yml配置文件" class="headerlink" title="yml配置文件"></a>yml配置文件</h1><pre><code>server:
-  port: 10001
-
-spring:
-  redis:
-    host: 127.0.0.1
-    port: 6379
-</code></pre>
-<h1 id="测试连接"><a href="#测试连接" class="headerlink" title="测试连接"></a>测试连接</h1><pre><code>import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-
-@SpringBootTest
-public class testRedis &#123;
-
-    @Autowired(required = false)
-    private RedisTemplate redisTemplate;
-
-    @Test
-    void getName()&#123;
-        redisTemplate.opsForValue().set(&quot;name&quot;,&quot;dadadingdada!&quot;);
-        System.out.println(redisTemplate.opsForValue().get(&quot;name&quot;));
-    &#125;
-&#125;
-</code></pre>
-
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/08/13/redis%E4%B8%8Espringboot/" data-id="cl6uz06xd0001xow9d0k58ob0" data-title="redis与springboot" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/09/14/postman1/" data-id="cl97wpbx00000tww9e7vz7uzr" data-title="postman1" class="article-share-link">Share</a>
       
       
       
@@ -157,19 +107,19 @@ public class testRedis &#123;
     
 <nav id="article-nav">
   
-    <a href="/2022/08/14/vue2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2022/10/14/%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E9%9B%86%E6%98%A0%E5%B0%84%E4%B8%BAhashmap%E5%AF%B9%E8%B1%A1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          vue2
+          将数据库查询结果集映射为hashmap对象
         
       </div>
     </a>
   
   
-    <a href="/2022/08/13/redis3/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/09/12/swagger1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">redis3</div>
+      <div class="article-nav-title">swagger1</div>
     </a>
   
 </nav>

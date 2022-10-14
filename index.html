@@ -71,6 +71,122 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-将数据库查询结果集映射为hashmap对象" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/10/14/%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E9%9B%86%E6%98%A0%E5%B0%84%E4%B8%BAhashmap%E5%AF%B9%E8%B1%A1/" class="article-date">
+  <time class="dt-published" datetime="2022-10-14T03:03:30.000Z" itemprop="datePublished">2022-10-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/10/14/%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E9%9B%86%E6%98%A0%E5%B0%84%E4%B8%BAhashmap%E5%AF%B9%E8%B1%A1/">将数据库查询结果集映射为hashmap对象</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <pre><code>/**
+ * 该方法用来将结果集转换为HashMap&lt;字段名称,字段中的数据&lt;字段的第几个数据,存放的数据&gt;&gt;
+ * @param resultSet 结果集
+ * @return 将结果集转换返回为HashMap&lt;字段名称, 字段中的数据 &lt; 字段的第几个数据(从0开始), 存放的数据&gt;&gt;
+ */
+public HashMap&lt;String, HashMap&lt;Integer, Object&gt;&gt; getHashMap(ResultSet resultSet) throws SQLException &#123;
+    HashMap&lt;String, HashMap&lt;Integer, Object&gt;&gt; objectObjectHashMap = new HashMap&lt;&gt;();
+    ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();
+    ResultSetMetaData metaData = resultSet.getMetaData();
+    int columnCount = metaData.getColumnCount();//获取结果集有多少个字段
+    for (int i = 1; i &lt;= columnCount; i++) &#123;
+        //获取字段第几个字段的名称,数据库字段是从1开始的
+        String columnLabel = metaData.getColumnLabel(i);
+        list.add(columnLabel);
+    &#125;
+    int Counter = 0;
+    for (String s : list) &#123;
+        HashMap&lt;Integer, Object&gt; objectObjectHashMap1 = new HashMap&lt;&gt;();
+        while (resultSet.next()) &#123;
+            Object object = resultSet.getObject(s);
+            objectObjectHashMap1.put(Counter, object);
+            Counter++;
+        &#125;
+        resultSet.beforeFirst();
+        objectObjectHashMap.put(s, objectObjectHashMap1);
+    &#125;
+    return objectObjectHashMap;
+&#125;
+</code></pre>
+<p>好处</p>
+<p>大大减少的代码量<br>返回一个HashMap通过遍历可随时获取结果集里的值  </p>
+<p>如:直接遍历一个id值:</p>
+<pre><code> public static void main(String[] args) throws SQLException &#123;
+ HashMap&lt;String, HashMap&lt;Integer, Object&gt;&gt; hashMap=newUserDaoImpl().getHashMap(resultSet);
+ HashMap&lt;Integer, Object&gt; id = hashMap.get(&quot;id&quot;);
+ for (Map.Entry&lt;Integer, Object&gt; integerObjectEntry : id.entrySet()) &#123;
+        System.out.println(integerObjectEntry.getValue());
+ &#125;
+&#125;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/10/14/%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E9%9B%86%E6%98%A0%E5%B0%84%E4%B8%BAhashmap%E5%AF%B9%E8%B1%A1/" data-id="cl97wpbx30001tww92i1rhdg6" data-title="将数据库查询结果集映射为hashmap对象" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-postman1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/09/14/postman1/" class="article-date">
+  <time class="dt-published" datetime="2022-09-14T12:15:57.000Z" itemprop="datePublished">2022-09-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/09/14/postman1/">postman1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/09/14/postman1/" data-id="cl97wpbx00000tww9e7vz7uzr" data-title="postman1" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-swagger1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/09/12/swagger1/" class="article-date">
@@ -1264,970 +1380,11 @@ export default &#123;
 
 
   
-    <article id="post-vue4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/08/16/vue4/" class="article-date">
-  <time class="dt-published" datetime="2022-08-16T14:42:56.000Z" itemprop="datePublished">2022-08-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/08/16/vue4/">vue4</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="webpack模块化开发"><a href="#webpack模块化开发" class="headerlink" title="webpack模块化开发"></a>webpack模块化开发</h1><p>目录结构：<br>WEBPACK-DEMO<br>│  package.json<br>│  webpack.config.js<br>│<br>├─dist<br>├─node_modules<br>└─src<br>      index.html<br>      main.js  </p>
-<h1 id="webpack安装"><a href="#webpack安装" class="headerlink" title="webpack安装"></a>webpack安装</h1><p>Vue.js官方脚手架工具就使用了webpack模板  </p>
-<ul>
-<li>对所有的资源会压缩等优化操作，核心两个功能 模块化和打包  </li>
-<li>它在开发过程中提供了一套完整的功能，能够使得我们开发过程中变得高效</li>
-<li>安装webpack之前先安装node，并且配置环境变量 node-v 查看是否安装node环境</li>
-<li>配置阿里云镜像：npm config set registry <a target="_blank" rel="noopener" href="https://registry.npm.taobao.org/">https://registry.npm.taobao.org/</a></li>
-<li>检测是否配置成功 npm config get registry</li>
-<li>安装命令（全局安装）：cnpm install <a href="mailto:&#119;&#101;&#x62;&#112;&#x61;&#x63;&#x6b;&#64;&#51;&#46;&#54;&#46;&#48;">&#119;&#101;&#x62;&#112;&#x61;&#x63;&#x6b;&#64;&#51;&#46;&#54;&#46;&#48;</a> -g</li>
-<li>测试是否安装成功：webpack -v</li>
-</ul>
-<h1 id="webpack入门使用"><a href="#webpack入门使用" class="headerlink" title="webpack入门使用"></a>webpack入门使用</h1><p>index.html 只需要引入bundle.js即可，webpack打包的时候会将依赖到的都引入进来</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-    &lt;script src=&quot;../dist/bundle.js&quot;&gt;&lt;/script&gt;
-&lt;/head&gt;
-
-&lt;body&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h1 id="main-js"><a href="#main-js" class="headerlink" title="main.js"></a>main.js</h1><pre><code>const &#123;add, mul&#125; = require(&#39;./mathUtil.js&#39;)
-console.log(add(20,30));
-console.log(mul(20,30));
-</code></pre>
-<p>#mathUtil.js</p>
-<pre><code>function add(number1,number2) &#123;
-        return number1+number2;
-&#125;
-
-function mul(number1,number2) &#123;
-        return number2*number1;
-&#125;
-
-module.exports = &#123;
-        add,
-        mul
-&#125;
-
--------------------------------------------ES6模块化---------------------------------------------------------
- // 导出  
-    export &#123;
-        add,mul
-&#125;
-// 导入
-    import &#123;name, age, height&#125; from &quot;./info&quot;;
-</code></pre>
-<h1 id="webpack配置"><a href="#webpack配置" class="headerlink" title="webpack配置"></a>webpack配置</h1><p>初始化项目：cnpm init</p>
-<pre><code>package name: (02webpack配置) meetwebpack(包名)
-version: (1.0.0)
-description: webpack-init(描述)
-entry point: (webpack.config.js) index.js(入口文件)
-test command:
-git repository:
-keywords:
-author:
-license: (ISC)
-About to write to C:\Users\11058\Desktop\web学习\webpack\package.json:
-</code></pre>
-<p>在项目下，新建一个文件 webpack.config.js</p>
-<pre><code>// 从node中导入
-const path=require(&#39;path&#39;)
-module.exports=&#123;
-    // 入口
-    entry:&#39;./src/main.js&#39;,
-    // 出口
-    output:&#123;
-        // 将当前路径和dist进行拼接
-        path: path.resolve(__dirname, &#39;dist&#39;),
-        filename:&#39;bundle.js&#39;
-    &#125;
-&#125;
-</code></pre>
-<p>在 package.json 的script中配置命令 直接使用 npm run build 代替 webpack 命令</p>
-<pre><code>  &quot;scripts&quot;: &#123;
-     // 优先从本地webpack中找，如果本地没有就去全局中找 [使用脚本使用的就是本地的，否则都是使用的是全局的]
-     // 如果想通过cm命令的方式使用本地webpack，那么就在node_modules/bin目录下执行：webpack命令 
-    &quot;build&quot;: &quot;webpack&quot;
-  &#125;
-</code></pre>
-<p>在项目本地安装 webpack 命令： npm install <a href="mailto:&#119;&#x65;&#98;&#112;&#x61;&#x63;&#x6b;&#x40;&#51;&#46;&#54;&#x2e;&#48;">&#119;&#x65;&#98;&#112;&#x61;&#x63;&#x6b;&#x40;&#51;&#46;&#54;&#x2e;&#48;</a> –save-dev</p>
-<p>webpack本身来说无法处理css, 图片, 高级ES6转化ES5的能力, 需要webpack扩展对应的loader</p>
-<h3 id="css-loader配置"><a href="#css-loader配置" class="headerlink" title="css-loader配置:"></a>css-loader配置:</h3><p>加载 CSS 文件并解析 import 的 CSS 文件，最终返回 CSS 代码</p>
-<p>1.安装css-loader: npm install <a href="mailto:&#115;&#x74;&#x79;&#108;&#101;&#45;&#108;&#x6f;&#x61;&#100;&#101;&#x72;&#64;&#50;&#x2e;&#x30;&#x2e;&#50;">&#115;&#x74;&#x79;&#108;&#101;&#45;&#108;&#x6f;&#x61;&#100;&#101;&#x72;&#64;&#50;&#x2e;&#x30;&#x2e;&#50;</a> –save-dev<br>2.在main.js中依赖normal.css[ require(’.&#x2F;css&#x2F;normal.css’) ]<br>3.在webpack.config.js中进行配置</p>
-<pre><code>   module: &#123;
-        // 配置规则
-        rules: [
-            &#123;
-                test: /\.css$/,
-                use: [ &quot;css-loader&quot;],
-            &#125;,
-        ],
-    &#125;,
-</code></pre>
-<h3 id="style-loader配置"><a href="#style-loader配置" class="headerlink" title="style-loader配置 :"></a>style-loader配置 :</h3><p>安装往css-loader后，并不能进行解析运行，css-loader只负责加载进来，需要额外的在安装style-loader</p>
-<p>1.安装style-loader: npm install <a href="mailto:&#x73;&#116;&#x79;&#108;&#x65;&#45;&#108;&#x6f;&#97;&#100;&#x65;&#114;&#64;&#48;&#46;&#x32;&#51;&#x2e;&#49;">&#x73;&#116;&#x79;&#108;&#x65;&#45;&#108;&#x6f;&#97;&#100;&#x65;&#114;&#64;&#48;&#46;&#x32;&#51;&#x2e;&#49;</a> –save-dev<br>2.在webpack.config.js中进行配置 ,在use中添加一个 style-loader 即可</p>
-<h3 id="less-loader配置"><a href="#less-loader配置" class="headerlink" title="less-loader配置:"></a>less-loader配置:</h3><p>1.安装 less-loader: npm install <a href="mailto:&#x6c;&#101;&#x73;&#x73;&#45;&#x6c;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x34;&#46;&#49;&#46;&#48;">&#x6c;&#101;&#x73;&#x73;&#45;&#x6c;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x34;&#46;&#49;&#46;&#48;</a> –save-dev<br>2.在webpack.config.js中进行配置<br>3.在rules中的第二个下标中配置该对象  </p>
-<pre><code>        &#123;
-            test: /\.less$/,
-           // 使用多个loader时，从右向左进行加载,使用对象还可以传递参数： &#123; loader:&quot;less-loader&quot;,arg:value&#125;,
-            use:[
-                &#123;loader:&quot;style-loader&quot;&#125;,
-                &#123;loader:&quot;css-loader&quot;&#125;,
-                &#123;loader:&quot;less-loader&quot;&#125;
-            ]
-        &#125;,
-</code></pre>
-<h3 id="url-loader配置：用于打包图片"><a href="#url-loader配置：用于打包图片" class="headerlink" title="url-loader配置：用于打包图片"></a>url-loader配置：用于打包图片</h3><p>1.安装url-loader: npm install –save-dev <a href="mailto:&#117;&#114;&#108;&#x2d;&#108;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x31;&#x2e;&#49;&#46;&#x32;">&#117;&#114;&#108;&#x2d;&#108;&#x6f;&#97;&#x64;&#101;&#114;&#64;&#x31;&#x2e;&#49;&#46;&#x32;</a><br>2.在webpack.config.js中进行配置 注意根据这些版本来，否则不指定版本，会出现问题</p>
-<pre><code>&#123;
-            test: /\.(png|jpg|gif)$/,
-            use: [
-                &#123;
-                    loader: &#39;url-loader&#39;,
-                    options: &#123;
-                        // 限制文件的大小,当加载的图片大于限制的时候使用file-loader进行加载，
-                        // 小于limit将图片编译为base64字符串进行显示
-                        limit:625664,
-                    &#125;,
-                &#125;,
-            ],
-        &#125;
-</code></pre>
-<h3 id="file-loader-安装命令：npm-install-102-105-108-x65-x2d-x6c-x6f-x61-x64-101-x72-x40-50-x2e-x30-x2e-x30-–save-dev-解决图片超过limit大小时无法进行打包或显示"><a href="#file-loader-安装命令：npm-install-102-105-108-x65-x2d-x6c-x6f-x61-x64-101-x72-x40-50-x2e-x30-x2e-x30-–save-dev-解决图片超过limit大小时无法进行打包或显示" class="headerlink" title="file-loader: 安装命令：npm install &#102;&#105;&#108;&#x65;&#x2d;&#x6c;&#x6f;&#x61;&#x64;&#101;&#x72;&#x40;&#50;&#x2e;&#x30;&#x2e;&#x30; –save -dev (解决图片超过limit大小时无法进行打包或显示)"></a>file-loader: 安装命令：npm install <a href="mailto:&#102;&#105;&#108;&#x65;&#x2d;&#x6c;&#x6f;&#x61;&#x64;&#101;&#x72;&#x40;&#50;&#x2e;&#x30;&#x2e;&#x30;">&#102;&#105;&#108;&#x65;&#x2d;&#x6c;&#x6f;&#x61;&#x64;&#101;&#x72;&#x40;&#50;&#x2e;&#x30;&#x2e;&#x30;</a> –save -dev (解决图片超过limit大小时无法进行打包或显示)</h3><pre><code>   output:&#123;
-        // 将当前路径和dist进行拼接
-        path: path.resolve(__dirname, &#39;dist&#39;),
-        filename:&#39;bundle.js&#39;,
-        // 从dist目录下开始寻找资源
-        publicPath:&#39;dist/&#39;
-    &#125;,
-  ----------------------------------------在rules添加如下配置-------------------------------------------------------
-           &#123;
-                test: /\.(png|jpg|gif)$/,
-                use: [
-                    &#123;
-                        loader: &#39;url-loader&#39;,
-                        options: &#123;
-                            // 限制文件的大小,当加载的图片大于限制的时候使用file-loader进行加载，
-                            // 小于limit将图片编译为base64字符串进行显示
-                            limit:13000, //625664
-                            // 设置打包路径和文件名
-                            name:&#39;img/[name].[hash:8].[ext]&#39;
-                        &#125;,
-                    &#125;,
-                ],
-            &#125;
-</code></pre>
-<h3 id="ES6语法转ES5语法"><a href="#ES6语法转ES5语法" class="headerlink" title="ES6语法转ES5语法"></a>ES6语法转ES5语法</h3><p>1.安装对应的依赖： npm install –save-dev babel-loader@7 babel-core babel-preset-es2015<br>2.配置 webpack.config.js</p>
-<pre><code>     &#123;
-            test: /\.m?js$/,
-            // 在进行ES6转ES5时只对src目录下js进行转化
-            exclude: /(node_modules|bower_components)/,
-            use: &#123;
-                loader: &#39;babel-loader&#39;,
-                options: &#123;
-                    presets: [&#39;es2015&#39;]
-                &#125;
-            &#125;
-        &#125;
-</code></pre>
-<h3 id="配置Vue环境"><a href="#配置Vue环境" class="headerlink" title="配置Vue环境"></a>配置Vue环境</h3><p>1.先进行安装 npm install vue –save<br>2.在mian.js中写入如下测试代码</p>
-<pre><code>const app = new Vue(&#123;
-    el:&#39;#app&#39;,
-    message:&#39;hello world&#39;,
-    methods:&#123;
-        showMessage()&#123;
-            console.log(&quot;welcome to Vue&quot;)
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<p>3.在index.html中写一个app</p>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    &lt;button @click=&quot;showMessage&quot;&gt; 按钮 &lt;/button&gt;
-&lt;/div&gt;
-// 把引入bundle.js放在后面，避免元素未加载完，js代码开始执行找不到dom
-</code></pre>
-<p>4.解决错误：</p>
-<p>方式1：import Vue from ‘vue&#x2F;dist&#x2F;vue.esm.js’<br>方式2：在webpack.config.js中添加如下代码，和moudle同级</p>
-<pre><code>resolve: &#123;
-    alias: &#123;
-        &#39;vue$&#39;: &#39;vue/dist/vue.esm.js&#39; //内部为正则表达式  vue结尾的
-    &#125;
-&#125;
-</code></pre>
-<h3 id="安装vue-loader-npm-install-x76-x75-x65-45-108-111-97-x64-x65-114-64-x31-x35-x2e-52-x2e-50-x76-117-x65-x2d-x74-x65-x6d-112-108-97-x74-x65-45-x63-x6f-109-x70-x69-x6c-101-114-x40-x32-46-x36-x2e-49-x34-–save-dev"><a href="#安装vue-loader-npm-install-x76-x75-x65-45-108-111-97-x64-x65-114-64-x31-x35-x2e-52-x2e-50-x76-117-x65-x2d-x74-x65-x6d-112-108-97-x74-x65-45-x63-x6f-109-x70-x69-x6c-101-114-x40-x32-46-x36-x2e-49-x34-–save-dev" class="headerlink" title="安装vue-loader : npm install &#x76;&#x75;&#x65;&#45;&#108;&#111;&#97;&#x64;&#x65;&#114;&#64;&#x31;&#x35;&#x2e;&#52;&#x2e;&#50; &#x76;&#117;&#x65;&#x2d;&#x74;&#x65;&#x6d;&#112;&#108;&#97;&#x74;&#x65;&#45;&#x63;&#x6f;&#109;&#x70;&#x69;&#x6c;&#101;&#114;&#x40;&#x32;&#46;&#x36;&#x2e;&#49;&#x34;–save-dev"></a>安装vue-loader : npm install <a href="mailto:&#x76;&#x75;&#x65;&#45;&#108;&#111;&#97;&#x64;&#x65;&#114;&#64;&#x31;&#x35;&#x2e;&#52;&#x2e;&#50;">&#x76;&#x75;&#x65;&#45;&#108;&#111;&#97;&#x64;&#x65;&#114;&#64;&#x31;&#x35;&#x2e;&#52;&#x2e;&#50;</a> <a href="mailto:&#x76;&#117;&#x65;&#x2d;&#x74;&#x65;&#x6d;&#112;&#108;&#97;&#x74;&#x65;&#45;&#x63;&#x6f;&#109;&#x70;&#x69;&#x6c;&#101;&#114;&#x40;&#x32;&#46;&#x36;&#x2e;&#49;&#x34;">&#x76;&#117;&#x65;&#x2d;&#x74;&#x65;&#x6d;&#112;&#108;&#97;&#x74;&#x65;&#45;&#x63;&#x6f;&#109;&#x70;&#x69;&#x6c;&#101;&#114;&#x40;&#x32;&#46;&#x36;&#x2e;&#49;&#x34;</a>–save-dev</h3><p>在配置文件中做以下修改：</p>
-<pre><code>       &#123;
-            test: /\.vue$/,
-            use: &#123;
-                loader: &#39;vue-loader&#39;,
-            &#125;
-        &#125;
-</code></pre>
-<p>在vue目录下新建AApp.vue代替app.js ,内容如下：</p>
-<pre><code>&lt;!-- 组件模板代码 --&gt;
-&lt;template&gt;
-    &lt;div&gt;
-        &lt;p&gt;&#123;&#123;message&#125;&#125;&lt;/p&gt;
-        &lt;button @click=&quot;showMessage&quot;&gt; 按钮&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;!-- js代码 --&gt;
-&lt;script&gt;
-    export default &#123;
-        name: &#39;App&#39;,
-        data() &#123;
-            return &#123;
-                message: &quot;hello world&quot;
-            &#125;
-        &#125;,
-        methods: &#123;
-            showMessage() &#123;
-                alert(&quot;welcome to Vue&quot;);
-            &#125;
-        &#125;
-    &#125;
-&lt;/script&gt;
-
-&lt;!-- 写css代码 --&gt;
-&lt;style scoped&gt;
-    .title &#123;
-        color: #ff0000
-    &#125;
-&lt;/style&gt;
-</code></pre>
-<p>在 main.js 中使用即可</p>
-<pre><code>//引入App.vue
-import App from &quot;./vue/App.vue&quot;;
-
-new Vue(&#123;
-    el: &#39;#app&#39;,
-    template:&#39;&lt;App/&gt;&#39;,
-    components:&#123; App &#125;
-
-&#125;)
-</code></pre>
-<h1 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a>plugin</h1><h3 id="配置BannerPulgin"><a href="#配置BannerPulgin" class="headerlink" title="配置BannerPulgin:"></a>配置BannerPulgin:</h3><p>在webpack.config.js引入webpack</p>
-<pre><code>const webpack=require(&#39;webpack&#39;)
-</code></pre>
-<p>2.在moudle同级下配置插件</p>
-<pre><code>// 插件
-plugins:[
-    // 版权信息插件
-    new webpack.BannerPlugin(&#39;最终版权归test所有&#39;)
-]
-</code></pre>
-<h3 id="配置HtmlWebpackPlugin"><a href="#配置HtmlWebpackPlugin" class="headerlink" title="配置HtmlWebpackPlugin"></a>配置HtmlWebpackPlugin</h3><p>该插件将 index.html 打包到 buildle.js 中去</p>
-<p>1.安装该插件:npm install <a href="mailto:&#x68;&#116;&#109;&#108;&#x2d;&#x77;&#101;&#x62;&#112;&#x61;&#99;&#x6b;&#x2d;&#x70;&#x6c;&#117;&#103;&#x69;&#110;&#64;&#x32;&#x2e;&#x33;&#x30;&#x2e;&#x31;">&#x68;&#116;&#109;&#108;&#x2d;&#x77;&#101;&#x62;&#112;&#x61;&#99;&#x6b;&#x2d;&#x70;&#x6c;&#117;&#103;&#x69;&#110;&#64;&#x32;&#x2e;&#x33;&#x30;&#x2e;&#x31;</a> –save-dev<br>2.注释掉webpack.config.js中的publicPath:‘dist&#x2F;’<br>3.在webpack.config.js中引入const htmlWebpackPlugin &#x3D; require(‘html-webpack-plugin’)<br>4.在webpack.config.js中配置new htmlWebpackPlugin({template:‘index.html’ })  </p>
-<h3 id="配置uglifyjs"><a href="#配置uglifyjs" class="headerlink" title="配置uglifyjs:"></a>配置uglifyjs:</h3><p>对buildle.js进行压缩  </p>
-<p>1.安装 npm install <a href="mailto:&#117;&#103;&#x6c;&#x69;&#x66;&#x79;&#106;&#115;&#x2d;&#119;&#x65;&#98;&#112;&#97;&#99;&#107;&#x2d;&#x70;&#108;&#117;&#103;&#x69;&#x6e;&#x40;&#x31;&#46;&#x31;&#46;&#x31;">&#117;&#103;&#x6c;&#x69;&#x66;&#x79;&#106;&#115;&#x2d;&#119;&#x65;&#98;&#112;&#97;&#99;&#107;&#x2d;&#x70;&#108;&#117;&#103;&#x69;&#x6e;&#x40;&#x31;&#46;&#x31;&#46;&#x31;</a> –save-dev<br>2.在 webpack.config.js 中引入 const uglifyJsPlugin &#x3D; require(‘uglifyjs-webpack-plugin’)<br>3.在 webpack.config.js 中配置 new uglifyJsPlugin()  </p>
-<h3 id="使用-webpack-搭建本地服务器"><a href="#使用-webpack-搭建本地服务器" class="headerlink" title="使用 webpack 搭建本地服务器"></a>使用 webpack 搭建本地服务器</h3><p>1.安装npm install <a href="mailto:&#x77;&#101;&#98;&#112;&#97;&#x63;&#x6b;&#45;&#100;&#101;&#118;&#45;&#115;&#101;&#114;&#x76;&#x65;&#114;&#x40;&#50;&#46;&#x39;&#x2e;&#49;">&#x77;&#101;&#98;&#112;&#97;&#x63;&#x6b;&#45;&#100;&#101;&#118;&#45;&#115;&#101;&#114;&#x76;&#x65;&#114;&#x40;&#50;&#46;&#x39;&#x2e;&#49;</a> –save-dev<br>2.在package.json中的script中配置”dev”:”webpack-dev-server”<br>3.在webpack.config.js中添加如下配置</p>
-<pre><code>// 加载本地服务器
-devServer: &#123;
-    contentBase: &#39;./dist&#39;,
-    // 实时监听页面
-    inline: true,
-    // 80端口
-    port: 80,
-    // 如下 npm run dev 后自动打开浏览器
-    open: true,
-&#125;
-</code></pre>
-<h3 id="配置文件的分离抽取："><a href="#配置文件的分离抽取：" class="headerlink" title="配置文件的分离抽取："></a>配置文件的分离抽取：</h3><p>1.安装 npm install webpack-merge –save -dev</p>
-<p>base.config.js: 开发时和运行时都需要的配置</p>
-<pre><code>// 从node中导入
-const path=require(&#39;path&#39;)
-// 引入插件
-const webpack=require(&#39;webpack&#39;)
-const htmlWebpackPlugin = require(&#39;html-webpack-plugin&#39;)
-module.exports=&#123;
-    // 入口
-    entry:&#39;./src/main.js&#39;,
-    // 出口
-    output:&#123;
-        // 将当前路径和dist进行拼接
-        path: path.resolve(__dirname, &#39;../dist&#39;),
-        filename:&#39;bundle.js&#39;,
-        // 从dist目录下开始寻找资源
-        // publicPath:&#39;dist/&#39;
-    &#125;,
-
-    module: &#123;
-        // 配置规则
-        rules: [
-            &#123;
-                test: /\.css$/,
-                // css-loader:只负责将css进行加载,不负责解析和加载到index.html中
-                // style-loader ：将模块导出的内容作为样式并添加到 DOM 中
-                use: [ &quot;style-loader&quot;,&quot;css-loader&quot;],
-            &#125;,
-            &#123;
-                test: /\.less$/,
-                // 使用多个loader时，从右向左进行加载,使用对象还可以传递参数： &#123; loader:&quot;less-loader&quot;,arg:value&#125;,
-                use:[
-                    &#123;loader:&quot;style-loader&quot;&#125;,
-                    &#123;loader:&quot;css-loader&quot;&#125;,
-                    &#123;loader:&quot;less-loader&quot;&#125;
-                ]
-            &#125;,
-            &#123;
-                test: /\.(png|jpg|gif)$/,
-                use: [
-                    &#123;
-                        loader: &#39;url-loader&#39;,
-                        options: &#123;
-                            // 限制文件的大小,当加载的图片大于限制的时候使用file-loader进行加载，
-                            // 小于limit将图片编译为base64字符串进行显示
-                            limit:13000, //625664
-                            // 设置打包路径和文件名
-                            name:&#39;img/[name].[hash:8].[ext]&#39;
-                        &#125;,
-                    &#125;,
-                ],
-            &#125;,
-            &#123;
-                test: /\.m?js$/,
-                // 在进行ES6转ES5时只对src目录下js进行转化
-                exclude: /(node_modules|bower_components)/,
-                use: &#123;
-                    loader: &#39;babel-loader&#39;,
-                    options: &#123;
-                        presets: [&#39;es2015&#39;]
-                    &#125;
-                &#125;
-            &#125;,
-            &#123;
-                test: /\.vue$/,
-                use: &#123;
-                    loader: &#39;vue-loader&#39;,
-                &#125;
-            &#125;
-        ],
-
-    &#125;,
-    // 解析
-    resolve: &#123;
-        extensions:[&#39;.css&#39;,&#39;.js&#39;,&#39;.vue&#39;],
-        alias: &#123;
-            &#39;vue$&#39;: &#39;vue/dist/vue.esm.js&#39; //内部为正则表达式  vue结尾的
-        &#125;
-    &#125;,
-    // 插件
-    plugins:[
-        // 版权信息插件
-        new webpack.BannerPlugin(&#39;最终版权归test所有&#39;),
-        new htmlWebpackPlugin(&#123;
-            template:&#39;index.html&#39;
-        &#125;),
-    ],
-
-&#125;
-</code></pre>
-<h3 id="dev-config-js-开发时配置"><a href="#dev-config-js-开发时配置" class="headerlink" title="dev.config.js: 开发时配置"></a>dev.config.js: 开发时配置</h3><pre><code>// proud.config.js:开发时需要的配置
-const  baseConfig = require(&#39;./base.config.js&#39;)
-const  webpackMerge=require(&#39;webpack-merge&#39;)
-// 将base.config和dev.config.js进行合并
-
-module.exports = webpackMerge.merge(baseConfig,&#123;
-    // 加载本地服务器
-    devServer: &#123;
-        contentBase: &#39;./dist&#39;,
-        // 实时监听页面
-        inline: true,
-        // 80端口
-        port: 80,
-        // 如下 npm run dev 后自动打开浏览器
-        open: true,
-    &#125;
-&#125;)
-</code></pre>
-<h3 id="proud-config-js-运行时配置"><a href="#proud-config-js-运行时配置" class="headerlink" title="proud.config.js: 运行时配置"></a>proud.config.js: 运行时配置</h3><pre><code>// proud.config.js:运行时都需要的配置
-const uglifyJsPlugin = require(&#39;uglifyjs-webpack-plugin&#39;)
-const  baseConfig = require(&#39;./base.config.js&#39;)
-const  webpackMerge=require(&#39;webpack-merge&#39;)
-
-// 将base.config和proud.config.js进行合并
-module.exports=webpackMerge.merge(baseConfig,&#123;
-    // 插件
-    plugins:[
-        // 进行压缩
-        new uglifyJsPlugin()
-    ],
-&#125;)
-</code></pre>
-<h3 id="在-package-json-指定配置文件路径"><a href="#在-package-json-指定配置文件路径" class="headerlink" title="在 package.json 指定配置文件路径"></a>在 package.json 指定配置文件路径</h3><pre><code>  &quot;scripts&quot;: &#123;
-    &quot;build&quot;: &quot;webpack  --config  ./build/proud.config.js&quot;,
-    &quot;dev&quot;: &quot;webpack-dev-server  --config  ./build/dev.config.js&quot;
-  &#125;,
-</code></pre>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/08/16/vue4/" data-id="cl70ok8hp000044w9ffe20o0a" data-title="vue4" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-vue3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/08/15/vue3/" class="article-date">
-  <time class="dt-published" datetime="2022-08-15T15:43:09.000Z" itemprop="datePublished">2022-08-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/08/15/vue3/">vue3</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="组件化开发"><a href="#组件化开发" class="headerlink" title="组件化开发"></a>组件化开发</h1><blockquote>
-<p>##组件的基本介绍<br>注册组件的基本步骤  </p>
-</blockquote>
-<blockquote>
-<ul>
-<li>调用Vue.extend()方法 - 创建组件构造器  </li>
-<li>调用Vue.component()方法 - 注册组件  </li>
-<li>在Vue实例的作用范围内 - 使用组件</li>
-</ul>
-</blockquote>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    //使用组件
-    &lt;my-cpm&gt;&lt;/my-cpm&gt;
-&lt;/div&gt;
-
-//创建组件构造器
-const cpnC = Vue.extend(&#123;
-    template: &#39;
-    &lt;div&gt;
-        &lt;h2&gt;标题&lt;/h2&gt;
-        &lt;p&gt;模板&lt;/p&gt;
-    &lt;/div&gt;&#39;
-&#125;)
-
-//注册组件
-Vue.component(&#39;my-cpn&#39;, cpmC)
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data:&#123;
-        message: &#39;&#39;
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<h3 id="全局组件-x2F-局部组件"><a href="#全局组件-x2F-局部组件" class="headerlink" title="全局组件 &#x2F; 局部组件"></a>全局组件 &#x2F; 局部组件</h3><p>全局:上面案例  </p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>局部组件<br>    <div id="app"><br>        <my-cpm></my-cpm><br>    </div></p>
-</blockquote>
-<pre><code>const cpnC = Vue.extend(&#123;
-    template: &#39;
-    &lt;div&gt;
-        &lt;h2&gt;标题&lt;/h2&gt;
-        &lt;p&gt;模板&lt;/p&gt;
-    &lt;/div&gt;&#39;
-&#125;)
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data:&#123;
-        message: &#39;&#39;
-    &#125;,
-    components: &#123;
-        cpn: cpnC
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<h3 id="父组件-x2F-子组件"><a href="#父组件-x2F-子组件" class="headerlink" title="父组件 &#x2F; 子组件"></a>父组件 &#x2F; 子组件</h3><blockquote>
-<p>父子组件的错误用法: 以子标签的形式在Vue实例中使用  </p>
-</blockquote>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<ul>
-<li>因为当子组件注册到父组件的components时, Vue会编译好父组件的模块</li>
-<li>该模块的内容已经决定了父组件将要渲染的HTML (相当于父组件中已经有子组件中的内容了)</li>
-</ul>
-</blockquote>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<h3 id="语法塘"><a href="#语法塘" class="headerlink" title="语法塘"></a>语法塘</h3><p>Vue为了简化注册组件的过程, 提供了注册的语法塘, 省去了调用Vue.extend()的步骤. 而是可以直接使用一个对象来代替</p>
-</blockquote>
-</blockquote>
-<pre><code>// 全局组件
-Vue.component(&#39;xxx&#39;, &#123;
-    template: &#39;
-    &lt;div&gt;
-        哈哈哈哈
-    &lt;/div&gt;
-    &#39;
-&#125;)
-
-// 内部会自动调用Vue.extend()
-
-
-// 局部组件
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;
-    &#125;,
-    components: &#123;
-        &#39;cpn&#39;: &#123;
-            template: &#39;
-                &lt;div&gt;
-                    哈哈哈哈
-                &lt;/div&gt;
-            &#39;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<h1 id="组件通讯"><a href="#组件通讯" class="headerlink" title="组件通讯"></a>组件通讯</h1><blockquote>
-<h3 id="父子组件的通讯"><a href="#父子组件的通讯" class="headerlink" title="父子组件的通讯"></a>父子组件的通讯</h3><p>父组件通过props向子组件传递数据</p>
-</blockquote>
-</blockquote>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    &lt;cpm v-bind:cmovies=&quot;movies&quot; v-bind:cmessage=&quot;message&quot;&gt;&lt;/cpn&gt;
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        &lt;li v-for=&quot;item in cmovies&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;
-        &lt;h2&gt;&#123;&#123;cmessage&#125;&#125;&lt;/h2&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-
-const cpn = &#123;
-    template: &#39;#cpn&#39;,
-    // 把数组里的当变量来看了
-    props: [&#39;cmovies&#39;, &#39;cmessage&#39;],
-    data () &#123;
-        return &#123;&#125;
-    &#125;
-&#125;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;,
-        movies: [&#39;哈喽&#39;, &#39;嗨&#39;, &#39;哟哟&#39;]
-    &#125;,
-    components: &#123;
-        cpn
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<p>子组件通过事件向父组件发送数据</p>
-</blockquote>
-</blockquote>
-<pre><code>// 父组件模板
-&lt;div id=&quot;app&quot;&gt;
-    // 2.父组件监听一个事件
-    // 不能写驼峰
-    &lt;cpm @itemclick=&quot;cpnClick&quot;&gt;&lt;/cpn&gt;
-&lt;/div&gt;
-
-// 子组件模板
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        &lt;button v-for=&quot;item in categories&quot; 
-                @click=&quot;btnClick(item)&quot;&gt;
-            &#123;&#123;item.name&#125;&#125;
-        &lt;/button&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-
-// 子组件
-const cpn = &#123;
-    template: &#39;#cpn&#39;,
-    data() &#123;
-        return &#123;
-            categories: [
-                &#123;id: &#39;aaaa&#39;, name: &#39;热门推荐&#39;&#125;,
-                &#123;id: &#39;bbbb&#39;, name: &#39;手机数码&#39;&#125;,
-                &#123;id: &#39;cccc&#39;, name: &#39;家用家电&#39;&#125;,
-                &#123;id: &#39;dddd&#39;, name: &#39;电脑办公&#39;&#125;,
-            ]
-        &#125;
-    &#125;,
-    methods: &#123;
-        btnClick(item) &#123;
-            // 要把item传给父组件
-            // 1. 发送一个事件 (自定义事件)
-            // 会把item当成默认的传到父组件去
-            this.$emit(&#39;itemclick&#39;, item)
-        ]
-    &#125;
-&#125;
-
-// 父组件
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;
-    &#125;,
-    components: &#123;
-        cpn
-    &#125;,
-    methods: &#123;
-        // 3. 父组件监听的事件 
-        cpnClick(item) &#123;
-            console.log(&#39;成功了&#39;, item);
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<h3 id="父子组件的访问方式"><a href="#父子组件的访问方式" class="headerlink" title="父子组件的访问方式"></a>父子组件的访问方式</h3><h3 id="父组件访问子组件"><a href="#父组件访问子组件" class="headerlink" title="父组件访问子组件"></a>父组件访问子组件</h3><ul>
-<li>$children: 拿所有子组件</li>
-<li>$refs: 拿指定的子组件</li>
-</ul>
-</blockquote>
-</blockquote>
-<pre><code>// this.$children是一个数组类型, 它包含所有子组件对象  
-// 通过遍历, 取出所有子组件的message状态  
-
-&lt;div id=&quot;app&quot;&gt;
-    &lt;cpm&gt;&lt;/cpn&gt;
-    &lt;cpm&gt;&lt;/cpn&gt;
-    // 使用$refs的时候, 在想要访问的子组件上添加ref属性
-    &lt;cpm ref=&quot;aaa&quot;&gt;&lt;/cpn&gt;
-    &lt;buttun @click=&quot;btnClick&quot;&gt;按钮&lt;/button&gt;
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        我是子组件
-    &lt;/div&gt;
-&lt;/template&gt;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;
-    &#125;,
-    methods: &#123;
-        btnClick() &#123;
-            cosole.log(this.$children);
-            // $children 的使用方法, 一般用的少, 下标不固定
-            // this.$children[0].showMessage();
-            // this.$children[0].name;
-            
-            //for (let c of this.$children) &#123;
-            //    console.log(c.name); // 我是子组件的name
-            //    c.showMessage(); // showMessage
-            //&#125;
-            
-            // $refs 的使用方法 =&gt; 对象类型, 默认是一个空的对象
-            console.log(this.$refs.aaa.name); // 我是子组件的name
-        &#125;
-    &#125;
-    components: &#123;
-        cpn: &#123;
-            template: &quot;#cpn&quot;,
-            data() &#123;
-                return &#123;
-                    name: &#39;我是子组件的name&#39;
-                &#125;
-            &#125;,
-            methods: &#123;
-                showMessage() &#123;
-                    cosole.log(&#39;showMessage&#39;);
-                &#125;
-            &#125;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<blockquote>
-<blockquote>
-<h3 id="子组件访问父组件"><a href="#子组件访问父组件" class="headerlink" title="子组件访问父组件"></a>子组件访问父组件</h3><ul>
-<li>$parent: 上一级父组件</li>
-<li>$root: 根组件</li>
-</ul>
-</blockquote>
-</blockquote>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    &lt;cpm&gt;&lt;/cpn&gt;
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        &lt;ccpn&gt;&lt;/ccpn&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;template id=&quot;ccpn&quot;&gt;
-    &lt;div&gt;
-        &lt;h2&gt;我是子组件&lt;/h2&gt;
-        &lt;button @click=&quot;btnClick&quot;&gt;按钮&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;
-    &#125;,
-
-    components: &#123;
-        cpn: &#123;
-            template: &quot;#cpn&quot;,
-            data() &#123;
-               return &#123;
-                   name: &#39;我是cpn的name&#39;
-               &#125; 
-            &#125;,
-            conmponents: &#123;
-                ccpn: &#123;
-                    template: &#39;#ccpn&#39;,
-                    btnClick() &#123;
-                        // 1. 访问父组件$parent
-                        // 不建议这么写, 一层套一层 复用性太差
-                        console.log(this.$parent);  
-                        console.log(this.$parent.name);  // 我是cpn的name
-                        
-                        // 2. 访问根组件 $root
-                        console.log(this.$root.meassage);   // 哈哈哈
-                    &#125; 
-                &#125;
-            &#125;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<h1 id="跨级组件通信之provide-x2F-inject"><a href="#跨级组件通信之provide-x2F-inject" class="headerlink" title="跨级组件通信之provide&#x2F;inject"></a>跨级组件通信之provide&#x2F;inject</h1><p>provide选项允许我们指定我们想要提供给后代组件的数据&#x2F;方法。</p>
-<pre><code>provide: function () &#123;
-  return &#123;
-    fun: this.fun, //方法
-    name: &#39;Bob&#39;, // 数据
-  &#125;
-&#125;
-</code></pre>
-<p>然后在任何后代组件里，我们都可以使用inject选项来接收指定的我们想要添加在这个实例上的属性：</p>
-<pre><code>//接受方法
-inject: [&#39;fun&#39;]
-//接受数据
-inject:[&#39;name&#39;]
-</code></pre>
-<h1 id="插槽slot"><a href="#插槽slot" class="headerlink" title="插槽slot"></a>插槽slot</h1><p>作用:<br>组件的插槽是为了让我们封装的组件更加具有扩展性<br>让使用者可以决定组件内部的一些内容到底展示什么  </p>
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><ul>
-<li>插槽的基本使用</li>
-<li>插槽的默认值 button</li>
-<li>如果有多个值同时放入到组件进行替换时, 一起作为替换元素</li>
-</ul>
-<p>d</p>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    // 使用默认值替换
-    &lt;cpm&gt;&lt;/cpn&gt;
-    // 插槽替换的元素
-    &lt;cpm&gt;&lt;span&gt;这是替换的内容呀&lt;/span&gt;&lt;/cpn&gt;
-    // 多个元素
-    &lt;cpm&gt;
-        &lt;div&gt;第一个元素&lt;/div&gt;
-        &lt;p&gt;第二个元素&lt;/p&gt;
-    &lt;/cpn&gt;
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        &lt;div&gt;这个是标题&lt;/div&gt;
-        &lt;p&gt;这个是内容&lt;/p&gt;
-        // 放入插槽
-        &lt;slot&gt;默认值元素&lt;/slot&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;
-    &#125;,
-    components: &#123;
-        cpn: &#123;
-            template: &#39;#cpn&#39;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<h2 id="具名插槽"><a href="#具名插槽" class="headerlink" title="具名插槽"></a>具名插槽</h2><p>在多个插槽的情况下, 替换制定插槽的内容</p>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    &lt;cpm&gt;&lt;/cpn&gt;
-    &lt;cpm&gt;&lt;button slot=&quot;left&quot;&gt;返回&lt;/button&gt;&lt;/cpn&gt;
-    &lt;cpm&gt;&lt;span slot=&quot;center&quot;&gt;中间标题&lt;/span&gt;&lt;/cpn&gt;
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        &lt;slot name=&quot;left&quot;&gt;&lt;span&gt;左边&lt;/span&gt;&lt;/slot&gt;
-        &lt;slot name=&quot;center&quot;&gt;&lt;span&gt;中间&lt;/span&gt;&lt;/slot&gt;
-        &lt;slot name=&quot;right&quot;&gt;&lt;span&gt;右边&lt;/span&gt;&lt;/slot&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        meassage: &#39;哈哈哈&#39;
-    &#125;,
-    components: &#123;
-        cpn: &#123;
-            template: &#39;#cpn&#39;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<h2 id="作用域插槽"><a href="#作用域插槽" class="headerlink" title="作用域插槽"></a>作用域插槽</h2><h3 id="编译作用域"><a href="#编译作用域" class="headerlink" title="编译作用域"></a>编译作用域</h3><p>父组件模板所有的东西都在父级作用域内编译, 子组件模板的所有东西会在子级作用域内编译</p>
-<pre><code>&lt;div id=&quot;app&quot;&gt;
-    &lt;cpm v-show=&quot;isShow&quot;&gt;我是一&lt;/cpn&gt; // true
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        &lt;p v-show=&quot;isShow&quot;&gt;我是二&lt;/p&gt; // false
-    &lt;/div&gt;
-&lt;/template&gt;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        isShow: true // Vue实例中的属性
-    &#125;,
-    components: &#123;
-        cpn: &#123;
-            template: &#39;#cpn&#39;,
-            data() &#123;
-                return &#123;
-                     isShow: false // 子组件中的属性
-                &#125;
-            &#125;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-<h2 id="作用域插槽使用"><a href="#作用域插槽使用" class="headerlink" title="作用域插槽使用"></a>作用域插槽使用</h2><p>父组件替换插槽的标签, 但是内容由子组件来提供</p>
-<pre><code>需求: 
-1. 子组件中包括一组数据, num: [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;]
-2. 需要在多个界面展示 
-   某些界面是以水平方向展示
-   某些界面是以列表形式展示
-   某些界面直接展示一个数组 
-3. 内容在子组件, 希望父组件告诉我们如何展示, 怎么办?
-   利用slot作用域插槽就行了
-   
-&lt;div id=&quot;app&quot;&gt;
-    &lt;cpm&gt;&lt;/cpn&gt; 
-    &lt;cpm&gt;
-        // 2. 获取子组件中的num
-        &lt;template slot-scope=&quot;slot&quot;&gt;
-            // 根据之前的起名来取  如 slot.aaa
-            &lt;span  v-for=&quot;item in slot.data&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/span&gt;
-        &lt;/template&gt;
-    &lt;/cpn&gt; 
-    &lt;cpm&gt;&lt;/cpn&gt; 
-&lt;/div&gt;
-
-&lt;template id=&quot;cpn&quot;&gt;
-    &lt;div&gt;
-        // 1. slot定义  &#39;data&#39;可以随便起名 如 :aaa=&quot;num&quot;
-        &lt;slot :data=&quot;num&quot;&gt;
-            &lt;ul&gt;
-                &lt;li v-for=&quot;item in num&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/slot&gt;
-    &lt;/div&gt;
-&lt;/template&gt;
-
-const app = new Vue(&#123;
-    el: &#39;#app&#39;,
-    data: &#123;
-        message: &#39;哈哈哈&#39;
-    &#125;,
-    components: &#123;
-        cpn: &#123;
-            template: &#39;#cpn&#39;,
-            data() &#123;
-                return &#123;
-                    num: [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;]
-                &#125;
-            &#125;
-        &#125;
-    &#125;
-&#125;)
-</code></pre>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/08/15/vue3/" data-id="cl6uz06xd0002xow94rbya8hc" data-title="vue3" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -2246,7 +1403,7 @@ const app = new Vue(&#123;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
     </div>
   </div>
 
@@ -2259,6 +1416,14 @@ const app = new Vue(&#123;
       <ul>
         
           <li>
+            <a href="/2022/10/14/%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E9%9B%86%E6%98%A0%E5%B0%84%E4%B8%BAhashmap%E5%AF%B9%E8%B1%A1/">将数据库查询结果集映射为hashmap对象</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/14/postman1/">postman1</a>
+          </li>
+        
+          <li>
             <a href="/2022/09/12/swagger1/">swagger1</a>
           </li>
         
@@ -2268,14 +1433,6 @@ const app = new Vue(&#123;
         
           <li>
             <a href="/2022/08/24/spring2/">spring2</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/22/spring1/">spring1</a>
-          </li>
-        
-          <li>
-            <a href="/2022/08/21/element2/">element2</a>
           </li>
         
       </ul>
